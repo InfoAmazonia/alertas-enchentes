@@ -1,0 +1,45 @@
+$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
+@import "customVariables";
+// bower:scss
+@import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
+// endbower
+
+$section-padding-vertical: 60px;
+$background-color: #111;
+$background-color-inverse: #fff;
+
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Varela', sans-serif;
+  background-color: $background-color;
+}
+
+.headline {
+  height: 100vh;
+  padding-top: 50px;
+  background: url('../images/amazonia.png') no-repeat center;
+  background-size: cover;
+  text-align: center;
+  color: #fff;
+}
+
+.main-title {
+  margin-top: 120px;
+}
+
+.section {
+  padding-top: $section-padding-vertical;
+  padding-bottom: $section-padding-vertical;
+  background-color: $background-color-inverse;
+}
+
+.about {
+  font-size: 2em;
+}
+
+footer {
+  padding: 60px 0 0;
+  background: $background-color;
+  color: rgba(255,255,255,0.5);
+}
