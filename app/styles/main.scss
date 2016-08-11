@@ -13,6 +13,7 @@ body {
   margin: 0;
   font-family: 'Varela', sans-serif;
   background-color: $background-color;
+  font-size: 1.5em;
 }
 
 .headline {
@@ -20,12 +21,21 @@ body {
   padding-top: 50px;
   background: url('../images/amazonia.png') no-repeat center;
   background-size: cover;
-  text-align: center;
   color: #fff;
 }
 
 .main-title {
-  margin-top: 120px;
+  @media (min-width: 768px) {
+    margin-top: 120px;
+    margin-bottom: 120px;
+  }
+}
+
+.form-card {
+  background-color: $background-color-inverse;
+  padding: $padding-large-vertical;
+  border-radius: $border-radius-large;
+  color: $background-color;
 }
 
 .section {
@@ -42,4 +52,8 @@ footer {
   padding: 60px 0 0;
   background: $background-color;
   color: rgba(255,255,255,0.5);
+}
+
+.alert-icon {
+  fill: #fff;
 }
