@@ -31,13 +31,21 @@
         fill: #1878f0;
       }
 
+      .bar-alert {
+        fill: #faea59;
+      }
+
+      .bar-flood {
+        fill: #eb533e;
+      }
+
       .bar-value {
         fill: #fff;
         font-size: 1em;
       }
 
       .bar:hover {
-      opacity: 1;
+        opacity: 1;
       }
 
       .axis {
@@ -53,6 +61,21 @@
 
       .x.axis path {
         display: none;
+      }
+
+      .line {
+        fill: none;
+        stroke-width: 2px;
+        opacity: 0.4;
+        stroke-dasharray: 10;
+      }
+
+      .line-flood {
+        stroke: red;
+      }
+
+      .line-alert {
+        stroke: yellow;
       }
     </style>
     <script>
@@ -103,20 +126,34 @@
         //     .attr("class", "y axis")
         //     .call(yAxis);
 
+        var line = svg.append("line")
+          .attr("class", "line line-alert")
+          .attr("x1", 0)
+          .attr("y1", y(1350))
+          .attr("x2", width)
+          .attr("y2", y(1350));
+
+        var line = svg.append("line")
+          .attr("class", "line line-flood")
+          .attr("x1", 0)
+          .attr("y1", y(1400))
+          .attr("x2", width)
+          .attr("y2", y(1400));
+
         var bar = svg.selectAll(".bar")
             .data(data);
           bar.enter().append("rect")
-            .attr("class", "bar")
+            .attr("class", function(d) { return "bar "+color(d.quota); })
             .attr("x", function(d) { return x(d.hour); })
             .attr("width", x.rangeBand())
             .attr("y", function(d) { return y(d.quota); })
             .attr("height", function(d) { return height - y(d.quota) + baseValue; });
           bar.enter().append("rect")
-            .attr("class", "bar-top")
+            .attr("class", function(d) { return "bar-top "+color(d.quota); })
             .attr("x", function(d) { return x(d.hour); })
             .attr("width", x.rangeBand())
             .attr("y", function(d) { return y(d.quota); })
-            .attr("height", 5);
+            .attr("height", 2);
           bar.enter().append("text")
             .attr("class", "bar-value")
             .attr("x", function(d) { return x(d.hour)+x.rangeBand()/2; })
@@ -135,6 +172,16 @@
       function type(d) {
         d.quota = +d.quota;
         return d;
+      }
+
+      function color(d) {
+        if (d < 1350) {
+          return "bar-normal";
+        } else if (d >= 1350 && d < 1400) {
+          return "bar-alert";
+        } else {
+          return "bar-flood";
+        }
       }
     </script>
     <!-- /CHART -->
@@ -167,7 +214,7 @@
   </div>
 </section>
 
-<section class="container-fluid section section-primary">
+<section class="container-fluid section section-default">
   <div class="container about text-center">
     Sistema de alertas e notícias de enchentes
       <p>

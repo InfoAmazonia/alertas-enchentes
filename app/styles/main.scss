@@ -45,6 +45,14 @@ body {
   background-color: $background-color-inverse;
 }
 
+.section-primary {
+  background-color: $background-color;
+}
+
+.section-default {
+  background-color: $background-color-inverse;
+}
+
 .about {
   font-size: 2em;
 }
