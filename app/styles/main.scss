@@ -26,16 +26,17 @@ body {
 
 .main-title {
   @media (min-width: 768px) {
-    margin-top: 120px;
-    margin-bottom: 120px;
+    margin-top: 60px;
+    margin-bottom: 60px;
   }
 }
 
 .form-card {
   background-color: $background-color-inverse;
-  padding: $padding-large-vertical;
+  padding: $padding-large-vertical $padding-large-horizontal;
   border-radius: $border-radius-large;
   color: $background-color;
+  margin-top: -120px;
 }
 
 .section {

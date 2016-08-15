@@ -5,42 +5,218 @@
     <div class="main-title text-center">
       <h1>Alertas de enchentes</h1>
     </div>
-
     <div class="row">
-      <div class="col-md-8">
-        <h3 class="text-center">Rio Acre</h3>
-        <br>
-        <div class="row">
-          <div class="col-xs-2 col-xs-offset-1">
-            <svg width="100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70">
-              <path id="svg_2" class="alert-icon" d="m55.190081,67.09211l-40.116,0c-5.344,0 -9.631,-2.07 -11.766,-5.677c-2.136,-3.61 -1.886,-8.362 0.683,-13.044l20.664,-37.669c2.628,-4.792 6.348,-7.433 10.475,-7.433c4.131,0 7.85,2.641 10.479,7.433l20.664,37.671c2.569,4.68 2.818,9.431 0.683,13.041c-2.135,3.608 -6.422,5.678 -11.766,5.678zm-20.059,-57.437c-1.665,0 -3.442,1.5 -4.876,4.115l-20.665,37.671c-1.459,2.656 -1.743,5.104 -0.789,6.722c0.957,1.615 3.246,2.544 6.273,2.544l40.116,0c3.027,0 5.316,-0.929 6.273,-2.544c0.954,-1.618 0.67,-4.065 -0.789,-6.719l-20.664,-37.674c-1.434,-2.616 -3.211,-4.115 -4.879,-4.115z"/>
-              <path id="svg_5" class="alert-icon" d="m31.310581,49.62311c0,-2.262 1.581,-3.885 3.844,-3.885s3.753,1.623 3.798,3.885c0,2.217 -1.494,3.882 -3.798,3.882c-2.308,0 -3.844,-1.665 -3.844,-3.882zm1.411,-6.019l-0.983,-19.336l6.787,0l-0.938,19.336l-4.866,0z" fill="#000000"/>
-            </svg>
-          </div>
-          <div class="col-xs-9">
-            <h3>Alerta de enchentes</h3>
-            <h4>Previsão para as próximas <strong>12 horas</strong></h4>
-          </div>
-        </div>
+      <div class="col-lg-8 col-lg-offset-2">
+        <div id="chart"></div>
       </div>
-      <div class="col-md-4">
-        <div class="form-card">
-          <h4 class="text-center">Quero receber alertas via<br>Telegram<small>&copy;</small> ou Whatsapp<small>&copy;</small></h4>
-          <br>
-          <form>
+    </div>
+    <!-- CHART  -->
+    <style>
+      svg {
+        font: 10px sans-serif;
+      }
+
+      .y.axis path {
+        display: none;
+      }
+
+      .y.axis line {
+        stroke: #fff;
+        stroke-opacity: .2;
+        shape-rendering: crispEdges;
+      }
+
+      .y.axis .zero line {
+        stroke: #000;
+        stroke-opacity: 1;
+      }
+
+      .title {
+        font: 78px;
+        fill: #666;
+      }
+
+      .birthyear,
+      .age {
+        text-anchor: middle;
+      }
+
+      .birthyear {
+        fill: #fff;
+      }
+
+      rect {
+        fill-opacity: .6;
+        fill: #e377c2;
+      }
+
+      rect:first-child {
+        fill: #1f77b4;
+      }
+
+      </style>
+    <script>
+      var margin = {
+            top: 10,
+            right: 20,
+            bottom: 15,
+            left: 10},
+          width = 1000 - margin.left - margin.right,
+          height = 250 - margin.top - margin.bottom,
+          barWidth = Math.floor(width / 19) - 1,
+          viewBoxWidth = width + margin.left + margin.right,
+          viewBoxHeight = height + margin.top + margin.bottom;
+
+      var x = d3.scale.linear()
+          .range([barWidth / 2, width - barWidth / 2]);
+
+      var y = d3.scale.linear()
+          .range([height, 0]);
+
+      var yAxis = d3.svg.axis()
+          .scale(y)
+          .orient("right")
+          .tickSize(-width)
+          .tickFormat(function(d) { return Math.round(d / 1e6); });
+
+      // An SVG element with a bottom-right origin.
+      var svg = d3.select("#chart").append("svg")
+          .attr("width", "100%")
+          .attr("viewBox", "0 0 "+viewBoxWidth+" "+viewBoxHeight)
+        .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      // A sliding container to hold the bars by birthyear.
+      var birthyears = svg.append("g")
+          .attr("class", "birthyears");
+
+      // A label for the current year.
+      var title = svg.append("text")
+          .attr("class", "title")
+          .attr("dy", ".71em")
+          .text(2000);
+
+      d3.csv("population.csv", function(error, data) {
+
+        // Convert strings to numbers.
+        data.forEach(function(d) {
+          d.people = +d.people;
+          d.year = +d.year;
+          d.age = +d.age;
+        });
+
+        // Compute the extent of the data set in age and years.
+        var age1 = d3.max(data, function(d) { return d.age; }),
+            year0 = d3.min(data, function(d) { return d.year; }),
+            year1 = d3.max(data, function(d) { return d.year; }),
+            year = year1;
+
+        // Update the scale domains.
+        x.domain([year1 - age1, year1]);
+        y.domain([0, d3.max(data, function(d) { return d.people; })]);
+
+        // Produce a map from year and birthyear to [male, female].
+        data = d3.nest()
+            .key(function(d) { return d.year; })
+            .key(function(d) { return d.year - d.age; })
+            .rollup(function(v) { return v.map(function(d) { return d.people; }); })
+            .map(data);
+
+        // Add an axis to show the population values.
+        svg.append("g")
+            .attr("class", "y axis")
+            .attr("transform", "translate(" + width + ",0)")
+            .call(yAxis)
+          .selectAll("g")
+          .filter(function(value) { return !value; })
+            .classed("zero", true);
+
+        // Add labeled rects for each birthyear (so that no enter or exit is required).
+        var birthyear = birthyears.selectAll(".birthyear")
+            .data(d3.range(year0 - age1, year1 + 1, 5))
+          .enter().append("g")
+            .attr("class", "birthyear")
+            .attr("transform", function(birthyear) { return "translate(" + x(birthyear) + ",0)"; });
+
+        birthyear.selectAll("rect")
+            .data(function(birthyear) { return data[year][birthyear] || [0, 0]; })
+          .enter().append("rect")
+            .attr("x", -barWidth / 2)
+            .attr("width", barWidth)
+            .attr("y", y)
+            .attr("height", function(value) { return height - y(value); });
+
+        // Add labels to show birthyear.
+        birthyear.append("text")
+            .attr("y", height - 4)
+            .text(function(birthyear) { return birthyear; });
+
+        // Add labels to show age (separate; not animated).
+        svg.selectAll(".age")
+            .data(d3.range(0, age1 + 1, 5))
+          .enter().append("text")
+            .attr("class", "age")
+            .attr("x", function(age) { return x(year - age); })
+            .attr("y", height + 4)
+            .attr("dy", ".71em")
+            .text(function(age) { return age; });
+
+        // Allow the arrow keys to change the displayed year.
+        window.focus();
+        d3.select(window).on("keydown", function() {
+          switch (d3.event.keyCode) {
+            case 37: year = Math.max(year0, year - 10); break;
+            case 39: year = Math.min(year1, year + 10); break;
+          }
+          update();
+        });
+
+        function update() {
+          if (!(year in data)) return;
+          title.text(year);
+
+          birthyears.transition()
+              .duration(750)
+              .attr("transform", "translate(" + (x(year1) - x(year)) + ",0)");
+
+          birthyear.selectAll("rect")
+              .data(function(birthyear) { return data[year][birthyear] || [0, 0]; })
+            .transition()
+              .duration(750)
+              .attr("y", y)
+              .attr("height", function(value) { return height - y(value); });
+        }
+      });
+
+      </script>
+    <!-- /CHART -->
+
+</section>
+
+<section class="container-fluid section section-primary">
+  <div class="container">
+    <div class="form-card">
+      <h4 class="text-center">Quero receber alertas via Telegram<small>&copy;</small> ou Whatsapp<small>&copy;</small></h4>
+      <br>
+      <form>
+        <div class="row">
+          <div class="col-sm-5 col-md-5">
             <div class="form-group">
               <input type="text" class="form-control" id="nome" placeholder="Nome">
             </div>
+          </div>
+          <div class="col-sm-4 col-md-5">
             <div class="form-group">
               <input type="text" class="form-control" id="telefone" placeholder="Telefone">
             </div>
+          </div>
+          <div class="col-sm-3 col-md-2">
             <button type="submit" class="btn btn-block btn-success">Cadastrar-se</button>
-          </form>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
   </div>
-
 </section>
 
 <section class="container-fluid section section-primary">
