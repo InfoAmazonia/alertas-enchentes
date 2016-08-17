@@ -1,17 +1,37 @@
 <section class="container-fluid headline">
+    <div class="container">
+      <h1 class="main-title text-right">Alerta de enchentes</h1>
+      <h2 class="main-title-logo text-right"><img src="images/ia-white.png" alt="Infoamazônia" width="150" height="32"></h2>
 
-  <div class="container">
-    <h2 class="text-center"><img src="images/ia-white.png" alt="Infoamazônia" width="150" height="32"></h2>
-    <div class="main-title text-center">
-      <h1>Alertas de enchentes</h1>
-    </div>
+      <div class="row">
+        <div class="col-md-8">
+          <div class="map-info">
 
-    <div class="row">
-      <div class="col-md-10 col-md-offset-1">
-        <div id="chart"></div>
+            <div style="padding: 20px 20px 80px 40px; font:16px arial,helvetica,sans-serif;">
+              <div style="font-size:22px; font-weight: bold;">Rio Acre</div>
+              <div>Quarta-feira, {{main.now}}</div>
+              <img src="images/flood.svg" alt="Flood" style="float: left; height: 90px; width: 64px;" />
+              <div style="padding-left:10px;float:left">
+                <div>
+                  <div style="float:left;margin-top:10px;font-size:60px">
+                    <span>23h</span>
+                  </div>
+                  <div style="float:left;font-size:16px;margin-top:25px; margin-left: 12px;">
+                    <div style="font-size:22px;">Alerta de enchente</div>
+                    <div>Ação evasiva é recomendada</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+
+            <div id="chart"></div>
+
+          </div>
+        </div>
       </div>
-    </div>
 
+    </div>
     <!-- CHART  -->
     <style>
       .tick,
@@ -142,24 +162,27 @@
 
         var bar = svg.selectAll(".bar")
             .data(data);
+          // Render bars
           bar.enter().append("rect")
             .attr("class", function(d) { return "bar "+color(d.quota); })
             .attr("x", function(d) { return x(d.hour); })
             .attr("width", x.rangeBand())
             .attr("y", function(d) { return y(d.quota); })
             .attr("height", function(d) { return height - y(d.quota) + baseValue; });
+          // Render top bars
           bar.enter().append("rect")
             .attr("class", function(d) { return "bar-top "+color(d.quota); })
             .attr("x", function(d) { return x(d.hour); })
             .attr("width", x.rangeBand())
             .attr("y", function(d) { return y(d.quota); })
             .attr("height", 2);
-          bar.enter().append("text")
-            .attr("class", "bar-value")
-            .attr("x", function(d) { return x(d.hour)+x.rangeBand()/2; })
-            .attr("y", function(d) { return y(d.quota)-5; })
-            .attr("text-anchor", "middle")
-            .text(function(d) { return d.quota; });
+          // Render values
+          // bar.enter().append("text")
+          //   .attr("class", "bar-value")
+          //   .attr("x", function(d) { return x(d.hour)+x.rangeBand()/2; })
+          //   .attr("y", function(d) { return y(d.quota)-5; })
+          //   .attr("text-anchor", "middle")
+          //   .text(function(d) { return d.quota; });
           bar.enter().append("text")
             .attr("class", "bar-value")
             .attr("x", function(d) { return x(d.hour)+x.rangeBand()/2; })

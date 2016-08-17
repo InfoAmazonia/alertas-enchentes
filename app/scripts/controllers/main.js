@@ -9,9 +9,12 @@
  */
 angular.module('alertasEnchentesApp')
   .controller('MainCtrl', function () {
-    this.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+    var getConvertedNow = function() {
+      var date = new Date();
+      var hh = date.getHours();
+      var mm = date.getMinutes();
+
+      return " "+hh+":00";
+    };
+    this.now = getConvertedNow();
   });
