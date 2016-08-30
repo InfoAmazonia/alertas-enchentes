@@ -22,6 +22,14 @@ angular
         controller: 'MainCtrl',
         controllerAs: 'main'
       })
+      .when('/madeira', {
+        templateUrl: 'views/main.html',
+        controller: 'MainCtrl',
+        controllerAs: 'main'
+      })
+      .when('/portovelho', {
+        templateUrl: 'views/madeira.html'
+      })
       .when('/about', {
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl',
