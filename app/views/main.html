@@ -2,210 +2,25 @@
     <div class="container">
       <h1 class="main-title text-right">Alerta de enchentes</h1>
       <h2 class="main-title-logo text-right"><img src="images/ia-white.png" alt="Infoamazônia" width="150" height="32"></h2>
+    </div>
 
+    <div class="container alert-widget">
       <div class="row">
         <div class="col-md-8">
-          <div class="map-info">
-
-            <div style="padding: 20px 20px 80px 40px; font:16px arial,helvetica,sans-serif;">
-              <div style="font-size:22px; font-weight: bold;">Rio Acre</div>
-              <div>Quarta-feira, {{main.now}}</div>
-              <img src="images/flood.svg" alt="Flood" style="float: left; height: 90px; width: 64px;" />
-              <div style="padding-left:10px;float:left">
-                <div>
-                  <div style="float:left;margin-top:10px;font-size:60px">
-                    <span>23h</span>
-                  </div>
-                  <div style="float:left;font-size:16px;margin-top:25px; margin-left: 12px;">
-                    <div style="font-size:22px;">Alerta de enchente</div>
-                    <div>Ação evasiva é recomendada</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div>
-
-            <div id="chart"></div>
-
-          </div>
-        </div>
+          <div id="alerta-enchentes"></div>
+         </div>
       </div>
-
     </div>
+
     <!-- CHART  -->
-    <style>
-      .tick,
-      .domain {
-        color: #fff;
-        fill: #fff;
-        stroke: #fff;
-      }
-
-      .bar {
-        fill: #1878f0;
-        opacity: 0.4;
-        transition: opacity 0.5s;
-      }
-
-      .bar-top {
-        fill: #1878f0;
-      }
-
-      .bar-alert {
-        fill: #faea59;
-      }
-
-      .bar-flood {
-        fill: #eb533e;
-      }
-
-      .bar-value {
-        fill: #fff;
-        font-size: 1em;
-      }
-
-      .bar:hover {
-        opacity: 1;
-      }
-
-      .axis {
-        font: 10px sans-serif;
-      }
-
-      .axis path,
-      .axis line {
-        fill: none;
-        stroke: #000;
-        shape-rendering: crispEdges;
-      }
-
-      .x.axis path {
-        display: none;
-      }
-
-      .line {
-        fill: none;
-        stroke-width: 2px;
-        opacity: 0.4;
-        stroke-dasharray: 10;
-      }
-
-      .line-flood {
-        stroke: red;
-      }
-
-      .line-alert {
-        stroke: yellow;
-      }
-    </style>
     <script>
-      var margin = {
-            top: 20,
-            right: 20,
-            bottom: 100,
-            left: 40
-          },
-          width = 960 - margin.left - margin.right,
-          height = 250 - margin.top - margin.bottom,
-          viewBoxWidth = width + margin.left + margin.right,
-          viewBoxHeight = height + margin.top + margin.bottom,
-          baseValue = 100;
-
-      var x = d3.scale.ordinal()
-          .rangeRoundBands([0, width], 0);
-
-      var y = d3.scale.linear()
-          .range([height, 0]);
-
-      var xAxis = d3.svg.axis()
-          .scale(x)
-          .orient("bottom");
-
-      var yAxis = d3.svg.axis()
-          .scale(y)
-          .orient("left");
-
-      var svg = d3.select("#chart").append("svg")
-          .attr("width", "100%")
-          .attr("viewBox", "0 0 "+viewBoxWidth+" "+viewBoxHeight)
-        .append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-      d3.tsv("data.tsv", type, function(error, data) {
-        if (error) throw error;
-
-        x.domain(data.map(function(d) { return d.hour; }));
-        y.domain([d3.min(data, function(d) { return d.quota; }), d3.max(data, function(d) { return d.quota; })]);
-
-        // svg.append("g")
-        //     .attr("class", "x axis")
-        //     .attr("transform", "translate(0," + height + ")")
-        //     .call(xAxis);
-
-        // svg.append("g")
-        //     .attr("class", "y axis")
-        //     .call(yAxis);
-
-        var line = svg.append("line")
-          .attr("class", "line line-alert")
-          .attr("x1", 0)
-          .attr("y1", y(1350))
-          .attr("x2", width)
-          .attr("y2", y(1350));
-
-        var line = svg.append("line")
-          .attr("class", "line line-flood")
-          .attr("x1", 0)
-          .attr("y1", y(1400))
-          .attr("x2", width)
-          .attr("y2", y(1400));
-
-        var bar = svg.selectAll(".bar")
-            .data(data);
-          // Render bars
-          bar.enter().append("rect")
-            .attr("class", function(d) { return "bar "+color(d.quota); })
-            .attr("x", function(d) { return x(d.hour); })
-            .attr("width", x.rangeBand())
-            .attr("y", function(d) { return y(d.quota); })
-            .attr("height", function(d) { return height - y(d.quota) + baseValue; });
-          // Render top bars
-          bar.enter().append("rect")
-            .attr("class", function(d) { return "bar-top "+color(d.quota); })
-            .attr("x", function(d) { return x(d.hour); })
-            .attr("width", x.rangeBand())
-            .attr("y", function(d) { return y(d.quota); })
-            .attr("height", 2);
-          // Render values
-          // bar.enter().append("text")
-          //   .attr("class", "bar-value")
-          //   .attr("x", function(d) { return x(d.hour)+x.rangeBand()/2; })
-          //   .attr("y", function(d) { return y(d.quota)-5; })
-          //   .attr("text-anchor", "middle")
-          //   .text(function(d) { return d.quota; });
-          bar.enter().append("text")
-            .attr("class", "bar-value")
-            .attr("x", function(d) { return x(d.hour)+x.rangeBand()/2; })
-            .attr("y", height + baseValue - 5)
-            .attr("text-anchor", "middle")
-            .text(function(d) { return d.hour; });
-
-      });
-
-      function type(d) {
-        d.quota = +d.quota;
-        return d;
-      }
-
-      function color(d) {
-        if (d < 1350) {
-          return "bar-normal";
-        } else if (d >= 1350 && d < 1400) {
-          return "bar-alert";
-        } else {
-          return "bar-flood";
-        }
-      }
+      (function() {
+          var script = document.createElement('script');
+          script.async = true;
+          script.src   = "http://localhost/alertas-enchentes-widget/alerta-enchentes.js?timestamp="+( new Date().getTime() );
+          var entry = document.getElementsByTagName('script')[0];
+          entry.parentNode.insertBefore(script, entry);
+      }());
     </script>
     <!-- /CHART -->
 
@@ -243,5 +58,17 @@
       <p>
       Nulla facilisi. Praesent sagittis tincidunt tortor, eget tristique leo finibus sed. Mauris in lacus volutpat, pellentesque libero at, lacinia velit. Proin mollis at est ac vehicula.
     </p>
+  </div>
+  <div class="container">
+    <!-- <div id="alerta-enchentes"></div>
+    <script>
+      (function() {
+          var script = document.createElement('script');
+          script.async = true;
+          script.src   = "http://localhost/alertas-enchentes-widget/alerta-enchentes.js?timestamp="+( new Date().getTime() );
+          var entry = document.getElementsByTagName('script')[0];
+          entry.parentNode.insertBefore(script, entry);
+      }());
+    </script> -->
   </div>
 </section>
