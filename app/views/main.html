@@ -7,7 +7,9 @@
     <div class="container alert-widget">
       <div class="row">
         <div class="col-md-10 col-md-offset-2">
-          <div id="alerta-enchentes"></div>
+          <div data-alerta-enchentes-station="13600002"></div>
+          
+          <div data-alerta-enchentes-station="15400000"></div>
          </div>
       </div>
     </div>
@@ -17,7 +19,7 @@
       (function() {
           var script = document.createElement('script');
           script.async = true;
-          script.src   = "scripts/alerta-enchentes.js?station=13600002&timestamp="+( new Date().getTime() );
+          script.src   = "http://localhost/alertas-enchentes-widget/alerta-enchentes.js";
           var entry = document.getElementsByTagName('script')[0];
           entry.parentNode.insertBefore(script, entry);
       }());
