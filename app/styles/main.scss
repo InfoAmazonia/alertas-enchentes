@@ -4,9 +4,11 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
 
-$section-padding-vertical: 60px;
-$background-color: #111;
+$background-color: #0b3341;
 $background-color-inverse: #fff;
+$section-padding-vertical: $padding-large-vertical*4;
+$section-primary-bg-color: #aaa;
+$section-secondary-bg-color: #0b3341;
 
 body {
   padding: 0;
@@ -14,69 +16,97 @@ body {
   font-family: sans-serif;
   background-color: $background-color;
   font-size: 1.5em;
+  font-family: 'Source Sans Pro', sans-serif;
+  color: $background-color-inverse;
 }
-
-.headline {
-  position: absolute;
-  top: 0;
-  height: 800px;
-  padding-top: 50px;
-  color: #fff;
-}
-
-.main-title-logo {
-  float: right;
-}
-
-.main-title {
-  float: right;
-  margin: 22px 10px 10px 5px;
-  font-size: 1.1em;
-  line-height: 35px;
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-.form-card {
-  background-color: $background-color-inverse;
-  padding: $padding-large-vertical $padding-large-horizontal;
-  border-radius: $border-radius-large;
-  color: $background-color;
-}
-
-.section {
+footer {
+  background-color: $background-color;
   padding-top: $section-padding-vertical;
   padding-bottom: $section-padding-vertical;
-  background-color: $background-color-inverse;
+}
+.section-header {
+		-moz-align-items: center;
+		-webkit-align-items: center;
+		-ms-align-items: center;
+		align-items: center;
+		background-image: url("https://upload.wikimedia.org/wikipedia/commons/4/4e/Curvas_do_Parque_Nacional_de_Anavilhanas.jpg");
+		display: -moz-flex;
+		display: -webkit-flex;
+		display: -ms-flex;
+		display: flex;
+		padding: $section-padding-vertical 0;
+		background-attachment: fixed;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+		border-bottom: 0 !important;
+		cursor: default;
+		position: relative;
+		top: 0;
+    padding-top: 100px;
+
+		&:after {
+			-moz-transition: opacity 2.5s ease;
+			-webkit-transition: opacity 2.5s ease;
+			-ms-transition: opacity 2.5s ease;
+			transition: opacity 2.5s ease;
+			-moz-transition-delay: 0.75s;
+			-webkit-transition-delay: 0.75s;
+			-ms-transition-delay: 0.75s;
+			transition-delay: 0.75s;
+			-moz-pointer-events: none;
+			-webkit-pointer-events: none;
+			-ms-pointer-events: none;
+			pointer-events: none;
+			background-color: rgba(11, 51, 65, 0.8);
+			content: '';
+			display: block;
+			height: 100%;
+			left: 0;
+			opacity: 0.85;
+			position: absolute;
+			top: 0;
+			width: 100%;
+			z-index: 1;
+		}
+
+    h1 {
+			font-size: 3.25em;
+		}
+
+    header {
+      padding-top: $section-padding-vertical*2;
+      padding-bottom: $section-padding-vertical*2;
+    }
+
+    > .inner {
+			-moz-transition: opacity 1.5s ease, -moz-transform 0.5s ease-out, -moz-filter 0.5s ease, -webkit-filter 0.5s ease;
+			-webkit-transition: opacity 1.5s ease, -webkit-transform 0.5s ease-out, -webkit-filter 0.5s ease, -webkit-filter 0.5s ease;
+			-ms-transition: opacity 1.5s ease, -ms-transform 0.5s ease-out, -ms-filter 0.5s ease, -webkit-filter 0.5s ease;
+			transition: opacity 1.5s ease, transform 0.5s ease-out, filter 0.5s ease, -webkit-filter 0.5s ease;
+			padding: 0 !important;
+			position: relative;
+			z-index: 2;
+
+      image {
+				display: none;
+			}
+		}
 }
 
 .section-primary {
-  background-color: $background-color;
+  padding-top: $section-padding-vertical;
+  padding-bottom: $section-padding-vertical;
+  background-color: $section-primary-bg-color;
 }
 
-.section-default {
-  background-color: $background-color-inverse;
+.major {
+  border-bottom: solid 2px #fff;
+  padding-bottom: 1em;
 }
 
-.about {
-  font-size: 2em;
-}
-
-.alert-widget {
-  margin-top: 80px;
-
-  @media (min-width: 768px) {
-    margin-top: 200px;
-  }
-
-}
-
-footer {
-  padding: 60px 0 0;
-  background: $background-color;
-  color: rgba(255,255,255,0.5);
-}
-
-.alert-icon {
-  fill: #fff;
+/* Bootstrap overhide */
+.navbar-default {
+  background: none;
+  border: none;
 }

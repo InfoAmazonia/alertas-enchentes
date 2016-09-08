@@ -18,17 +18,16 @@ angular
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl',
-        controllerAs: 'main'
+        templateUrl: 'views/riobranco.html'
       })
-      .when('/madeira', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl',
-        controllerAs: 'main'
+      .when('/riobranco', {
+        templateUrl: 'views/riobranco.html'
       })
       .when('/portovelho', {
-        templateUrl: 'views/madeira.html'
+        templateUrl: 'views/portovelho.html'
+      })
+      .when('/manaus', {
+        templateUrl: 'views/manaus.html'
       })
       .when('/about', {
         templateUrl: 'views/about.html',

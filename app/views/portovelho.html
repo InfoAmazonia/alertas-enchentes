@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-md-4">
+    <h2 class="major">Porto Velho</h2>
+    <p>Observando as medições do volume das estações Abunã, Morada Nova e Guajará Mirim, podemos antecipar as enchentes em Porto Velho e região.</p>
+  </div>
+  <div class="col-md-8">
+    <div data-alerta-enchentes-station="15400000"></div>
+    <script type="text/javascript">
+      (function() {
+          var script = document.createElement('script');
+          script.async = true;
+          script.src   = "http://localhost/alertas-enchentes-widget/alerta-enchentes.js";
+          var entry = document.getElementsByTagName('script')[0];
+          entry.parentNode.insertBefore(script, entry);
+      }());
+    </script>
+  </div>
+</div>
