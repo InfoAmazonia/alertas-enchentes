@@ -7,7 +7,7 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 $background-color: #0b3341;
 $background-color-inverse: #fff;
 $section-padding-vertical: $padding-large-vertical*4;
-$section-primary-bg-color: #aaa;
+$section-primary-bg-color: #eee;
 $section-secondary-bg-color: #0b3341;
 
 body {
@@ -15,14 +15,14 @@ body {
   margin: 0;
   font-family: sans-serif;
   background-color: $background-color;
-  font-size: 1.5em;
   font-family: 'Source Sans Pro', sans-serif;
-  color: $background-color-inverse;
+  font-size: 2em;
 }
 footer {
   background-color: $background-color;
   padding-top: $section-padding-vertical;
   padding-bottom: $section-padding-vertical;
+  color: #fff;
 }
 .section-header {
 		background-image: url("https://upload.wikimedia.org/wikipedia/commons/4/4e/Curvas_do_Parque_Nacional_de_Anavilhanas.jpg");
@@ -40,6 +40,7 @@ footer {
 		position: relative;
 		top: 0;
     padding-top: 100px;
+    color: #fff;
 
 		&:after {
 			-moz-transition: opacity 2.5s ease;
@@ -87,6 +88,11 @@ footer {
 				display: none;
 			}
 		}
+
+}
+
+.section-header-lg {
+  padding-bottom: 150px;
 }
 
 .main-header-subheadding {
