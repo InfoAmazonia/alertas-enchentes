@@ -25,10 +25,6 @@ footer {
   padding-bottom: $section-padding-vertical;
 }
 .section-header {
-		-moz-align-items: center;
-		-webkit-align-items: center;
-		-ms-align-items: center;
-		align-items: center;
 		background-image: url("https://upload.wikimedia.org/wikipedia/commons/4/4e/Curvas_do_Parque_Nacional_de_Anavilhanas.jpg");
 		display: -moz-flex;
 		display: -webkit-flex;
@@ -84,7 +80,6 @@ footer {
 			-webkit-transition: opacity 1.5s ease, -webkit-transform 0.5s ease-out, -webkit-filter 0.5s ease, -webkit-filter 0.5s ease;
 			-ms-transition: opacity 1.5s ease, -ms-transform 0.5s ease-out, -ms-filter 0.5s ease, -webkit-filter 0.5s ease;
 			transition: opacity 1.5s ease, transform 0.5s ease-out, filter 0.5s ease, -webkit-filter 0.5s ease;
-			padding: 0 !important;
 			position: relative;
 			z-index: 2;
 
@@ -94,6 +89,11 @@ footer {
 		}
 }
 
+.main-header-subheadding {
+  margin-top: $padding-large-vertical;
+  margin-bottom: $padding-large-vertical;
+  font-size: 18px;
+}
 .section-primary {
   padding-top: $section-padding-vertical;
   padding-bottom: $section-padding-vertical;
@@ -103,6 +103,73 @@ footer {
 .major {
   border-bottom: solid 2px #fff;
   padding-bottom: 1em;
+}
+
+.river-cover {
+  display: block;
+  height: 150px;
+  border-radius: $border-radius-base;
+  padding: $padding-large-vertical;
+  background-color: $background-color;
+  background-size: cover;
+  color: #fff;
+  text-shadow: 2px 2px $text-color;
+  font-size: 28px;
+  line-height: 130px;
+  text-align: center;
+
+  &:hover {
+    text-decoration: none;
+    color: #fff;
+  }
+
+  &.river-cover-riobranco {
+    background-image: url("http://4.bp.blogspot.com/-j-MSkE8IeKo/T84Jqk7FkJI/AAAAAAAAY4k/7FgbR3JYg7o/s1600/rio-branco-AC.jpg");
+  }
+
+  &.river-cover-portovelho {
+    background-image: url("http://www.portalgentedeopiniao.net/fotos/image/vistadePortoVelhoFotoJGOMES1200.jpg");
+  }
+
+  &.river-cover-manaus {
+    background-image: url("http://sknincorporadora.com.br/files/8314/0241/3198/Fotomontagem_Noturna_Cidade.jpg");
+  }
+
+  &:after {
+    -moz-transition: opacity 2.5s ease;
+    -webkit-transition: opacity 2.5s ease;
+    -ms-transition: opacity 2.5s ease;
+    transition: opacity 2.5s ease;
+    -moz-transition-delay: 0.75s;
+    -webkit-transition-delay: 0.75s;
+    -ms-transition-delay: 0.75s;
+    transition-delay: 0.75s;
+    -moz-pointer-events: none;
+    -webkit-pointer-events: none;
+    -ms-pointer-events: none;
+    pointer-events: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    content: '';
+    display: block;
+    border-radius: $border-radius-base;
+    top: -140px;
+    left: 0;
+    height: 150px;
+    opacity: 0.85;
+    position: relative;
+    margin-left: -$padding-large-vertical;
+    margin-right: -$padding-large-vertical;
+    z-index: 1;
+  }
+
+  > .river-cover-inner {
+    -moz-transition: opacity 1.5s ease, -moz-transform 0.5s ease-out, -moz-filter 0.5s ease, -webkit-filter 0.5s ease;
+    -webkit-transition: opacity 1.5s ease, -webkit-transform 0.5s ease-out, -webkit-filter 0.5s ease, -webkit-filter 0.5s ease;
+    -ms-transition: opacity 1.5s ease, -ms-transform 0.5s ease-out, -ms-filter 0.5s ease, -webkit-filter 0.5s ease;
+    transition: opacity 1.5s ease, transform 0.5s ease-out, filter 0.5s ease, -webkit-filter 0.5s ease;
+    position: relative;
+    z-index: 2;
+  }
 }
 
 /* Bootstrap overhide */

@@ -1,18 +1,26 @@
-<div class="row">
-  <div class="col-md-4">
-    <h2 class="major">Rio Branco</h2>
-    <p>Observando as medições do volume da estação Xapuri, podemos antecipar as enchentes em Rio Branco e região.</p>
+<section class="section-header">
+  <div class="container inner">
+    <header>
+      <h1>Alerta de enchentes</h1>
+      <p>Veja as previsões de volume para os rios da região amazônica</p>
+    </header>
+    <div class="row">
+      <div class="col-md-4">
+        <h2 class="major">Rio Branco</h2>
+        <p>Observando as medições do volume da estação Xapuri, podemos antecipar as enchentes em Rio Branco e região.</p>
+      </div>
+      <div class="col-md-8">
+        <div data-alerta-enchentes-station="13600002"></div>
+        <script type="text/javascript">
+          (function() {
+              var script = document.createElement('script');
+              script.async = true;
+              script.src   = "http://alertas-enchentes-api.herokuapp.com/scripts/alerta-enchentes.js";
+              var entry = document.getElementsByTagName('script')[0];
+              entry.parentNode.insertBefore(script, entry);
+          }());
+        </script>
+      </div>
+    </div>
   </div>
-  <div class="col-md-8">
-    <div data-alerta-enchentes-station="13600002"></div>
-    <script type="text/javascript">
-      (function() {
-          var script = document.createElement('script');
-          script.async = true;
-          script.src   = "http://alertas-enchentes-api.herokuapp.com/scripts/alerta-enchentes.js";
-          var entry = document.getElementsByTagName('script')[0];
-          entry.parentNode.insertBefore(script, entry);
-      }());
-    </script>
-  </div>
-</div>
+</section>

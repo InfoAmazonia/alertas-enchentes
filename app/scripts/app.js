@@ -11,30 +11,35 @@
 angular
   .module('alertasEnchentesApp', [
     'ngAnimate',
-    'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'ui.router'
   ])
-  .config(function ($routeProvider) {
-    $routeProvider
-      .when('/', {
-        templateUrl: 'views/riobranco.html'
-      })
-      .when('/riobranco', {
-        templateUrl: 'views/riobranco.html'
-      })
-      .when('/portovelho', {
-        templateUrl: 'views/portovelho.html'
-      })
-      .when('/manaus', {
-        templateUrl: 'views/manaus.html'
-      })
-      .when('/about', {
-        templateUrl: 'views/about.html',
-        controller: 'AboutCtrl',
-        controllerAs: 'about'
-      })
-      .otherwise({
-        redirectTo: '/'
-      });
-  });
+  .constant('RESTAPI', {
+    url: 'http://localhost:5003/api'
+  })
+  .config(routeConfig);
+
+  routeConfig.$inject = ['$stateProvider', '$urlRouterProvider'];
+
+  /*jshint latedef: nofunc */
+  function routeConfig($stateProvider, $urlRouterProvider) {
+    $stateProvider
+    .state('home', {
+      url: "/",
+      templateUrl: "views/main.html"
+    })
+    .state('riobranco', {
+      url: "/riobranco",
+      templateUrl: "views/riobranco.html"
+    })
+    .state('portovelho', {
+      url: "/portovelho",
+      templateUrl: "views/portovelho.html"
+    })
+    .state('manaus', {
+      url: "/manaus",
+      templateUrl: "views/manaus.html"
+    });
+    $urlRouterProvider.otherwise('/');
+  }
