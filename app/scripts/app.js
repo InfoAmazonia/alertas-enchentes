@@ -31,7 +31,9 @@ angular
     })
     .state('riobranco', {
       url: "/riobranco",
-      templateUrl: "views/riobranco.html"
+      templateUrl: "views/riobranco.html",
+      controller: "RioBrancoCtrl",
+      controllerAs: "ctrl"
     })
     .state('portovelho', {
       url: "/portovelho",
