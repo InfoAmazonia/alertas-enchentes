@@ -179,15 +179,27 @@ footer {
 }
 
 /* Graph */
+.timeline-chart {
+  font: 12px sans-serif;
+}
+
 .area {
   fill: steelblue;
+  fill-opacity: 0.8;
   clip-path: url(#clip);
 }
 
-.zoom {
-  cursor: move;
+.axis path,
+.axis line {
   fill: none;
-  pointer-events: all;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
 }
 
 /* Bootstrap overhide */
