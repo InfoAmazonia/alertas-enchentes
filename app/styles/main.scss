@@ -184,7 +184,7 @@ footer {
 }
 
 .area {
-  fill: steelblue;
+  fill: #2980b9;
   fill-opacity: 0.8;
   clip-path: url(#clip);
 }
@@ -195,6 +195,33 @@ footer {
   stroke: #000;
   shape-rendering: crispEdges;
 }
+
+.tick line {
+  opacity: 0.2;
+  stroke-dasharray: 5;
+}
+
+.selected-value {
+
+  > circle {
+    stroke: #333;
+    fill: #fff;
+    stroke-width: 2;
+    opacity: 1;
+  }
+
+  > line {
+    stroke: #333;
+    fill: none;
+    stroke-width: 1;
+    opacity: 1;
+  }
+
+  > text {
+    font-size: 18px;
+  }
+}
+
 
 .brush .extent {
   stroke: #fff;
