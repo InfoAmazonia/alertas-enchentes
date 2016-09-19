@@ -184,9 +184,14 @@ footer {
 }
 
 .area {
-  fill: #2980b9;
-  fill-opacity: 0.8;
+  fill: #587FAF;
+  fill-opacity: 1;
   clip-path: url(#clip);
+}
+
+.area2 {
+  fill: #575CAB;
+  fill-opacity: 0.9;
 }
 
 .axis path,
@@ -225,8 +230,13 @@ footer {
 
 .brush .extent {
   stroke: #fff;
-  fill-opacity: .125;
+  fill: #23d4a9;
+  fill-opacity: 0.2;
   shape-rendering: crispEdges;
+}
+
+.warning-line {
+  stroke: yellow;
 }
 
 /* Bootstrap overhide */

@@ -22,7 +22,7 @@
                 height = 500 - margin.top - margin.bottom,
                 height2 = 500 - margin2.top - margin2.bottom;
 
-            var parseDate = d3noConflict.time.format("%b %Y").parse,
+            var parseDate = d3noConflict.time.format("%d/%m/%Y").parse,
               bisectDate = d3.bisector(function(d) { return d.date; }).left;
 
             var x = d3noConflict.time.scale().range([0, width]),
@@ -38,8 +38,7 @@
                   .outerTickSize(0)
                   .tickPadding(10);
 
-            var brush = d3noConflict.svg.brush()
-                .x(x2);
+            var brush = d3noConflict.svg.brush().x(x2);
 
             var areavalue = d3noConflict.svg.area()
                 .interpolate("monotone")
@@ -97,12 +96,17 @@
 
             d3noConflict.csv("population.csv", type, function (error, data) {
               var max = d3noConflict.max(data.map(function (d) { return d.price; }));
-              x.domain(d3noConflict.extent(data.map(function (d) { return d.date; })));
+              var extent = d3noConflict.extent(data.map(function (d) { return d.date; }));
+              x.domain(extent);
               y.domain([0, max]);
               x2.domain(x.domain());
               y2.domain(y.domain());
 
               area.attr("d", areavalue(data));
+
+              focus.append("line")
+                  .attr("class", "warning-line")
+                  .attr({"x1": 0, "y1": y(1350), "x2": width, "y2": y(1350)});
 
               focus.append("g")
                   .attr("class", "x axis")
@@ -115,7 +119,7 @@
 
               context.append("path")
                   .datum(data)
-                  .attr("class", "area")
+                  .attr("class", "area2")
                   .attr("d", area2);
 
               context.append("g")
@@ -134,6 +138,7 @@
                 .on("mouseout", mouseout)
                 .on("mousemove", mousemove);
 
+              brush.extent(extent);
               brush.on("brush", brushed);
 
                 function brushed() {
