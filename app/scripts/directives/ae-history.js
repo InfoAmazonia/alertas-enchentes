@@ -20,23 +20,44 @@
                 margin2 = { top: 430, right: 10, bottom: 20, left: 40 },
                 width = 1960 - margin.left - margin.right,
                 height = 500 - margin.top - margin.bottom,
-                height2 = 500 - margin2.top - margin2.bottom;
+                height2 = 500 - margin2.top - margin2.bottom,
+                tooltipWidth = 500,
+                tooltipHeight = 10;
 
             var parseDate = d3noConflict.time.format("%d/%m/%Y").parse,
-              bisectDate = d3.bisector(function(d) { return d.date; }).left;
+              bisectDate = d3noConflict.bisector(function(d) { return d.date; }).left;
+
+            var localized = d3.locale({
+              "decimal": ",",
+              "thousands": ".",
+              "grouping": [3],
+              "currency": ["R$", ""],
+              "dateTime": "%d/%m/%Y %H:%M:%S",
+              "date": "%d/%m/%Y",
+              "time": "%H:%M:%S",
+              "periods": ["AM", "PM"],
+              "days": ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"],
+              "shortDays": ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+              "months": ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+              "shortMonths": ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
+            });
+
+            var formatTimeLiteral = localized.timeFormat("%d de %B  de %Y");
 
             var x = d3noConflict.time.scale().range([0, width]),
                 x2 = d3noConflict.time.scale().range([0, width]),
                 y = d3noConflict.scale.linear().range([height, 0]),
                 y2 = d3noConflict.scale.linear().range([height2, 0]);
 
-            var xAxis = d3noConflict.svg.axis().scale(x).orient("bottom"),
-                xAxis2 = d3noConflict.svg.axis().scale(x2).orient("bottom"),
-                yAxis = d3noConflict.svg.axis().scale(y)
-                  .orient("left")
+            var xAxis = d3noConflict.svg.axis().scale(x)
+                  .orient("bottom")
+                  .ticks(d3.time.year)
                   .innerTickSize(-width)
                   .outerTickSize(0)
-                  .tickPadding(10);
+                  .tickPadding(10),
+                xAxis2 = d3noConflict.svg.axis().scale(x2).orient("bottom"),
+                yAxis = d3noConflict.svg.axis().scale(y)
+                  .orient("left");
 
             var brush = d3noConflict.svg.brush().x(x2);
 
@@ -74,10 +95,10 @@
             var focus = svg.append("g")
                 .attr("class", "focus")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
             var area = focus.append("path")
                 .attr("class", "area");
-
+            var dots = focus.append("g")
+                .attr("class", "dots");
             var rectMouse = focus.append("rect")
                 .attr("width", width)
                 .attr("height", height)
@@ -87,7 +108,7 @@
                 .attr("class", "selected-value")
                 .style("display", "none");
             var selectedValueLine = selectedValue.append("line");
-            var selectedValueCircle = selectedValue.append("circle").attr("r", 6);
+            var selectedValueCircle = selectedValue.append("circle").attr("r", 3.5);
             var selectedValueText = selectedValue.append("text").attr("x", 9).attr("dy", ".35em");
 
             var context = svg.append("g")
@@ -95,6 +116,52 @@
                 .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
             d3noConflict.csv("population.csv", type, function (error, data) {
+
+              data.sort(function(a, b) {
+                return a.date - b.date;
+              });
+              var
+                currentYear,
+                year,
+                maxYear,
+                minYear,
+                years = new Array();
+              data.forEach(function(d) {
+                year = d.date.getFullYear();
+                if (year !== currentYear) {
+                  currentYear = year;
+                  years[currentYear] = {
+                    min: {
+                      date: null,
+                      price: null
+                    },
+                    max: {
+                      date: null,
+                      price: null
+                    },
+                    data: new Array()
+                  }
+                }
+                years[currentYear].data.push(d);
+              });
+              years.forEach(function(year, key) {
+                var
+                  maxValue = 0,
+                  minValue = 9999;
+                year.data.forEach(function(y) {
+                  if (y.price > maxValue) {
+                    years[key].max.date = y.date;
+                    years[key].max.price = y.price;
+                    maxValue = y.price;
+                  }
+                  if (y.price < minValue) {
+                    years[key].min.date = y.date;
+                    years[key].min.price = y.price;
+                    minValue = y.price;
+                  }
+                });
+              });
+
               var max = d3noConflict.max(data.map(function (d) { return d.price; }));
               var extent = d3noConflict.extent(data.map(function (d) { return d.date; }));
               x.domain(extent);
@@ -107,12 +174,22 @@
               focus.append("line")
                   .attr("class", "warning-line")
                   .attr({"x1": 0, "y1": y(1350), "x2": width, "y2": y(1350)});
-
+              years.forEach(function(year) {
+                dots.append("circle")
+                  .attr("r", 3.5)
+                  .style("fill", "green")
+                  .attr("cx", function(d) { return x(year.max.date); })
+                  .attr("cy", function(d) { return y(year.max.price); });
+                dots.append("circle")
+                  .attr("r", 3.5)
+                  .style("fill", "red")
+                  .attr("cx", function(d) { return x(year.min.date); })
+                  .attr("cy", function(d) { return y(year.min.price); });
+              });
               focus.append("g")
                   .attr("class", "x axis")
                   .attr("transform", "translate(0," + height + ")")
                   .call(xAxis);
-
               focus.append("g")
                   .attr("class", "y axis")
                   .call(yAxis);
@@ -121,12 +198,10 @@
                   .datum(data)
                   .attr("class", "area2")
                   .attr("d", area2);
-
               context.append("g")
                   .attr("class", "x axis")
                   .attr("transform", "translate(0," + height2 + ")")
                   .call(xAxis2);
-
               context.append("g")
                   .attr("class", "x brush")
                   .call(brush)
@@ -164,7 +239,7 @@
                   selectedValueCircle.attr("transform", "translate(" + x(d.date) + "," + y(d.price) + ")");
                   selectedValueLine.attr({"x1": x(d.date), "y1": y(max), "x2": x(d.date), "y2": y(0)});
                   selectedValueText.attr("transform", "translate(" + x(d.date) + "," + y(d.price) + ")");
-                  selectedValueText.text(d.price);
+                  selectedValueText.text(d.price+" em "+formatTimeLiteral(d.date));
                 }
             });
 

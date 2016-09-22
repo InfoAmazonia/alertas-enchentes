@@ -212,7 +212,7 @@ footer {
     stroke: #333;
     fill: #fff;
     stroke-width: 2;
-    opacity: 1;
+    fill-opacity: 0.4;
   }
 
   > line {
@@ -223,7 +223,7 @@ footer {
   }
 
   > text {
-    font-size: 18px;
+    font-size: 16px;
   }
 }
 
