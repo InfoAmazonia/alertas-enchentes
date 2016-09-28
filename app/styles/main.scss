@@ -179,18 +179,26 @@ footer {
 }
 
 /* Graph */
+$chart-primary-color: #3498db;
 .timeline-chart {
   font: 12px sans-serif;
 }
 
 .area {
-  fill: #587FAF;
-  fill-opacity: 1;
+  fill: $chart-primary-color;
+  fill-opacity: 0.8;
+  clip-path: url(#clip);
+}
+
+.line {
+  fill: none;
+  stroke: darken($chart-primary-color, 10);
+  stroke-width: 2;
   clip-path: url(#clip);
 }
 
 .area2 {
-  fill: #575CAB;
+  fill: #999;
   fill-opacity: 0.9;
 }
 
@@ -209,10 +217,10 @@ footer {
 .selected-value {
 
   > circle {
-    stroke: #333;
+    stroke: darken($chart-primary-color, 10);
     fill: #fff;
     stroke-width: 2;
-    fill-opacity: 0.4;
+    fill-opacity: 1;
   }
 
   > line {
@@ -227,10 +235,9 @@ footer {
   }
 }
 
-
 .brush .extent {
   stroke: #fff;
-  fill: #23d4a9;
+  fill: $chart-primary-color;
   fill-opacity: 0.2;
   shape-rendering: crispEdges;
 }
