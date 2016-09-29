@@ -97,7 +97,8 @@
                 .attr("id", "clip")
               .append("rect")
                 .attr("width", width)
-                .attr("height", height);
+                .attr("height", height + margin.top)
+                .attr("transform", "translate(0," + -margin.top + ")");
 
             var focus = svg.append("g")
                 .attr("class", "focus")
@@ -277,7 +278,6 @@
 
               brush.extent(extent);
               brush.on("brush", brushed);
-              console.log(linevalue.x());
               function brushed() {
                 x.domain(brush.empty() ? x2.domain() : brush.extent());
                 focus.select(".area").attr("d", areavalue(data));
