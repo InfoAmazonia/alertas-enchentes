@@ -214,9 +214,38 @@ $chart-primary-color: #3498db;
   stroke-dasharray: 5;
 }
 
+.dots {
+  stroke: darken($chart-primary-color, 10);
+  stroke-width: 2;
+  fill-opacity: 1;
+
+  &.max {
+    fill: #27ae60;
+  }
+
+  &.min {
+    fill: #c0392b;
+  }
+
+}
+
+.dots-line {
+
+  &.max {
+    stroke: #000;
+    fill: none;
+    stroke-width: 1;
+  }
+
+}
+
 .selected-value {
 
-  > circle {
+  > g > circle:first-child {
+    fill: #fff;
+  }
+
+  > g > circle:last-child {
     stroke: darken($chart-primary-color, 10);
     fill: #fff;
     stroke-width: 2;
@@ -224,14 +253,21 @@ $chart-primary-color: #3498db;
   }
 
   > line {
-    stroke: #333;
+    stroke: darken($chart-primary-color, 10);
     fill: none;
-    stroke-width: 1;
+    stroke-width: 2;
+  }
+
+  > rect {
+    fill: darken($chart-primary-color, 10);
     opacity: 1;
   }
 
   > text {
     font-size: 16px;
+    color: #fff;
+    fill: #fff;
+    font-weight: bold;
   }
 }
 

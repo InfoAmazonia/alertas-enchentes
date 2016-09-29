@@ -16,13 +16,15 @@
         },
         link: function postLink(scope, element) {
           var d3noConflict = d3;
-          var margin = { top: 10, right: 10, bottom: 100, left: 40 },
+          var margin = { top: 80, right: 10, bottom: 100, left: 40 },
                 margin2 = { top: 430, right: 10, bottom: 20, left: 40 },
                 width = 1960 - margin.left - margin.right,
                 height = 500 - margin.top - margin.bottom,
                 height2 = 500 - margin2.top - margin2.bottom,
-                tooltipWidth = 500,
-                tooltipHeight = 10;
+                tooltipWidth = 300,
+                tooltipHeight = 30,
+                tooltipPadding = 45,
+                minMaxLineHeight = 25;
 
             var parseDate = d3noConflict.time.format("%d/%m/%Y").parse,
               bisectDate = d3noConflict.bisector(function(d) { return d.date; }).left;
@@ -52,10 +54,10 @@
             var xAxis = d3noConflict.svg.axis().scale(x)
                   .orient("bottom")
                   .ticks(d3.time.year)
-                  .innerTickSize(-width)
+                  .innerTickSize(-height)
                   .outerTickSize(0)
                   .tickPadding(10),
-                xAxis2 = d3noConflict.svg.axis().scale(x2).orient("bottom"),
+                xAxis2 = d3noConflict.svg.axis().scale(x2).orient("bottom").ticks(d3.time.year),
                 yAxis = d3noConflict.svg.axis().scale(y)
                   .orient("left");
 
@@ -116,9 +118,17 @@
                 .style("display", "none");
             var selectedValueLine = selectedValue.append("line");
             var selectedValueCircle = selectedValue.append("g");
-              selectedValueCircle.append("circle").style("fill", "#fff").attr("r", 5.5);
-              selectedValueCircle.append("circle").attr("r", 3.5);
-            var selectedValueText = selectedValue.append("text").attr("x", 9).attr("dy", ".35em");
+                selectedValueCircle.append("circle").attr("r", 8);
+                selectedValueCircle.append("circle").attr("r", 5);
+            var selectedValueRect = selectedValue.append("rect")
+                .attr("rx", 4)
+                .attr("ry", 4)
+                .attr("width", tooltipWidth)
+                .attr("height", tooltipHeight);
+            var selectedValueText = selectedValue.append("text")
+                .attr("x", 9)
+                .attr("dy", ".35em")
+                .attr("text-anchor", "middle");
 
             var context = svg.append("g")
                 .attr("class", "context")
@@ -157,32 +167,37 @@
               });
               years.forEach(function(year, key) {
                 var
-                  maxValue = 0,
-                  minValue = 9999;
+                  maxValue = -9999,
+                  minValue = 9999,
+                  maxDate = null,
+                  minDate = null;
                 year.data.forEach(function(y) {
                   if (y.price > maxValue) {
-                    maxData.push(
-                      {
-                        date: y.date,
-                        price: y.price
-                      }
-                    );
                     years[key].max.date = y.date;
                     years[key].max.price = y.price;
+                    maxDate = y.date;
                     maxValue = y.price;
                   }
                   if (y.price < minValue) {
-                    minData.push(
-                      {
-                        date: y.date,
-                        price: y.price
-                      }
-                    );
                     years[key].min.date = y.date;
                     years[key].min.price = y.price;
                     minValue = y.price;
+                    minDate = y.date;
+                    minValue = y.price;
                   }
                 });
+                maxData.push(
+                  {
+                    date: maxDate,
+                    price: maxValue
+                  }
+                );
+                minData.push(
+                  {
+                    date: minDate,
+                    price: minValue
+                  }
+                );
               });
               var max = d3noConflict.max(data.map(function (d) { return d.price; }));
               var extent = d3noConflict.extent(data.map(function (d) { return d.date; }));
@@ -194,17 +209,33 @@
               area.attr("d", areavalue(data));
               line.attr("d", linevalue(data));
 
-              focus.selectAll(".pontos")
-                .data(data)
+              focus.selectAll(".dots.max")
+                .data(maxData)
               .enter().append("circle")
-                .attr("class", "dots")
-                .attr("r", 1)
+                .attr("class", "dots max")
+                .attr("r", 5)
+                .attr("cx", function(d) { return x(d.date); })
+                .attr("cy", function(d) { return y(d.price); });
+              // focus.selectAll(".dots-line.max")
+              //   .data(maxData)
+              // .enter().append("line")
+              //   .attr("class", "dots-line max")
+              //   .attr("x1", function(d) { return x(d.date); })
+              //   .attr("y1", function(d) { return y(d.price)-minMaxLineHeight; })
+              //   .attr("x2", function(d) { return x(d.date); })
+              //   .attr("y2", function(d) { return y(d.price); });
+
+              focus.selectAll(".dots.min")
+                .data(minData)
+              .enter().append("circle")
+                .attr("class", "dots min")
+                .attr("r", 5)
                 .attr("cx", function(d) { return x(d.date); })
                 .attr("cy", function(d) { return y(d.price); });
 
-              focus.append("line")
-                  .attr("class", "warning-line")
-                  .attr({"x1": 0, "y1": y(1350), "x2": width, "y2": y(1350)});
+              // focus.append("line")
+              //     .attr("class", "warning-line")
+              //     .attr({"x1": 0, "y1": y(1350), "x2": width, "y2": y(1350)});
               // years.forEach(function(year) {
               //   dots.append("circle")
               //     .attr("r", 3.5)
@@ -246,16 +277,23 @@
 
               brush.extent(extent);
               brush.on("brush", brushed);
-
+              console.log(linevalue.x());
               function brushed() {
                 x.domain(brush.empty() ? x2.domain() : brush.extent());
                 focus.select(".area").attr("d", areavalue(data));
                 focus.select(".line").attr("d", linevalue(data));
                 focus.select(".x.axis").call(xAxis);
-                console.log(linevalue.x());
-                focus.selectAll(".dots")
+                focus.selectAll(".dots.max")
                   .attr("cx", linevalue.x())
                   .attr("cy", linevalue.y());
+                focus.selectAll(".dots.min")
+                  .attr("cx", linevalue.x())
+                  .attr("cy", linevalue.y());
+                // focus.selectAll(".dots-line.max")
+                //   .attr("x1", function(d) { return x(d.date); })
+                //   .attr("y1", function(d) { return y(d.price)-minMaxLineHeight; })
+                //   .attr("x2", function(d) { return x(d.date); })
+                //   .attr("y2", function(d) { return y(d.price); });
               }
 
               function mouseover() {
@@ -273,9 +311,10 @@
                     d1 = data[i],
                     d = x0 - d0.date > d1.date - x0 ? d1 : d0;
                 selectedValueCircle.attr("transform", "translate(" + x(d.date) + "," + y(d.price) + ")");
-                selectedValueLine.attr({"x1": x(d.date), "y1": y(max), "x2": x(d.date), "y2": y(0)});
-                selectedValueText.attr("transform", "translate(" + x(d.date) + "," + y(d.price) + ")");
+                selectedValueLine.attr({"x1": x(d.date), "y1": (y(max)-tooltipPadding), "x2": x(d.date), "y2": y(0)});
+                selectedValueText.attr("transform", "translate(" + x(d.date) + "," + (y(max)-(tooltipHeight/2)-tooltipPadding) + ")");
                 selectedValueText.text(d.price+" em "+formatTimeLiteral(d.date));
+                selectedValueRect.attr({"x": (x(d.date)-(tooltipWidth/2)), "y": (y(max)-tooltipHeight-tooltipPadding)});
               }
             });
 
