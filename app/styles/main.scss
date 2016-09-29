@@ -218,6 +218,7 @@ $chart-primary-color: #3498db;
   stroke: darken($chart-primary-color, 10);
   stroke-width: 2;
   fill-opacity: 1;
+  clip-path: url(#clip);
 
   &.max {
     fill: #27ae60;
