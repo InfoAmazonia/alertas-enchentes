@@ -4,10 +4,10 @@
   angular.module('alertasEnchentesApp')
     .directive('aeHistory', aeHistory);
 
-    aeHistory.$inject = ['$window'];
+    aeHistory.$inject = [];
 
     /*jshint latedef: nofunc */
-    function aeHistory($window) {
+    function aeHistory() {
       return {
         template: '<svg></svg>',
         restrict: 'E',
@@ -23,13 +23,12 @@
                 height2 = 500 - margin2.top - margin2.bottom,
                 tooltipWidth = 300,
                 tooltipHeight = 30,
-                tooltipPadding = 45,
-                minMaxLineHeight = 25;
+                tooltipPadding = 45;
 
             var parseDate = d3noConflict.time.format("%d/%m/%Y").parse,
               bisectDate = d3noConflict.bisector(function(d) { return d.date; }).left;
 
-            var localized = d3.locale({
+            var localized = d3noConflict.locale({
               "decimal": ",",
               "thousands": ".",
               "grouping": [3],
@@ -53,11 +52,11 @@
 
             var xAxis = d3noConflict.svg.axis().scale(x)
                   .orient("bottom")
-                  .ticks(d3.time.year)
+                  .ticks(d3noConflict.time.year)
                   .innerTickSize(-height)
                   .outerTickSize(0)
                   .tickPadding(10),
-                xAxis2 = d3noConflict.svg.axis().scale(x2).orient("bottom").ticks(d3.time.year),
+                xAxis2 = d3noConflict.svg.axis().scale(x2).orient("bottom").ticks(d3noConflict.time.year),
                 yAxis = d3noConflict.svg.axis().scale(y)
                   .orient("left");
 
@@ -80,12 +79,6 @@
                 .y0(height2)
                 .y1(function (d) { return y2(d.price); });
 
-            function drawBrush() {
-              brush.extent([new Date(this.innerText + '-01-01'), new Date(this.innerText + '-12-31')])
-              brush(d3noConflict.select(".brush").transition());
-              brush.event(d3noConflict.select(".brush").transition().delay(1000))
-            }
-
             var svg = d3noConflict.select("svg")
               .attr({
                 'class': 'timeline-chart',
@@ -107,7 +100,7 @@
                 .attr("class", "area");
             var line = focus.append("path")
                 .attr("class", "line");
-            var dots = focus.append("g")
+            focus.append("g")
                 .attr("class", "dots");
             var rectMouse = focus.append("rect")
                 .attr("width", width)
@@ -143,11 +136,9 @@
               var
                 currentYear,
                 year,
-                maxYear,
-                minYear,
-                years = new Array(),
-                maxData = new Array(),
-                minData = new Array();
+                years = [],
+                maxData = [],
+                minData = [];
               data.forEach(function(d) {
                 year = d.date.getFullYear();
                 if (year !== currentYear) {
@@ -161,7 +152,7 @@
                       date: null,
                       price: null
                     },
-                    data: new Array()
+                    data: []
                   }
                 }
                 years[currentYear].data.push(d);
