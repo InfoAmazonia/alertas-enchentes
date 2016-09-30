@@ -25,7 +25,7 @@
                 tooltipHeight = 30,
                 tooltipPadding = 45,
                 minMaxLineHeight = 25,
-                minMaxLinePadding = 12;
+                minMaxLinePadding = 0;
 
             var parseDate = d3noConflict.time.format("%d/%m/%Y").parse,
               bisectDate = d3noConflict.bisector(function(d) { return d.date; }).left;
@@ -129,6 +129,18 @@
             var context = svg.append("g")
                 .attr("class", "context")
                 .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+
+            var minMaxOfExtent = {
+              data: null,
+              min: null,
+              max: null
+            };
+
+            var minMaxValueSvg = svg.append("text")
+              .attr("class", "legend")
+              .attr("x", margin.left)
+              .attr("y", 50)
+              .text("");
 
             d3noConflict.csv("population.csv", type, function (error, data) {
 
@@ -268,7 +280,19 @@
               brush.extent(extent);
               brush.on("brush", brushed);
               function brushed() {
-                x.domain(brush.empty() ? x2.domain() : brush.extent());
+                if (brush.empty()) {
+                  x.domain(x2.domain());
+                  minMaxOfExtent = {
+                    data: null,
+                    min: null,
+                    max: null
+                  };
+                  minMaxOfExtent.text("");
+                } else {
+                  x.domain(brush.extent());
+                  minMaxOfExtent = getMinMaxOfExtent(data, brush.extent());
+                  minMaxValueSvg.text("Maior " + minMaxOfExtent.max + " Menor " + minMaxOfExtent.min);
+                }
                 focus.select(".area").attr("d", areavalue(data));
                 focus.select(".line").attr("d", linevalue(data));
                 focus.select(".x.axis").call(xAxis);
@@ -317,6 +341,46 @@
               d.price = +d.price;
               return d;
             }
+
+            function getMinMaxOfExtent(data, extent) {
+
+          		var startIndex;
+          		var start = _.find(data, function(d, i) {
+          			startIndex = i;
+          			return extent[0].getFullYear() == d.date.getFullYear() &&
+          				extent[0].getMonth() == d.date.getMonth();
+          		});
+
+          		var dataFrom = _.rest(data, startIndex);
+
+          		var between = [];
+
+          		var end = _.find(dataFrom, function(d) {
+          			between.push(d);
+          			return extent[1].getFullYear() == d.date.getFullYear() &&
+          				extent[1].getMonth() == d.date.getMonth();
+          		});
+
+              var
+                maxValue = -9999,
+                minValue = 9999;
+
+          		_.each(between, function(d) {
+                if (d.price > maxValue) {
+                  maxValue = d.price;
+                }
+                if (d.price < minValue) {
+                  minValue = d.price;
+                }
+          		});
+
+          		return {
+          			data: between,
+          			min: minValue,
+          			max: maxValue
+          		};
+
+          	}
 
         }
       }

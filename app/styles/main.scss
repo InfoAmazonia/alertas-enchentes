@@ -286,6 +286,11 @@ $chart-primary-color: #3498db;
   shape-rendering: crispEdges;
 }
 
+.legend {
+  font-size: 22px;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
 .warning-line {
   stroke: yellow;
 }
