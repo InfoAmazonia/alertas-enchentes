@@ -231,8 +231,15 @@ $chart-primary-color: #3498db;
 }
 
 .dots-line {
+  clip-path: url(#clip);
 
   &.max {
+    stroke: #000;
+    fill: none;
+    stroke-width: 1;
+  }
+
+  &.min {
     stroke: #000;
     fill: none;
     stroke-width: 1;

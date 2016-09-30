@@ -23,7 +23,9 @@
                 height2 = 500 - margin2.top - margin2.bottom,
                 tooltipWidth = 300,
                 tooltipHeight = 30,
-                tooltipPadding = 45;
+                tooltipPadding = 45,
+                minMaxLineHeight = 25,
+                minMaxLinePadding = 12;
 
             var parseDate = d3noConflict.time.format("%d/%m/%Y").parse,
               bisectDate = d3noConflict.bisector(function(d) { return d.date; }).left;
@@ -201,45 +203,41 @@
               area.attr("d", areavalue(data));
               line.attr("d", linevalue(data));
 
+              focus.selectAll(".dots-line.max")
+                .data(maxData)
+              .enter().append("line")
+                .attr("class", "dots-line max")
+                .attr("x1", function(d) { return x(d.date)-minMaxLinePadding; })
+                .attr("y1", function(d) { return y(d.price)-minMaxLineHeight; })
+                .attr("x2", function(d) { return x(d.date); })
+                .attr("y2", function(d) { return y(d.price); });
               focus.selectAll(".dots.max")
                 .data(maxData)
               .enter().append("circle")
                 .attr("class", "dots max")
                 .attr("r", 5)
-                .attr("cx", function(d) { return x(d.date); })
-                .attr("cy", function(d) { return y(d.price); });
-              // focus.selectAll(".dots-line.max")
-              //   .data(maxData)
-              // .enter().append("line")
-              //   .attr("class", "dots-line max")
-              //   .attr("x1", function(d) { return x(d.date); })
-              //   .attr("y1", function(d) { return y(d.price)-minMaxLineHeight; })
-              //   .attr("x2", function(d) { return x(d.date); })
-              //   .attr("y2", function(d) { return y(d.price); });
+                .attr("cx", function(d) { return x(d.date)-minMaxLinePadding; })
+                .attr("cy", function(d) { return y(d.price)-minMaxLineHeight; });
 
+              focus.selectAll(".dots-line.min")
+                .data(minData)
+              .enter().append("line")
+                .attr("class", "dots-line min")
+                .attr("x1", function(d) { return x(d.date); })
+                .attr("y1", function(d) { return y(d.price); })
+                .attr("x2", function(d) { return x(d.date)+minMaxLinePadding; })
+                .attr("y2", function(d) { return y(d.price)+minMaxLineHeight; });
               focus.selectAll(".dots.min")
                 .data(minData)
               .enter().append("circle")
                 .attr("class", "dots min")
                 .attr("r", 5)
-                .attr("cx", function(d) { return x(d.date); })
-                .attr("cy", function(d) { return y(d.price); });
+                .attr("cx", function(d) { return x(d.date)+minMaxLinePadding; })
+                .attr("cy", function(d) { return y(d.price)+minMaxLineHeight; });
 
               // focus.append("line")
               //     .attr("class", "warning-line")
               //     .attr({"x1": 0, "y1": y(1350), "x2": width, "y2": y(1350)});
-              // years.forEach(function(year) {
-              //   dots.append("circle")
-              //     .attr("r", 3.5)
-              //     .style("fill", "green")
-              //     .attr("cx", function(d) { return x(year.max.date); })
-              //     .attr("cy", function(d) { return y(year.max.price); });
-              //   dots.append("circle")
-              //     .attr("r", 3.5)
-              //     .style("fill", "red")
-              //     .attr("cx", function(d) { return x(year.min.date); })
-              //     .attr("cy", function(d) { return y(year.min.price); });
-              // });
               focus.append("g")
                   .attr("class", "x axis")
                   .attr("transform", "translate(0," + height + ")")
@@ -274,17 +272,22 @@
                 focus.select(".area").attr("d", areavalue(data));
                 focus.select(".line").attr("d", linevalue(data));
                 focus.select(".x.axis").call(xAxis);
+                focus.selectAll(".dots-line.max")
+                  .attr("x1", function(d) { return x(d.date)-minMaxLinePadding; })
+                  .attr("y1", function(d) { return y(d.price)-minMaxLineHeight; })
+                  .attr("x2", function(d) { return x(d.date); })
+                  .attr("y2", function(d) { return y(d.price); });
                 focus.selectAll(".dots.max")
-                  .attr("cx", linevalue.x())
-                  .attr("cy", linevalue.y());
+                  .attr("cx", function(d) { return x(d.date)-minMaxLinePadding; })
+                  .attr("cy", function(d) { return y(d.price)-minMaxLineHeight; });
+                focus.selectAll(".dots-line.min")
+                  .attr("x1", function(d) { return x(d.date); })
+                  .attr("y1", function(d) { return y(d.price); })
+                  .attr("x2", function(d) { return x(d.date)+minMaxLinePadding; })
+                  .attr("y2", function(d) { return y(d.price)+minMaxLineHeight; });
                 focus.selectAll(".dots.min")
-                  .attr("cx", linevalue.x())
-                  .attr("cy", linevalue.y());
-                // focus.selectAll(".dots-line.max")
-                //   .attr("x1", function(d) { return x(d.date); })
-                //   .attr("y1", function(d) { return y(d.price)-minMaxLineHeight; })
-                //   .attr("x2", function(d) { return x(d.date); })
-                //   .attr("y2", function(d) { return y(d.price); });
+                  .attr("cx", function(d) { return x(d.date)+minMaxLinePadding; })
+                  .attr("cy", function(d) { return y(d.price)+minMaxLineHeight; });
               }
 
               function mouseover() {
