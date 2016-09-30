@@ -12,7 +12,7 @@
         template: '<svg></svg>',
         restrict: 'E',
         scope: {
-          history: '='
+          river: '='
         },
         link: function postLink(scope, element) {
           var d3noConflict = d3;
@@ -128,7 +128,23 @@
                 .attr("class", "context")
                 .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
-            d3noConflict.csv("population.csv", type, function (error, data) {
+              scope.$watch(function(scope) { return scope.river; }, function(newValue) {
+                if (typeof newValue !== 'undefined' && newValue.data) {
+                  draw(newValue);
+                }
+              });
+
+            function draw(river) {
+
+              var data = [];
+              river.data.forEach(function(d) {
+                if (d.measured) {
+                  data.push({
+                    date: new Date(d.timestamp),
+                    price: d.measured
+                  })
+                }
+              })
 
               data.sort(function(a, b) {
                 return a.date - b.date;
@@ -200,6 +216,19 @@
 
               area.attr("d", areavalue(data));
               line.attr("d", linevalue(data));
+              console.log(river.info);
+              focus.append("line")
+                .attr("class", "warning-line")
+                .attr("x1", 0)
+                .attr("y1", function(d) { return y(river.info.warningThreshold); })
+                .attr("x2", width)
+                .attr("y2", function(d) { return y(river.info.warningThreshold); });
+              focus.append("line")
+                .attr("class", "flood-line")
+                .attr("x1", 0)
+                .attr("y1", function(d) { return y(river.info.floodThreshold); })
+                .attr("x2", width)
+                .attr("y2", function(d) { return y(river.info.floodThreshold); });
 
               focus.selectAll(".dots.max")
                 .data(maxData)
@@ -307,13 +336,7 @@
                 selectedValueText.text(d.price+" em "+formatTimeLiteral(d.date));
                 selectedValueRect.attr({"x": (x(d.date)-(tooltipWidth/2)), "y": (y(max)-tooltipHeight-tooltipPadding)});
               }
-            });
-
-            function type(d) {
-              d.date = parseDate(d.date);
-              d.price = +d.price;
-              return d;
-            }
+            };
 
         }
       }

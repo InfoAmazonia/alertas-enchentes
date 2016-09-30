@@ -37,7 +37,9 @@ angular
     })
     .state('portovelho', {
       url: "/portovelho",
-      templateUrl: "views/portovelho.html"
+      templateUrl: "views/portovelho.html",
+      controller: "PortoVelhoCtrl",
+      controllerAs: "ctrl"
     })
     .state('manaus', {
       url: "/manaus",
