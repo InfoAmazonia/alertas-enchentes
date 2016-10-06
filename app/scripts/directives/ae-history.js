@@ -242,26 +242,26 @@
                   dots.transition(500)
                     .attr("opacity", 0);
                   dots.select(".dots.max")
-                    .transition(500)
+                    .transition(1000)
                     .attr("r", 50);
                   dots.select(".dots.min")
-                    .transition(500)
+                    .transition(1000)
                     .attr("r", 50);
                 } else {
                   x.domain(brush.extent());
                   minMaxOfExtent = getMinMaxOfExtent(data, brush.extent());
                   maxValueSvg.text("Maior medição: [" + minMaxOfExtent.max.value + " em "+ formatTimeLiteral(minMaxOfExtent.max.date) +"]");
                   minValueSvg.text("Menor medição: [" + minMaxOfExtent.min.value + " em " + formatTimeLiteral(minMaxOfExtent.min.date)+"]");
-                  dots.transition(500)
+                  dots.transition(1000)
                     .attr("opacity", 1);
                   dots.select(".dots.max")
-                    .transition(500)
+                    .transition(1000)
                     .attr("r", 10);
                   dots.select(".dots.max")
                     .attr("cx", x(minMaxOfExtent.max.date))
                     .attr("cy", y(minMaxOfExtent.max.value));
                   dots.select(".dots.min")
-                    .transition(500)
+                    .transition(1000)
                     .attr("r", 10);
                   dots.select(".dots.min")
                     .attr("cx", x(minMaxOfExtent.min.date))
@@ -294,7 +294,6 @@
               }
 
               function selectYear() {
-                console.log(this.innerHTML);
                 brush.extent([new Date(this.innerHTML + '-01-01'), new Date(this.innerHTML + '-12-31')]);
                 brush(d3.select(".brush").transition());
                 brush.event(d3.select(".brush").transition());
@@ -355,6 +354,7 @@
           		};
 
           	}
+
 
         }
       }

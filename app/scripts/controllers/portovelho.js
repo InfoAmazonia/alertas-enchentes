@@ -4,10 +4,10 @@
   angular.module('alertasEnchentesApp')
     .controller('PortoVelhoCtrl', PortoVelhoCtrl);
 
-  PortoVelhoCtrl.$inject = ['$http', '$templateCache'];
+  PortoVelhoCtrl.$inject = ['$http', '$templateCache', 'RESTAPI'];
 
   /*jshint latedef: nofunc */
-  function PortoVelhoCtrl($http, $templateCache) {
+  function PortoVelhoCtrl($http, $templateCache, RESTAPI) {
     var vm = this;
     vm.river = {};
 
