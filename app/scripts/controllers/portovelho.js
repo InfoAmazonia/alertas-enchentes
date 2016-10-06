@@ -14,7 +14,7 @@
     $http(
       {
         method: 'GET',
-        url: 'http://enchentes.infoamazonia.org:8080/station/15400000/history',
+        url: RESTAPI.url+'/station/15400000/history',
         cache: $templateCache
       }).then(function(response) {
         vm.river = response.data;

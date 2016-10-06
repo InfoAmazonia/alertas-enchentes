@@ -4,17 +4,17 @@
   angular.module('alertasEnchentesApp')
     .controller('RioBrancoCtrl', RioBrancoCtrl);
 
-  RioBrancoCtrl.$inject = ['$http', '$templateCache'];
+  RioBrancoCtrl.$inject = ['$http', '$templateCache', 'RESTAPI'];
 
   /*jshint latedef: nofunc */
-  function RioBrancoCtrl($http, $templateCache) {
+  function RioBrancoCtrl($http, $templateCache, RESTAPI) {
     var vm = this;
     vm.river = {};
 
     $http(
       {
         method: 'GET',
-        url: 'http://enchentes.infoamazonia.org:8080/station/13600002/history',
+        url: RESTAPI.url+'/station/13600002/history',
         cache: $templateCache
       }).then(function(response) {
         vm.river = response.data;
