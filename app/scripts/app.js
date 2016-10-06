@@ -16,7 +16,7 @@ angular
     'ui.router'
   ])
   .constant('RESTAPI', {
-    url: 'http://localhost:5003/api'
+    url: 'http://enchentes.infoamazonia.org:8080/'
   })
   .config(routeConfig);
 

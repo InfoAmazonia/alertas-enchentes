@@ -180,7 +180,6 @@
 
               area.attr("d", areavalue(data));
               line.attr("d", linevalue(data));
-              console.log(river.info);
               focus.append("line")
                 .attr("class", "warning-line")
                 .attr("x1", 0)
