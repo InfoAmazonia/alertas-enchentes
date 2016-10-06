@@ -2,19 +2,19 @@
   'use strict';
 
   angular.module('alertasEnchentesApp')
-    .controller('RioBrancoCtrl', RioBrancoCtrl);
+    .controller('ManausCtrl', ManausCtrl);
 
-  RioBrancoCtrl.$inject = ['$http', '$templateCache', 'RESTAPI'];
+  ManausCtrl.$inject = ['$http', '$templateCache', 'RESTAPI'];
 
   /*jshint latedef: nofunc */
-  function RioBrancoCtrl($http, $templateCache, RESTAPI) {
+  function ManausCtrl($http, $templateCache, RESTAPI) {
     var vm = this;
     vm.river = {};
 
     $http(
       {
         method: 'GET',
-        url: RESTAPI.url+'/station/13600002/history',
+        url: RESTAPI.url+'/station/14990000/history',
         cache: $templateCache
       }).then(function(response) {
         vm.river = response.data;

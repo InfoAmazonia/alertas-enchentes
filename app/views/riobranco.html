@@ -15,7 +15,7 @@
           (function() {
               var script = document.createElement('script');
               script.async = true;
-              script.src   = "http://alertas-enchentes-api.herokuapp.com/scripts/alerta-enchentes.js";
+              script.src   = "http://enchentes.infoamazonia.org:8080/scripts/alerta-enchentes.js";
               var entry = document.getElementsByTagName('script')[0];
               entry.parentNode.insertBefore(script, entry);
           }());
@@ -28,6 +28,6 @@
 <section class="section-primary">
   <div class="container-fluid">
     <h2 class="text-center">Série histórica</h2>
-    <ae-history history="ctrl.history"></ae-history>
+    <ae-history river="ctrl.river"></ae-history>
   </div>
 </section>

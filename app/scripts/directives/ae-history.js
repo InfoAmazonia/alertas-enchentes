@@ -12,7 +12,7 @@
         template: '<svg></svg>',
         restrict: 'E',
         scope: {
-          history: '='
+          river: '='
         },
         link: function postLink(scope, element) {
           var d3noConflict = d3;
@@ -149,7 +149,23 @@
               .attr("y", 70)
               .text("");
 
-            d3noConflict.csv("population.csv", type, function (error, data) {
+            scope.$watch(function(scope) { return scope.river; }, function(newValue) {
+              if (typeof newValue !== 'undefined' && newValue.data) {
+                draw(newValue);
+              }
+            });
+
+            function draw(river) {
+
+              var data = [];
+              river.data.forEach(function(d) {
+                if (d.measured) {
+                  data.push({
+                    date: new Date(d.timestamp),
+                    price: d.measured
+                  })
+                }
+              })
 
               data.sort(function(a, b) {
                 return a.date - b.date;
@@ -164,6 +180,18 @@
 
               area.attr("d", areavalue(data));
               line.attr("d", linevalue(data));
+              focus.append("line")
+                .attr("class", "warning-line")
+                .attr("x1", 0)
+                .attr("y1", function(d) { return y(river.info.warningThreshold); })
+                .attr("x2", width)
+                .attr("y2", function(d) { return y(river.info.warningThreshold); });
+              focus.append("line")
+                .attr("class", "flood-line")
+                .attr("x1", 0)
+                .attr("y1", function(d) { return y(river.info.floodThreshold); })
+                .attr("x2", width)
+                .attr("y2", function(d) { return y(river.info.floodThreshold); });
 
               dots.append("circle").attr("class", "dots max");
               dots.append("circle").attr("class", "dots min");
@@ -214,26 +242,26 @@
                   dots.transition(500)
                     .attr("opacity", 0);
                   dots.select(".dots.max")
-                    .transition(500)
+                    .transition(1000)
                     .attr("r", 50);
                   dots.select(".dots.min")
-                    .transition(500)
+                    .transition(1000)
                     .attr("r", 50);
                 } else {
                   x.domain(brush.extent());
                   minMaxOfExtent = getMinMaxOfExtent(data, brush.extent());
                   maxValueSvg.text("Maior medição: [" + minMaxOfExtent.max.value + " em "+ formatTimeLiteral(minMaxOfExtent.max.date) +"]");
                   minValueSvg.text("Menor medição: [" + minMaxOfExtent.min.value + " em " + formatTimeLiteral(minMaxOfExtent.min.date)+"]");
-                  dots.transition(500)
+                  dots.transition(1000)
                     .attr("opacity", 1);
                   dots.select(".dots.max")
-                    .transition(500)
+                    .transition(1000)
                     .attr("r", 10);
                   dots.select(".dots.max")
                     .attr("cx", x(minMaxOfExtent.max.date))
                     .attr("cy", y(minMaxOfExtent.max.value));
                   dots.select(".dots.min")
-                    .transition(500)
+                    .transition(1000)
                     .attr("r", 10);
                   dots.select(".dots.min")
                     .attr("cx", x(minMaxOfExtent.min.date))
@@ -266,18 +294,17 @@
               }
 
               function selectYear() {
-                console.log(this.innerHTML);
                 brush.extent([new Date(this.innerHTML + '-01-01'), new Date(this.innerHTML + '-12-31')]);
                 brush(d3.select(".brush").transition());
                 brush.event(d3.select(".brush").transition());
               }
-            });
+            };
 
             function type(d) {
               d.date = parseDate(d.date);
               d.price = +d.price;
               return d;
-            }
+            };
 
             function getMinMaxOfExtent(data, extent) {
           		var startIndex;
@@ -327,6 +354,7 @@
           		};
 
           	}
+
 
         }
       }

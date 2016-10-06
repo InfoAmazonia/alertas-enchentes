@@ -16,7 +16,7 @@ angular
     'ui.router'
   ])
   .constant('RESTAPI', {
-    url: 'http://localhost:5003/api'
+    url: 'http://enchentes.infoamazonia.org:8080/'
   })
   .config(routeConfig);
 
@@ -37,11 +37,15 @@ angular
     })
     .state('portovelho', {
       url: "/portovelho",
-      templateUrl: "views/portovelho.html"
+      templateUrl: "views/portovelho.html",
+      controller: "PortoVelhoCtrl",
+      controllerAs: "ctrl"
     })
     .state('manaus', {
       url: "/manaus",
-      templateUrl: "views/manaus.html"
+      templateUrl: "views/manaus.html",
+      controller: "ManausCtrl",
+      controllerAs: "ctrl"
     });
     $urlRouterProvider.otherwise('/');
   }
