@@ -214,6 +214,14 @@ $chart-primary-color: #3498db;
   stroke-dasharray: 5;
 }
 
+.x {
+  &.axis {
+    > .tick {
+      cursor: pointer;
+    }
+  }
+}
+
 .dots {
   stroke: darken($chart-primary-color, 10);
   stroke-width: 2;
