@@ -43,7 +43,9 @@ angular
     })
     .state('manaus', {
       url: "/manaus",
-      templateUrl: "views/manaus.html"
+      templateUrl: "views/manaus.html",
+      controller: "ManausCtrl",
+      controllerAs: "ctrl"
     });
     $urlRouterProvider.otherwise('/');
   }
