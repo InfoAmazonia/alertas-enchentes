@@ -23,7 +23,9 @@
                 height2 = 500 - margin2.top - margin2.bottom,
                 tooltipWidth = 300,
                 tooltipHeight = 30,
-                tooltipPadding = 45;
+                tooltipPadding = 45,
+                minMaxLineHeight = 25,
+                minMaxLinePadding = 0;
 
             var parseDate = d3noConflict.time.format("%d/%m/%Y").parse,
               bisectDate = d3noConflict.bisector(function(d) { return d.date; }).left;
@@ -100,8 +102,9 @@
                 .attr("class", "area");
             var line = focus.append("path")
                 .attr("class", "line");
-            focus.append("g")
-                .attr("class", "dots");
+            var dots = focus.append("g")
+                .attr("class", "dots")
+                .attr("opacity", 0);
             var rectMouse = focus.append("rect")
                 .attr("width", width)
                 .attr("height", height)
@@ -128,69 +131,30 @@
                 .attr("class", "context")
                 .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
+            var minMaxOfExtent = {
+              data: null,
+              min: null,
+              max: null
+            };
+
+            var maxValueSvg = svg.append("text")
+              .attr("class", "legend")
+              .attr("x", margin.left)
+              .attr("y", 50)
+              .text("");
+
+            var minValueSvg = svg.append("text")
+              .attr("class", "legend")
+              .attr("x", margin.left)
+              .attr("y", 70)
+              .text("");
+
             d3noConflict.csv("population.csv", type, function (error, data) {
 
               data.sort(function(a, b) {
                 return a.date - b.date;
               });
-              var
-                currentYear,
-                year,
-                years = [],
-                maxData = [],
-                minData = [];
-              data.forEach(function(d) {
-                year = d.date.getFullYear();
-                if (year !== currentYear) {
-                  currentYear = year;
-                  years[currentYear] = {
-                    min: {
-                      date: null,
-                      price: null
-                    },
-                    max: {
-                      date: null,
-                      price: null
-                    },
-                    data: []
-                  }
-                }
-                years[currentYear].data.push(d);
-              });
-              years.forEach(function(year, key) {
-                var
-                  maxValue = -9999,
-                  minValue = 9999,
-                  maxDate = null,
-                  minDate = null;
-                year.data.forEach(function(y) {
-                  if (y.price > maxValue) {
-                    years[key].max.date = y.date;
-                    years[key].max.price = y.price;
-                    maxDate = y.date;
-                    maxValue = y.price;
-                  }
-                  if (y.price < minValue) {
-                    years[key].min.date = y.date;
-                    years[key].min.price = y.price;
-                    minValue = y.price;
-                    minDate = y.date;
-                    minValue = y.price;
-                  }
-                });
-                maxData.push(
-                  {
-                    date: maxDate,
-                    price: maxValue
-                  }
-                );
-                minData.push(
-                  {
-                    date: minDate,
-                    price: minValue
-                  }
-                );
-              });
+
               var max = d3noConflict.max(data.map(function (d) { return d.price; }));
               var extent = d3noConflict.extent(data.map(function (d) { return d.date; }));
               x.domain(extent);
@@ -201,45 +165,11 @@
               area.attr("d", areavalue(data));
               line.attr("d", linevalue(data));
 
-              focus.selectAll(".dots.max")
-                .data(maxData)
-              .enter().append("circle")
-                .attr("class", "dots max")
-                .attr("r", 5)
-                .attr("cx", function(d) { return x(d.date); })
-                .attr("cy", function(d) { return y(d.price); });
-              // focus.selectAll(".dots-line.max")
-              //   .data(maxData)
-              // .enter().append("line")
-              //   .attr("class", "dots-line max")
-              //   .attr("x1", function(d) { return x(d.date); })
-              //   .attr("y1", function(d) { return y(d.price)-minMaxLineHeight; })
-              //   .attr("x2", function(d) { return x(d.date); })
-              //   .attr("y2", function(d) { return y(d.price); });
-
-              focus.selectAll(".dots.min")
-                .data(minData)
-              .enter().append("circle")
-                .attr("class", "dots min")
-                .attr("r", 5)
-                .attr("cx", function(d) { return x(d.date); })
-                .attr("cy", function(d) { return y(d.price); });
-
+              dots.append("circle").attr("class", "dots max");
+              dots.append("circle").attr("class", "dots min");
               // focus.append("line")
               //     .attr("class", "warning-line")
               //     .attr({"x1": 0, "y1": y(1350), "x2": width, "y2": y(1350)});
-              // years.forEach(function(year) {
-              //   dots.append("circle")
-              //     .attr("r", 3.5)
-              //     .style("fill", "green")
-              //     .attr("cx", function(d) { return x(year.max.date); })
-              //     .attr("cy", function(d) { return y(year.max.price); });
-              //   dots.append("circle")
-              //     .attr("r", 3.5)
-              //     .style("fill", "red")
-              //     .attr("cx", function(d) { return x(year.min.date); })
-              //     .attr("cy", function(d) { return y(year.min.price); });
-              // });
               focus.append("g")
                   .attr("class", "x axis")
                   .attr("transform", "translate(0," + height + ")")
@@ -256,6 +186,8 @@
                   .attr("class", "x axis")
                   .attr("transform", "translate(0," + height2 + ")")
                   .call(xAxis2);
+              context.selectAll(".tick text")
+                  .on("click", selectYear);
               context.append("g")
                   .attr("class", "x brush")
                   .call(brush)
@@ -270,21 +202,46 @@
               brush.extent(extent);
               brush.on("brush", brushed);
               function brushed() {
-                x.domain(brush.empty() ? x2.domain() : brush.extent());
+                if (brush.empty()) {
+                  x.domain(x2.domain());
+                  minMaxOfExtent = {
+                    data: null,
+                    min: null,
+                    max: null
+                  };
+                  maxValueSvg.text("");
+                  minValueSvg.text("");
+                  dots.transition(500)
+                    .attr("opacity", 0);
+                  dots.select(".dots.max")
+                    .transition(500)
+                    .attr("r", 50);
+                  dots.select(".dots.min")
+                    .transition(500)
+                    .attr("r", 50);
+                } else {
+                  x.domain(brush.extent());
+                  minMaxOfExtent = getMinMaxOfExtent(data, brush.extent());
+                  maxValueSvg.text("Maior medição: [" + minMaxOfExtent.max.value + " em "+ formatTimeLiteral(minMaxOfExtent.max.date) +"]");
+                  minValueSvg.text("Menor medição: [" + minMaxOfExtent.min.value + " em " + formatTimeLiteral(minMaxOfExtent.min.date)+"]");
+                  dots.transition(500)
+                    .attr("opacity", 1);
+                  dots.select(".dots.max")
+                    .transition(500)
+                    .attr("r", 10);
+                  dots.select(".dots.max")
+                    .attr("cx", x(minMaxOfExtent.max.date))
+                    .attr("cy", y(minMaxOfExtent.max.value));
+                  dots.select(".dots.min")
+                    .transition(500)
+                    .attr("r", 10);
+                  dots.select(".dots.min")
+                    .attr("cx", x(minMaxOfExtent.min.date))
+                    .attr("cy", y(minMaxOfExtent.min.value));
+                }
                 focus.select(".area").attr("d", areavalue(data));
                 focus.select(".line").attr("d", linevalue(data));
                 focus.select(".x.axis").call(xAxis);
-                focus.selectAll(".dots.max")
-                  .attr("cx", linevalue.x())
-                  .attr("cy", linevalue.y());
-                focus.selectAll(".dots.min")
-                  .attr("cx", linevalue.x())
-                  .attr("cy", linevalue.y());
-                // focus.selectAll(".dots-line.max")
-                //   .attr("x1", function(d) { return x(d.date); })
-                //   .attr("y1", function(d) { return y(d.price)-minMaxLineHeight; })
-                //   .attr("x2", function(d) { return x(d.date); })
-                //   .attr("y2", function(d) { return y(d.price); });
               }
 
               function mouseover() {
@@ -307,6 +264,13 @@
                 selectedValueText.text(d.price+" em "+formatTimeLiteral(d.date));
                 selectedValueRect.attr({"x": (x(d.date)-(tooltipWidth/2)), "y": (y(max)-tooltipHeight-tooltipPadding)});
               }
+
+              function selectYear() {
+                console.log(this.innerHTML);
+                brush.extent([new Date(this.innerHTML + '-01-01'), new Date(this.innerHTML + '-12-31')]);
+                brush(d3.select(".brush").transition());
+                brush.event(d3.select(".brush").transition());
+              }
             });
 
             function type(d) {
@@ -314,6 +278,55 @@
               d.price = +d.price;
               return d;
             }
+
+            function getMinMaxOfExtent(data, extent) {
+          		var startIndex;
+          		var start = _.find(data, function(d, i) {
+          			startIndex = i;
+          			return extent[0].getFullYear() == d.date.getFullYear() &&
+          				extent[0].getMonth() == d.date.getMonth();
+          		});
+
+          		var dataFrom = _.rest(data, startIndex);
+
+          		var between = [];
+
+          		var end = _.find(dataFrom, function(d) {
+          			between.push(d);
+          			return extent[1].getFullYear() == d.date.getFullYear() &&
+          				extent[1].getMonth() == d.date.getMonth();
+          		});
+
+              var
+                maxValue = -9999,
+                maxDate,
+                minValue = 9999,
+                minDate;
+
+          		_.each(between, function(d) {
+                if (d.price > maxValue) {
+                  maxValue = d.price;
+                  maxDate = d.date;
+                }
+                if (d.price < minValue) {
+                  minValue = d.price;
+                  minDate = d.date;
+                }
+          		});
+
+          		return {
+          			data: between,
+          			min: {
+                  value: minValue,
+                  date: minDate
+                },
+          			max: {
+                  value: maxValue,
+                  date: maxDate
+                }
+          		};
+
+          	}
 
         }
       }

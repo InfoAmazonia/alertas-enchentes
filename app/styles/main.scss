@@ -214,25 +214,41 @@ $chart-primary-color: #3498db;
   stroke-dasharray: 5;
 }
 
+.x {
+  &.axis {
+    > .tick {
+      cursor: pointer;
+    }
+  }
+}
+
 .dots {
-  stroke: darken($chart-primary-color, 10);
   stroke-width: 2;
   fill-opacity: 1;
   clip-path: url(#clip);
 
   &.max {
-    fill: #27ae60;
+    fill: #f1c40f;
+    stroke: #f39c12;
   }
 
   &.min {
-    fill: #c0392b;
+    fill: #e74c3c;
+    stroke: #c0392b;
   }
 
 }
 
 .dots-line {
+  clip-path: url(#clip);
 
   &.max {
+    stroke: #000;
+    fill: none;
+    stroke-width: 1;
+  }
+
+  &.min {
     stroke: #000;
     fill: none;
     stroke-width: 1;
@@ -277,6 +293,11 @@ $chart-primary-color: #3498db;
   fill: $chart-primary-color;
   fill-opacity: 0.2;
   shape-rendering: crispEdges;
+}
+
+.legend {
+  font-size: 16px;
+  font-family: 'Source Sans Pro', sans-serif;
 }
 
 .warning-line {
