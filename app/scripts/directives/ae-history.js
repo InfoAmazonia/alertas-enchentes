@@ -137,10 +137,16 @@
               max: null
             };
 
-            var minMaxValueSvg = svg.append("text")
+            var maxValueSvg = svg.append("text")
               .attr("class", "legend")
               .attr("x", margin.left)
               .attr("y", 50)
+              .text("");
+
+            var minValueSvg = svg.append("text")
+              .attr("class", "legend")
+              .attr("x", margin.left)
+              .attr("y", 70)
               .text("");
 
             d3noConflict.csv("population.csv", type, function (error, data) {
@@ -159,12 +165,8 @@
               area.attr("d", areavalue(data));
               line.attr("d", linevalue(data));
 
-              dots.append("circle")
-                .attr("class", "dots max")
-                .attr("r", 10);
-              dots.append("circle")
-                .attr("class", "dots min")
-                .attr("r", 10);
+              dots.append("circle").attr("class", "dots max");
+              dots.append("circle").attr("class", "dots min");
               // focus.append("line")
               //     .attr("class", "warning-line")
               //     .attr({"x1": 0, "y1": y(1350), "x2": width, "y2": y(1350)});
@@ -207,21 +209,33 @@
                     min: null,
                     max: null
                   };
-                  minMaxValueSvg.text("");
+                  maxValueSvg.text("");
+                  minValueSvg.text("");
                   dots.transition(500)
                     .attr("opacity", 0);
+                  dots.select(".dots.max")
+                    .transition(500)
+                    .attr("r", 50);
+                  dots.select(".dots.min")
+                    .transition(500)
+                    .attr("r", 50);
                 } else {
                   x.domain(brush.extent());
                   minMaxOfExtent = getMinMaxOfExtent(data, brush.extent());
-                  minMaxValueSvg.text("Maior " + minMaxOfExtent.max.value + " em "+ formatTimeLiteral(minMaxOfExtent.max.date) +" Menor " + minMaxOfExtent.min.value + " em " + formatTimeLiteral(minMaxOfExtent.min.date));
+                  maxValueSvg.text("Maior medição: [" + minMaxOfExtent.max.value + " em "+ formatTimeLiteral(minMaxOfExtent.max.date) +"]");
+                  minValueSvg.text("Menor medição: [" + minMaxOfExtent.min.value + " em " + formatTimeLiteral(minMaxOfExtent.min.date)+"]");
                   dots.transition(500)
                     .attr("opacity", 1);
                   dots.select(".dots.max")
                     .transition(500)
+                    .attr("r", 10);
+                  dots.select(".dots.max")
                     .attr("cx", x(minMaxOfExtent.max.date))
                     .attr("cy", y(minMaxOfExtent.max.value));
                   dots.select(".dots.min")
                     .transition(500)
+                    .attr("r", 10);
+                  dots.select(".dots.min")
                     .attr("cx", x(minMaxOfExtent.min.date))
                     .attr("cy", y(minMaxOfExtent.min.value));
                 }

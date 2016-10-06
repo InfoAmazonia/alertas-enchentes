@@ -223,17 +223,18 @@ $chart-primary-color: #3498db;
 }
 
 .dots {
-  stroke: darken($chart-primary-color, 10);
   stroke-width: 2;
   fill-opacity: 1;
   clip-path: url(#clip);
 
   &.max {
-    fill: #27ae60;
+    fill: #f1c40f;
+    stroke: #f39c12;
   }
 
   &.min {
-    fill: #c0392b;
+    fill: #e74c3c;
+    stroke: #c0392b;
   }
 
 }
@@ -295,7 +296,7 @@ $chart-primary-color: #3498db;
 }
 
 .legend {
-  font-size: 22px;
+  font-size: 16px;
   font-family: 'Source Sans Pro', sans-serif;
 }
 
