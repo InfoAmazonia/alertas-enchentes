@@ -18,7 +18,7 @@
         cache: $templateCache
       }).then(function(response) {
         vm.river = response.data;
-      }, function(response) {
+      }, function() {
         console.log("Erro");
       });
   }

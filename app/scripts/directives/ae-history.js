@@ -23,12 +23,9 @@
                 height2 = 500 - margin2.top - margin2.bottom,
                 tooltipWidth = 300,
                 tooltipHeight = 30,
-                tooltipPadding = 45,
-                minMaxLineHeight = 25,
-                minMaxLinePadding = 0;
+                tooltipPadding = 45;
 
-            var parseDate = d3noConflict.time.format("%d/%m/%Y").parse,
-              bisectDate = d3noConflict.bisector(function(d) { return d.date; }).left;
+            var bisectDate = d3noConflict.bisector(function(d) { return d.date; }).left;
 
             var localized = d3noConflict.locale({
               "decimal": ",",
@@ -163,9 +160,9 @@
                   data.push({
                     date: new Date(d.timestamp),
                     price: d.measured
-                  })
+                  });
                 }
-              })
+              });
 
               data.sort(function(a, b) {
                 return a.date - b.date;
@@ -183,21 +180,18 @@
               focus.append("line")
                 .attr("class", "warning-line")
                 .attr("x1", 0)
-                .attr("y1", function(d) { return y(river.info.warningThreshold); })
+                .attr("y1", y(river.info.warningThreshold))
                 .attr("x2", width)
-                .attr("y2", function(d) { return y(river.info.warningThreshold); });
+                .attr("y2", y(river.info.warningThreshold));
               focus.append("line")
                 .attr("class", "flood-line")
                 .attr("x1", 0)
-                .attr("y1", function(d) { return y(river.info.floodThreshold); })
+                .attr("y1", y(river.info.floodThreshold))
                 .attr("x2", width)
-                .attr("y2", function(d) { return y(river.info.floodThreshold); });
+                .attr("y2", y(river.info.floodThreshold));
 
               dots.append("circle").attr("class", "dots max");
               dots.append("circle").attr("class", "dots min");
-              // focus.append("line")
-              //     .attr("class", "warning-line")
-              //     .attr({"x1": 0, "y1": y(1350), "x2": width, "y2": y(1350)});
               focus.append("g")
                   .attr("class", "x axis")
                   .attr("transform", "translate(0," + height + ")")
@@ -295,33 +289,28 @@
 
               function selectYear() {
                 brush.extent([new Date(this.innerHTML + '-01-01'), new Date(this.innerHTML + '-12-31')]);
-                brush(d3.select(".brush").transition());
-                brush.event(d3.select(".brush").transition());
+                brush(d3noConflict.select(".brush").transition());
+                brush.event(d3noConflict.select(".brush").transition());
               }
-            };
-
-            function type(d) {
-              d.date = parseDate(d.date);
-              d.price = +d.price;
-              return d;
-            };
+            }
 
             function getMinMaxOfExtent(data, extent) {
           		var startIndex;
-          		var start = _.find(data, function(d, i) {
+
+              _.find(data, function(d, i) {
           			startIndex = i;
-          			return extent[0].getFullYear() == d.date.getFullYear() &&
-          				extent[0].getMonth() == d.date.getMonth();
+          			return extent[0].getFullYear() === d.date.getFullYear() &&
+          				extent[0].getMonth() === d.date.getMonth();
           		});
 
           		var dataFrom = _.rest(data, startIndex);
 
           		var between = [];
 
-          		var end = _.find(dataFrom, function(d) {
+          		_.find(dataFrom, function(d) {
           			between.push(d);
-          			return extent[1].getFullYear() == d.date.getFullYear() &&
-          				extent[1].getMonth() == d.date.getMonth();
+          			return extent[1].getFullYear() === d.date.getFullYear() &&
+          				extent[1].getMonth() === d.date.getMonth();
           		});
 
               var
@@ -357,6 +346,6 @@
 
 
         }
-      }
+      };
     }
 })();
