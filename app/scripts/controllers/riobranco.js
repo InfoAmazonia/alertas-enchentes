@@ -10,6 +10,7 @@
   function RioBrancoCtrl($http, $templateCache, RESTAPI) {
     var vm = this;
     vm.river = {};
+    vm.loading = true;
 
     $http(
       {
@@ -17,9 +18,8 @@
         url: RESTAPI.url+'/station/13600002/history',
         cache: $templateCache
       }).then(function(response) {
+        vm.loading = false;
         vm.river = response.data;
-      }, function() {
-        console.log("Erro");
       });
   }
 })();

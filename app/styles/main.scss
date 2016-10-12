@@ -178,6 +178,47 @@ footer {
   }
 }
 
+.loading {
+  padding-top: $padding-large-vertical;
+  padding-bottom: $padding-large-vertical;
+  text-align: center;
+}
+
+.loading-speeding-wheel {
+	width: 49px;
+	height: 49px;
+	margin: 0 auto;
+	border: 3px solid $brand-primary;
+	border-radius: 50%;
+	border-left-color: transparent;
+	border-right-color: transparent;
+	animation: loading-spin 400ms infinite linear;
+		-o-animation: loading-spin 400ms infinite linear;
+		-ms-animation: loading-spin 400ms infinite linear;
+		-webkit-animation: loading-spin 400ms infinite linear;
+		-moz-animation: loading-spin 400ms infinite linear;
+}
+
+@keyframes loading-spin {
+	100%{ transform: rotate(360deg); transform: rotate(360deg); }
+}
+
+@-o-keyframes loading-spin {
+	100%{ -o-transform: rotate(360deg); transform: rotate(360deg); }
+}
+
+@-ms-keyframes loading-spin {
+	100%{ -ms-transform: rotate(360deg); transform: rotate(360deg); }
+}
+
+@-webkit-keyframes loading-spin {
+	100%{ -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+}
+
+@-moz-keyframes loading-spin {
+	100%{ -moz-transform: rotate(360deg); transform: rotate(360deg); }
+}
+
 /* Graph */
 $chart-primary-color: #3498db;
 .timeline-chart {

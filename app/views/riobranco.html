@@ -28,6 +28,9 @@
 <section class="section-primary">
   <div class="container-fluid">
     <h2 class="text-center">Série histórica</h2>
+    <div class="loading" ng-show="ctrl.loading">
+      <div class="loading-speeding-wheel"></div>
+    </div>
     <ae-history river="ctrl.river"></ae-history>
   </div>
 </section>
