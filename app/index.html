@@ -21,31 +21,7 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" ui-sref="home">
-            <img src="images/ia-white.png" alt="Infoamazônia" width="150" height="32">
-          </a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a ui-sref="riobranco">Rio Branco</a></li>
-            <li><a ui-sref="portovelho">Porto Velho</a></li>
-            <li><a ui-sref="manaus">Manaus</a></li>
-          </ul>
-        </div><!-- /.navbar-collapse -->
-      </div><!-- /.container-fluid -->
-    </nav>
+    <ae-navbar scroll-position="scroll"></ae-navbar>
 
     <div ui-view></div>
 
@@ -98,6 +74,7 @@
         <script src="scripts/controllers/portovelho.js"></script>
         <script src="scripts/controllers/manaus.js"></script>
         <script src="scripts/directives/ae-history.js"></script>
+        <script src="scripts/directives/ae-navbar.js"></script>
         <!-- endbuild -->
 </body>
 </html>
