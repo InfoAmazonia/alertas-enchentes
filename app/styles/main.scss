@@ -68,12 +68,17 @@ footer {
 		}
 
     h1 {
-			font-size: 3.25em;
+      font-size: 2.25em;
+      @media (min-width: $screen-lg-min) {
+        font-size: 3.25em;
+      }
 		}
 
     header {
-      padding-top: $section-padding-vertical*2;
-      padding-bottom: $section-padding-vertical*2;
+      @media (min-width: $screen-lg-min) {
+        padding-top: $section-padding-vertical*2;
+        padding-bottom: $section-padding-vertical*2;
+      }
     }
 
     > .inner {
@@ -113,7 +118,6 @@ footer {
 
 .river-cover {
   display: block;
-  height: 150px;
   border-radius: $border-radius-base;
   padding: $padding-large-vertical;
   background-color: $background-color;
@@ -121,8 +125,16 @@ footer {
   color: #fff;
   text-shadow: 2px 2px $text-color;
   font-size: 28px;
-  line-height: 130px;
   text-align: center;
+  height: 50px;
+  line-height: 26px;
+  margin-bottom: 15px;
+
+  @media (min-width: $screen-lg-min) {
+    line-height: 130px;
+    height: 150px;
+    margin-bottom: 0;
+  }
 
   &:hover {
     text-decoration: none;
@@ -154,18 +166,28 @@ footer {
     -webkit-pointer-events: none;
     -ms-pointer-events: none;
     pointer-events: none;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.8);
     content: '';
     display: block;
     border-radius: $border-radius-base;
-    top: -140px;
     left: 0;
-    height: 150px;
     opacity: 0.85;
     position: relative;
     margin-left: -$padding-large-vertical;
     margin-right: -$padding-large-vertical;
     z-index: 1;
+    top: -36px;
+    height: 50px;
+
+    @media (min-width: $screen-lg-min) {
+    top: -140px;
+      height: 150px;
+      margin-bottom: 0;
+    }
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0);
+    }
   }
 
   > .river-cover-inner {
