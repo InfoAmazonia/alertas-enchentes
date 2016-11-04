@@ -377,4 +377,12 @@ $chart-primary-color: #3498db;
 .navbar-default {
   background: none;
   border: none;
+  transition: all ease 0.5s;
+}
+.navbar-inverse {
+  transition: all ease 0.5s;
+}
+
+.navbar-brand {
+  padding: 20px 15px;
 }
