@@ -29,6 +29,7 @@ module.exports = function(config) {
       'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/d3/d3.js',
       'bower_components/underscore/underscore.js',
+      'bower_components/angular-openlayers-directive/dist/angular-openlayers-directive.min.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',

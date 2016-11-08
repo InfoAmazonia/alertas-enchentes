@@ -13,7 +13,8 @@ angular
     'ngAnimate',
     'ngSanitize',
     'ngTouch',
-    'ui.router'
+    'ui.router',
+    'openlayers-directive'
   ])
   .constant('RESTAPI', {
     url: 'http://enchentes.infoamazonia.org:8080'
@@ -27,7 +28,9 @@ angular
     $stateProvider
     .state('home', {
       url: "/",
-      templateUrl: "views/main.html"
+      templateUrl: "views/main.html",
+      controller: "MainCtrl",
+      controllerAs: "ctrl"
     })
     .state('riobranco', {
       url: "/riobranco",
