@@ -12,7 +12,8 @@
         templateUrl: "views/directives/ae-navbar.html",
         restrict: 'E',
         scope: {
-          scroll: '=scrollPosition'
+          scroll: '=scrollPosition',
+          selectRiver: '&'
         },
         link: function(scope, element, attrs) {
           var windowEl = angular.element($window);

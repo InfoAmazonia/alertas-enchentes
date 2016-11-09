@@ -4,11 +4,11 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
 
-$background-color: #0b3341;
+$background-color: #222222;
 $background-color-inverse: #fff;
 $section-padding-vertical: $padding-large-vertical*4;
-$section-primary-bg-color: #eee;
-$section-secondary-bg-color: #0b3341;
+$section-primary-bg-color: $background-color;
+$section-secondary-bg-color: #292929;
 
 body {
   padding: 0;
@@ -17,6 +17,7 @@ body {
   background-color: $background-color;
   font-family: 'Source Sans Pro', sans-serif;
   font-size: 2em;
+  color: #fff;
 }
 
 footer {
@@ -67,6 +68,14 @@ footer {
     top: 280px;
     margin: 20px;
   }
+}
+
+.info-visible {
+  display: block;
+}
+
+.info-invisible {
+  display: none;
 }
 
 .section-primary {
@@ -133,15 +142,19 @@ footer {
 }
 
 /* Graph */
-$chart-primary-color: #3498db;
+$chart-primary-color: steelblue;
 .timeline-chart {
   font: 12px sans-serif;
 }
 
 .area {
   fill: $chart-primary-color;
-  fill-opacity: 0.8;
+  fill-opacity: 0.2;
   clip-path: url(#clip);
+
+  &.area-null {
+    fill-opacity: 0.9;
+  }
 }
 
 .line {
@@ -159,13 +172,17 @@ $chart-primary-color: #3498db;
 .axis path,
 .axis line {
   fill: none;
-  stroke: #000;
+  stroke: #fff;
   shape-rendering: crispEdges;
 }
 
 .tick line {
   opacity: 0.2;
   stroke-dasharray: 5;
+  fill: #fff;
+}
+.tick {
+  fill: #fff;
 }
 
 .x {
@@ -257,11 +274,13 @@ $chart-primary-color: #3498db;
 .warning-line {
   stroke: #f39c12;
   stroke-width: 2;
+  opacity: 0.6;
 }
 
 .flood-line {
   stroke: #e74c3c;
   stroke-width: 2;
+  opacity: 0.6;
 }
 
 .map {
@@ -276,7 +295,6 @@ $chart-primary-color: #3498db;
 
 /* Bootstrap overhide */
 .navbar-default {
-  border: none;
   transition: all ease 0.5s;
 }
 .navbar-inverse {

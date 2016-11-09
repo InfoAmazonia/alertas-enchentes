@@ -13,6 +13,7 @@ angular
     'ngAnimate',
     'ngSanitize',
     'ngTouch',
+    'ngResource',
     'ui.router',
     'openlayers-directive'
   ])

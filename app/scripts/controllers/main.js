@@ -1,15 +1,37 @@
+(function() {
 'use strict';
 
-/**
- * @ngdoc function
- * @name alertasEnchentesApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of the alertasEnchentesApp
- */
-angular.module('alertasEnchentesApp')
-  .controller('MainCtrl', function () {
+  angular.module('alertasEnchentesApp')
+    .controller('MainCtrl', MainCtrl);
+
+  MainCtrl.$inject = ['$scope', '$window', 'History'];
+
+  function MainCtrl($scope, $window, History) {
     var vm = this;
+    vm.loading = true;
+    vm.rivers = [
+      {
+        slug: 'rioacre',
+        name: 'Rio Acre',
+        station: 13600002,
+        history: {}
+      },
+      {
+        slug: 'riomadeira',
+        name: 'Rio Madeira',
+        station: 15400000,
+        history: {}
+      },
+      {
+        slug: 'manaus',
+        name: 'Rio Amazonas',
+        station: 14990000,
+        history: {}
+      }
+    ];
+    vm.selectedRiver = {};
+    vm.selectRiver = selectRiver;
+    vm.isSelectedRiver = isSelectedRiver;
     var smallDevide = ($(window).width() <= 998);
     vm.map = {
       center: {
@@ -58,7 +80,7 @@ angular.module('alertasEnchentesApp')
               attribution: false
           },
           interactions: {
-              mouseWheelZoom: true
+              mouseWheelZoom: false
           },
           view: {
               maxZoom: 16,
@@ -66,4 +88,45 @@ angular.module('alertasEnchentesApp')
           }
       }
     }
-  });
+
+    function init() {
+      selectRiver('riomadeira');
+    }
+    init();
+
+    function selectRiver(riverSlug) {
+      for (var i = 0; i < vm.rivers.length; i++) {
+        if (vm.rivers[i].slug === riverSlug) {
+          vm.selectedRiver = vm.rivers[i];
+          vm.loading = true;
+          History.get({'id': vm.selectedRiver.station}, function(response) {
+            vm.selectedRiver.history = response;
+            vm.loading = false;
+          });
+          break;
+        }
+      }
+    }
+
+    function isSelectedRiver(riverSlug) {
+      return (vm.selectedRiver.slug === riverSlug);
+    }
+
+    // $http(
+    // {
+    //   method: 'GET',
+    //   url: RESTAPI.url+'/station/13600002/history',
+    //   cache: $templateCache
+    // }).then(function(response) {
+    //   vm.loading = false;
+    //   vm.river = response.data;
+    // });
+
+    var windowEl = angular.element($window);
+    var handler = function() {
+      $scope.scroll = windowEl.scrollTop();
+    }
+    windowEl.on('scroll', $scope.$apply.bind($scope, handler));
+    handler();
+  }
+})();

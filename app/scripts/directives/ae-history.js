@@ -62,12 +62,12 @@
             var brush = d3noConflict.svg.brush().x(x2);
 
             var areavalue = d3noConflict.svg.area()
-                .interpolate("monotone")
+                // .interpolate("monotone")
                 .x(function (d) { return x(d.date); })
                 .y0(height)
                 .y1(function (d) { return y(d.price); });
             var linevalue = d3noConflict.svg.line()
-                .interpolate("monotone")
+                // .interpolate("monotone")
                 .defined(function(d) { return d.price; })
                 .x(function(d) { return x(d.date); })
                 .y(function(d) { return y(d.price); });
@@ -97,6 +97,8 @@
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
             var area = focus.append("path")
                 .attr("class", "area");
+            var nullArea = focus.append("path")
+                .attr("class", "area area-null");
             var line = focus.append("path")
                 .attr("class", "line");
             var dots = focus.append("g")
@@ -168,14 +170,47 @@
                 return a.date - b.date;
               });
 
+              function diff(date1, date2) {
+                var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+                return Math.ceil(timeDiff / (1000 * 3600 * 24));
+              }
+
+              var nullData = [];
+              for (var i = 0; i < data.length-1; i++) {
+                nullData.push(data[i]);
+                if (diff(data[i+1].date, data[i].date) > 30) {
+                  var newData = {
+                    date: data[i].date,
+                    price: null
+                  }
+                  nullData.push(newData);
+                  var newData2 = {
+                    date: data[i+1].date,
+                    price: null
+                  }
+                  nullData.push(newData2);
+                }
+                if (data.length-2 === i) {
+                  nullData.push(data[i+1]);
+                }
+              }
+
               var max = d3noConflict.max(data.map(function (d) { return d.price; }));
               var extent = d3noConflict.extent(data.map(function (d) { return d.date; }));
+
+              var brushExtent = extent;
+              var endDate = data[data.length-1].date;
+              var startDate = new Date(endDate);
+              startDate = new Date(startDate.setMonth(startDate.getMonth() - 120));
+              brushExtent = [startDate, endDate];
+
               x.domain(extent);
               y.domain([0, max]);
               x2.domain(x.domain());
               y2.domain(y.domain());
 
               area.attr("d", areavalue(data));
+              nullArea.attr("d", areavalue(nullData));
               line.attr("d", linevalue(data));
               focus.append("line")
                 .attr("class", "warning-line")
@@ -221,8 +256,10 @@
                 .on("mouseout", mouseout)
                 .on("mousemove", mousemove);
 
-              brush.extent(extent);
+              brush.extent(brushExtent);
               brush.on("brush", brushed);
+              context.select('.brush').call(brush);
+              brushed();
               function brushed() {
                 if (brush.empty()) {
                   x.domain(x2.domain());
@@ -262,6 +299,7 @@
                     .attr("cy", y(minMaxOfExtent.min.value));
                 }
                 focus.select(".area").attr("d", areavalue(data));
+                focus.select(".area.area-null").attr("d", areavalue(nullData));
                 focus.select(".line").attr("d", linevalue(data));
                 focus.select(".x.axis").call(xAxis);
               }
