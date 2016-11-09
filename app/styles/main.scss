@@ -41,6 +41,7 @@ footer {
   font-size: 18px;
   position: absolute;
   top: $navbar-height;
+  color: #fff;
 
   h1 {
     font-size: 1.5em;
@@ -49,6 +50,23 @@ footer {
     }
 	}
 
+}
+
+.map-info {
+  float: left;
+  position: absolute;
+  z-index: 10;
+  text-align: left;
+
+  @media (max-width: $screen-sm-min) {
+    bottom: 0;
+    width: 100%;
+  }
+  @media (min-width: $screen-md-min) {
+    width: 680px;
+    top: 280px;
+    margin: 20px;
+  }
 }
 
 .section-primary {

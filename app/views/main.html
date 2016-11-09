@@ -1,7 +1,20 @@
 <openlayers class="content-fullheight" ol-defaults="ctrl.map.defaults" ol-center="ctrl.map.center">
   <ol-marker ol-marker-properties="marker" ng-repeat="marker in ctrl.map.markers"></ol-marker>
+  <ol-layer name="{{layer.name}}" ol-layer-properties="layer" ng-repeat="layer in ctrl.map.layers"></ol-layer>
 </openlayers>
 <div class="map-headding text-center">
   <h1>Alerta de enchentes</h1>
   <p class="map-subheadding">Veja as previsões de volume para os rios da região amazônica</p>
+</div>
+<div class="map-info">
+  <div data-alerta-enchentes-station="15400000"></div>
+  <script type="text/javascript">
+    (function() {
+        var script = document.createElement('script');
+        script.async = true;
+        script.src   = "http://localhost/alertas-enchentes-widget/alerta-enchentes.js";
+        var entry = document.getElementsByTagName('script')[0];
+        entry.parentNode.insertBefore(script, entry);
+    }());
+  </script>
 </div>

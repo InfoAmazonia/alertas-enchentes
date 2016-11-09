@@ -10,12 +10,24 @@
 angular.module('alertasEnchentesApp')
   .controller('MainCtrl', function () {
     var vm = this;
+    var smallDevide = ($(window).width() <= 998);
     vm.map = {
       center: {
         lat: -9.436510,
         lon: -65.616777,
-        zoom: 8
+        zoom: (smallDevide) ? 4 : 6
       },
+      layers: [
+        {
+          name: 'Satellite',
+          active: true,
+          source: {
+            type: 'MapBox',
+            mapId: 'mapbox.satellite',
+            accessToken: 'pk.eyJ1IjoiamVmZmVyc29ucnBuIiwiYSI6ImNpcnZhc2FoMTBpZGtmYW04M3IyZTZ6NWoifQ.xTtlY-a--vOAS25Op_7uIA'
+          }
+        }
+      ],
       markers: [
         {
           lat: -9.972892,
