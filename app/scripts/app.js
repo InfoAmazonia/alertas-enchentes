@@ -33,22 +33,10 @@ angular
       controller: "MainCtrl",
       controllerAs: "ctrl"
     })
-    .state('riobranco', {
-      url: "/riobranco",
-      templateUrl: "views/riobranco.html",
-      controller: "RioBrancoCtrl",
-      controllerAs: "ctrl"
-    })
-    .state('portovelho', {
-      url: "/portovelho",
-      templateUrl: "views/portovelho.html",
-      controller: "PortoVelhoCtrl",
-      controllerAs: "ctrl"
-    })
-    .state('manaus', {
-      url: "/manaus",
-      templateUrl: "views/manaus.html",
-      controller: "ManausCtrl",
+    .state('history', {
+      url: "/history/:river",
+      templateUrl: "views/history.html",
+      controller: "HistoryCtrl",
       controllerAs: "ctrl"
     });
     $urlRouterProvider.otherwise('/');

@@ -19,6 +19,7 @@
         <li><a href="" ng-click="ctrl.selectRiver('rioacre')">Rio Acre</a></li>
         <li><a href="" ng-click="ctrl.selectRiver('riomadeira')">Rio Madeira</a></li>
         <li><a href="" ng-click="ctrl.selectRiver('manaus')">Manaus</a></li>
+        <li><a ui-sref="history({river: 'rioacre'})">Séries históricas</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -48,13 +49,3 @@
   </div>
 </div>
 <div class="clearfix"></div>
-<section class="section-primary">
-  <div class="container-fluid">
-    <h2 class="text-center">Série histórica do {{ctrl.selectedRiver.name}}</h2>
-    <div class="loading" ng-show="ctrl.loading">
-      <div class="loading-speeding-wheel"></div>
-    </div>
-    <!-- {{ctrl.selectedRiver.history | json}} -->
-    <ae-history river="ctrl.selectedRiver.history"></ae-history>
-  </div>
-</section>

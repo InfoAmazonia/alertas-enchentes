@@ -4,9 +4,9 @@
   angular.module('alertasEnchentesApp')
     .controller('MainCtrl', MainCtrl);
 
-  MainCtrl.$inject = ['$scope', '$window', 'History'];
+  MainCtrl.$inject = ['$scope', '$window'];
 
-  function MainCtrl($scope, $window, History) {
+  function MainCtrl($scope, $window) {
     var vm = this;
     vm.loading = true;
     vm.rivers = [
@@ -32,12 +32,12 @@
     vm.selectedRiver = {};
     vm.selectRiver = selectRiver;
     vm.isSelectedRiver = isSelectedRiver;
-    var smallDevide = ($(window).width() <= 998);
+    var smallDevice = ($(window).width() <= 998);
     vm.map = {
       center: {
         lat: -9.436510,
         lon: -65.616777,
-        zoom: (smallDevide) ? 4 : 6
+        zoom: (smallDevice) ? 4 : 6
       },
       layers: [
         {
@@ -99,10 +99,6 @@
         if (vm.rivers[i].slug === riverSlug) {
           vm.selectedRiver = vm.rivers[i];
           vm.loading = true;
-          History.get({'id': vm.selectedRiver.station}, function(response) {
-            vm.selectedRiver.history = response;
-            vm.loading = false;
-          });
           break;
         }
       }
@@ -111,16 +107,6 @@
     function isSelectedRiver(riverSlug) {
       return (vm.selectedRiver.slug === riverSlug);
     }
-
-    // $http(
-    // {
-    //   method: 'GET',
-    //   url: RESTAPI.url+'/station/13600002/history',
-    //   cache: $templateCache
-    // }).then(function(response) {
-    //   vm.loading = false;
-    //   vm.river = response.data;
-    // });
 
     var windowEl = angular.element($window);
     var handler = function() {

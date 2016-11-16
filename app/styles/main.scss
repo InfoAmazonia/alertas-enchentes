@@ -37,6 +37,10 @@ footer {
   height:         calc(100vh);
 }
 
+.content-main {
+  margin-top: $navbar-height;
+}
+
 .map-headding {
   width: 100%;
   font-size: 18px;
@@ -169,6 +173,12 @@ $chart-primary-color: steelblue;
   fill-opacity: 0.9;
 }
 
+.axis {
+  > text {
+    fill: #fff;
+  }
+}
+
 .axis path,
 .axis line {
   fill: none;
@@ -199,13 +209,21 @@ $chart-primary-color: steelblue;
   clip-path: url(#clip);
 
   &.max {
-    fill: #1abc9c;
-    stroke: #16a085;
+    fill: #fff;
+    stroke: #fff;
   }
 
   &.min {
-    fill: #1abc9c;
-    stroke: #16a085;
+    fill: #fff;
+    stroke: #fff;
+  }
+
+  &.line-max {
+    stroke: #fff;
+  }
+
+  &.line-min {
+    stroke: #fff;
   }
 
 }
@@ -269,6 +287,7 @@ $chart-primary-color: steelblue;
 .legend {
   font-size: 16px;
   font-family: 'Source Sans Pro', sans-serif;
+  fill: #fff;
 }
 
 .warning-line {
