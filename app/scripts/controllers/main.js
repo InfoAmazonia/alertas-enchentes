@@ -4,9 +4,9 @@
   angular.module('alertasEnchentesApp')
     .controller('MainCtrl', MainCtrl);
 
-  MainCtrl.$inject = ['$scope', '$window'];
+  MainCtrl.$inject = ['$scope', '$window', 'olData'];
 
-  function MainCtrl($scope, $window) {
+  function MainCtrl($scope, $window, olData) {
     var vm = this;
     vm.loading = true;
     vm.rivers = [
@@ -94,7 +94,8 @@
       ],
       defaults: {
           events: {
-              layers: ['click']
+              layers: ['click'],
+              map: ['pointermove']
           },
           controls: {
               zoom: false,
@@ -144,5 +145,26 @@
           }
       });
     });
+
+    $scope.$on('openlayers.map.pointermove', function (e, data) {
+        $scope.$apply(function () {
+            olData.getMap().then(function (map) {
+                var pixel = map.getEventPixel(data.event.originalEvent);
+                var hit = map.forEachFeatureAtPixel(pixel, function (feature, layer) {
+                  if (layer.get('name') === 'Stations') {
+                    map.getTarget().style.cursor = 'pointer';
+                    return true;
+                  }
+                  return false;
+                });
+
+                if (typeof hit === 'undefined') {
+                    map.getTarget().style.cursor = '';
+                    return;
+                }
+            });
+        });
+    });
+
   }
 })();
