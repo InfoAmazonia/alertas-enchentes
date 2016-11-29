@@ -35,8 +35,8 @@
     var smallDevice = ($(window).width() <= 998);
     vm.map = {
       center: {
-        lat: -9.436510,
-        lon: -65.616777,
+        lat: -6,
+        lon: -70,
         zoom: (smallDevice) ? 4 : 6
       },
       layers: [
@@ -47,6 +47,19 @@
             type: 'MapBox',
             mapId: 'mapbox.satellite',
             accessToken: 'pk.eyJ1IjoiamVmZmVyc29ucnBuIiwiYSI6ImNpcnZhc2FoMTBpZGtmYW04M3IyZTZ6NWoifQ.xTtlY-a--vOAS25Op_7uIA'
+          }
+        },
+        {
+          name: 'Stations',
+          active: true,
+          source: {
+            type: 'GeoJSON',
+            url: '/stations.js'
+          },
+          style: {
+            fill: {
+                color: 'rgba(0, 0, 0, 0)'
+            }
           }
         }
       ],
@@ -68,11 +81,20 @@
               show: true,
               showOnMouseOver: true
           }
+        },
+        {
+          lat: -3.1383,
+          lon: -60.0272,
+          label: {
+              message: 'Rio Amazonas',
+              show: true,
+              showOnMouseOver: true
+          }
         }
       ],
       defaults: {
           events: {
-              layers: [ 'mousemove', 'click' ]
+              layers: ['click']
           },
           controls: {
               zoom: false,
@@ -114,5 +136,13 @@
     }
     windowEl.on('scroll', $scope.$apply.bind($scope, handler));
     handler();
+
+    $scope.$on('openlayers.layers.Stations.click', function(event, feature) {
+      $scope.$apply(function(scope) {
+          if (feature) {
+            selectRiver(feature.get('river'));
+          }
+      });
+    });
   }
 })();
