@@ -113,7 +113,7 @@
     }
 
     function init() {
-      selectRiver('riomadeira');
+      selectRiver('rioacre');
     }
     init();
 

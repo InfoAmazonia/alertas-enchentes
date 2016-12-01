@@ -1,5 +1,6 @@
 var Alert = (function(window, undefined) {
   var Alert = {};
+  Alert.$ = Alert.jQuery = jQuery.noConflict(true);
 
   function loadScript(url, callback) {
     var script = document.createElement('script');
@@ -54,32 +55,53 @@ var Alert = (function(window, undefined) {
       value = decode(pair[1]);
       params[key] = value;
     }
-
     return params;
   }
 
+  function getWidgetLocation(callback) {
+    Alert.$('[data-alerta-enchentes-station]').each(function() {
+      var
+        location = Alert.$(this),
+        station = location.attr('data-alerta-enchentes-station'),
+        timestamp = location.attr('data-alerta-enchentes-timestamp'),
+        htmlWrapper = 'alerta-enchentes-'+station;
+      location.attr('id', htmlWrapper);
+      if (!timestamp) {
+        timestamp = new Date().getTime();
+      }
+      var params = {
+        htmlWrapper: htmlWrapper,
+        station: station,
+        timestamp: timestamp
+      }
+      getData(params, callback)
+    });
+  }
+
   function getData(params, callback) {
-    Alert.$ = Alert.jQuery = jQuery.noConflict(true);
-
-    var timestamp = parseInt(params.timestamp);
-
-    $.ajax({
-      method: "GET",
-      url: "http://alertas-enchentes-api.herokuapp.com/station/"+params.station+"/prediction",
+    Alert.$.ajax({
+      method: 'GET',
+      url: 'http://enchentes.infoamazonia.org:8080/station/'+params.station+'/prediction',
       data: {},
-      sucess: function(river) {
-        callback(river, timestamp);
+      success: function(river) {
+        callback(river, params.timestamp, params.htmlWrapper);
       },
       error: function(error) {
-        console.log(error);
-        // var river = JSON.parse('{"info":{"id":13600002,"name":"Rio Madeira","warningThreshold":1350,"floodThreshold":1400},"data":[{"timestamp":1472571900,"measured":163,"predicted":171,"measuredStatus":"NORMAL","predictedStatus":"NORMAL"},{"timestamp":1472574600,"measured":null,"predicted":170,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472575500,"measured":null,"predicted":169,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472576400,"measured":null,"predicted":162,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472577300,"measured":null,"predicted":164,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472578200,"measured":null,"predicted":167,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472579100,"measured":null,"predicted":163,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472580000,"measured":null,"predicted":168,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472580900,"measured":null,"predicted":161,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472581800,"measured":null,"predicted":165,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472582700,"measured":null,"predicted":165,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472583600,"measured":null,"predicted":168,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472584500,"measured":null,"predicted":163,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472585400,"measured":null,"predicted":161,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472586300,"measured":null,"predicted":160,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472587200,"measured":null,"predicted":168,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472588100,"measured":null,"predicted":161,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472589000,"measured":null,"predicted":162,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472589900,"measured":null,"predicted":162,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472590800,"measured":null,"predicted":161,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472591700,"measured":null,"predicted":162,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472592600,"measured":null,"predicted":157,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472593500,"measured":null,"predicted":160,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472594400,"measured":null,"predicted":154,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472595300,"measured":null,"predicted":154,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472596200,"measured":null,"predicted":159,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472597100,"measured":null,"predicted":154,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472598000,"measured":null,"predicted":149,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472598900,"measured":null,"predicted":162,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472599800,"measured":null,"predicted":154,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472600700,"measured":null,"predicted":153,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472601600,"measured":null,"predicted":151,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472602500,"measured":null,"predicted":157,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472603400,"measured":null,"predicted":161,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472604300,"measured":null,"predicted":152,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472605200,"measured":null,"predicted":151,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472606100,"measured":null,"predicted":159,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472607000,"measured":null,"predicted":161,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472607900,"measured":null,"predicted":158,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472608800,"measured":null,"predicted":163,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472609700,"measured":null,"predicted":151,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472610600,"measured":null,"predicted":153,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472611500,"measured":null,"predicted":157,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472612400,"measured":null,"predicted":158,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472613300,"measured":null,"predicted":157,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472614200,"measured":null,"predicted":158,"measuredStatus":null,"predictedStatus":"NORMAL"},{"timestamp":1472615100,"measured":null,"predicted":156,"measuredStatus":null,"predictedStatus":"NORMAL"}]}');
-        // callback(river, timestamp);
+        console.log("Error");
       }
     });
   }
 
   function getAlertTimestamp(river) {
     if (!river) return;
+
+    if (!river.data.length) {
+      return {
+        title: "--",
+        description: "Não foi possível obter dados",
+        timestamp: null
+      };
+    }
     // Checks flood threshold
     for (var i = 0; i < river.data.length; i++) {
       if (river.data[i].predicted >= river.info.floodThreshold) {
@@ -107,37 +129,39 @@ var Alert = (function(window, undefined) {
     };
   }
 
-  function drawWidget(river, timestamp) {
+  function drawWidget(river, timestamp, htmlWrapper) {
     if (!river) return;
+
+    var d3Widget = d3;
 
     var data = river.data;
 
     var margin = {
           top: 50,
           right: 10,
-          bottom: 100,
+          bottom: 30,
           left: 10
         },
         width = 600 - margin.left - margin.right,
-        height = 250 - margin.top - margin.bottom,
+        height = 160 - margin.top - margin.bottom,
         viewBoxWidth = width + margin.left + margin.right,
         viewBoxHeight = height + margin.top + margin.bottom,
-        baseValue = 100,
+        baseValue = margin.bottom,
         tooltipWidth = 50,
         tooltipHeight = 30;
 
-    var x = d3.scale.ordinal()
+    var x = d3Widget.scale.ordinal()
         .rangeRoundBands([0, width], 0);
-    var y = d3.scale.linear()
+    var y = d3Widget.scale.linear()
         .range([height, 0]);
-    var xAxis = d3.svg.axis()
+    var xAxis = d3Widget.svg.axis()
         .scale(x)
         .orient("bottom");
-    var yAxis = d3.svg.axis()
+    var yAxis = d3Widget.svg.axis()
         .scale(y)
         .orient("left");
     x.domain(data.map(function(d) { return d.timestamp; }));
-    y.domain([d3.min(data, function(d) { return d.predicted; }), d3.max(data, function(d) { return d.predicted; })]);
+    y.domain([d3Widget.min(data, function(d) { return d.predicted; }), d3Widget.max(data, function(d) { return d.predicted; })]);
 
     //Get alert info
     var alertTimestamp = getAlertTimestamp(river);
@@ -149,11 +173,11 @@ var Alert = (function(window, undefined) {
       alertHour = hours + ':' + minutes.substr(-2);
     }
 
-    var mapInfo = d3.select("#alerta-enchentes")
+    var mapInfo = d3Widget.select("#"+htmlWrapper)
       .append("div")
         .attr("class", "alerta-enchentes-map-info")
         .style({
-          "width": "678px",
+          "width": "100%",
           "padding": "20px",
           "background-color": "rgba(11, 51, 65, 0.8)",
           "font": "16px arial,sans-serif-light,sans-serif",
@@ -171,14 +195,10 @@ var Alert = (function(window, undefined) {
       // Alert info
       var alertInfo = mapInfo.append("div")
         .attr("class", "alerta-enchentes-alert-info")
-        .style({
-          "float": "left"
-        })
         .append("div");
       if (alertHour !== null) {
         alertInfo.append("div")
         .style({
-          "float": "left",
           "margin-top": "10px",
           "margin-right": "12px",
           "font-size": "60px"
@@ -188,7 +208,6 @@ var Alert = (function(window, undefined) {
       }
       var alertInfoText = alertInfo.append("div")
         .style({
-          "float": "left",
           "margin-top": "25px",
           "font-size": "16px"
         });
@@ -199,18 +218,20 @@ var Alert = (function(window, undefined) {
         .html(alertTimestamp.title);
       alertInfoText.append("div")
         .html(alertTimestamp.description);
-      var graph = mapInfo.append("div")
-        .attr("class", "alerta-enchentes-graph");
 
     // Graph
+    if (river.data.length < 1) return;
+
+    var graph = mapInfo.append("div")
+    .attr("class", "alerta-enchentes-graph");
     var svg = graph.append("svg")
         .attr("width", "100%")
         .attr("viewBox", "0 0 "+viewBoxWidth+" "+viewBoxHeight)
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    var domainMin = d3.min(data, function(d) { return d.predicted; });
-    var domainMax = d3.max(data, function(d) { return d.predicted; });
+    var domainMin = d3Widget.min(data, function(d) { return d.predicted; });
+    var domainMax = d3Widget.max(data, function(d) { return d.predicted; });
     if (domainMax < river.info.floodThreshold) {
         var domainMax = river.info.floodThreshold;
     }
@@ -220,21 +241,22 @@ var Alert = (function(window, undefined) {
     // Draw lines
     svg.append("line")
       .attr({
-        "x1": 0,
+        "x1": margin.right*2,
         "y1": y(river.info.warningThreshold),
-        "x2": width+10,
+        "x2": width-margin.left*2,
         "y2": y(river.info.warningThreshold),
         "fill": "none",
         "stroke-width": "2px",
-        "opacity": 1,
+        "opacity": 0.5,
         "stroke-dasharray": "10,5",
         "stroke": color("ALERTA")
       });
     svg.append("text")
       .attr({
-        "x": 0,
+        "x": margin.right*2,
         "y": y(river.info.warningThreshold) + 12,
         "fill": color("ALERTA"),
+        "opacity": 0.5,
         "font-size": "10",
         "font-family": "sans"
       })
@@ -242,20 +264,21 @@ var Alert = (function(window, undefined) {
     svg.append("line")
       .attr({
         "fill": "none",
-        "x1": 0,
+        "x1": margin.right*2,
         "y1": y(river.info.floodThreshold),
-        "x2": width+10,
+        "x2": width-margin.left*2,
         "y2": y(river.info.floodThreshold),
         "stroke-width": "2px",
-        "opacity": 1,
+        "opacity": 0.5,
         "stroke-dasharray": "10,5",
         "stroke": color("INUNDACAO")
       });
     svg.append("text")
       .attr({
-        "x": 0,
+        "x": margin.right*2,
         "y": y(river.info.floodThreshold) - 4,
         "fill": color("INUNDACAO"),
+        "opacity": 0.5,
         "font-size": "10",
         "font-family": "sans"
       })
@@ -316,7 +339,7 @@ var Alert = (function(window, undefined) {
           .attr("fill", function(d) { return color(d.predictedStatus); })
           .style("opacity", 0.4)
           .on("mouseover", function(d) {
-            d3.select(this).transition().duration(200).style("opacity", 1);
+            d3Widget.select(this).transition().duration(200).style("opacity", 1);
 
             var date = new Date(d.timestamp*1000);
             var hours = date.getHours();
@@ -332,7 +355,7 @@ var Alert = (function(window, undefined) {
             tooltip.attr("transform", "translate(" + positionX + "," + positionY + ")");
             })
         .on("mouseout", function(d) {
-          d3.select(this).transition().duration(200).style("opacity", 0.4);
+          d3Widget.select(this).transition().duration(200).style("opacity", 0.4);
           tooltip.transition()
             .duration(500)
             .style("opacity", 0);
@@ -352,7 +375,6 @@ var Alert = (function(window, undefined) {
           .attr("x", function(d) { return x(d.timestamp)+x.rangeBand()+4; })
           .attr("y", height + baseValue - 5)
           .text(function(d, i) {
-            console.log();
             var minutes = moment(d.timestamp*1000).format("mm");
             if (minutes === "00" && i !== data.length-1) {
               return moment(d.timestamp*1000).format("H:mm");
@@ -384,11 +406,9 @@ var Alert = (function(window, undefined) {
   loadScript('//d3js.org/d3.v3.min.js', function() {
     loadScript('//code.jquery.com/jquery-3.1.0.min.js', function() {
       loadScript('//cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js', function() {
-        loadScript('//cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/locale/br.js', function() {
-          var url = getScriptUrl();
-          var params = getUrlParameters(url);
-          getData(params, drawWidget);
-        });
+        var url = getScriptUrl();
+        var params = getUrlParameters(url);
+        getWidgetLocation(drawWidget)
       });
     });
   });
