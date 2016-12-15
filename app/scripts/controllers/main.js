@@ -4,11 +4,11 @@
   angular.module('alertasEnchentesApp')
     .controller('MainCtrl', MainCtrl);
 
-  MainCtrl.$inject = ['$scope', '$window', 'olData'];
+  MainCtrl.$inject = ['$scope', '$window', 'olData', 'Prediction'];
 
-  function MainCtrl($scope, $window, olData) {
+  function MainCtrl($scope, $window, olData, Prediction) {
     var vm = this;
-    vm.loading = true;
+    vm.loading = false;
     vm.rivers = [
       {
         slug: 'rioacre',
@@ -113,15 +113,18 @@
     }
 
     function init() {
-      selectRiver('rioacre');
+      // selectRiver('rioacre');
     }
     init();
 
     function selectRiver(riverSlug) {
       for (var i = 0; i < vm.rivers.length; i++) {
         if (vm.rivers[i].slug === riverSlug) {
-          vm.selectedRiver = vm.rivers[i];
           vm.loading = true;
+          Prediction.get({'id': vm.rivers[i].station}, function(response) {
+            vm.selectedRiver = response;
+            vm.loading = false;
+          });
           break;
         }
       }

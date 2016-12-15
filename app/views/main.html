@@ -46,6 +46,12 @@
 </div>
 <div class="map-info">
   <div class="map-info-content">
+    <div class="loading" ng-show="ctrl.loading">
+      <div class="loading-speeding-wheel"></div>
+    </div>
+    <h2>{{ctrl.selectedRiver.info.name}}</h2>
+    <ae-prediction river="ctrl.selectedRiver"></ae-prediction>
+
     <div data-alerta-enchentes-station="13600002" ng-show="ctrl.isSelectedRiver('rioacre')"></div>
     <div data-alerta-enchentes-station="15400000" ng-show="ctrl.isSelectedRiver('riomadeira')"></div>
     <script type="text/javascript">
