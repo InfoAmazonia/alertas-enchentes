@@ -104,7 +104,7 @@
           });
 
           function draw(river) {
-            if (river.data.length < 1) return;
+            if (river.data.length < 1)  return;
 
             var data = river.data;
             var hasPrediction = 0;
@@ -114,6 +114,7 @@
                 hasPrediction++;
               }
             });
+
             if (!hasPrediction) {
               svg.select('.bars').selectAll('*').remove();
               svg.select('.times').selectAll('*').remove();
@@ -122,8 +123,6 @@
             } else {
               lines.attr('display', 'block');
             }
-
-            console.log(data);
 
             var domainMin = d3noConflict.min(data, function(d) { return d.predicted; });
             var domainMax = d3noConflict.max(data, function(d) { return d.predicted; });

@@ -136,6 +136,15 @@
             vm.selectedRiver.data = response;
             vm.selectedRiver.alert = getAlertTimestamp(vm.selectedRiver.data);
             vm.loading = false;
+          }, function(error) {
+            vm.timestamp = moment().format('H:mm');
+            vm.selectedRiver.data = {};
+            vm.selectedRiver.alert = {
+              title: "--",
+              description: "Não foi possível obter dados de previsão",
+              timestamp: null
+            }
+            vm.loading = false;
           });
           break;
         }

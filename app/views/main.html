@@ -55,7 +55,7 @@
       <div ng-hide="ctrl.loading">
         <div class="row">
           <div class="col-xs-6">
-            <div style="font-size: 25px;">{{ctrl.selectedRiver.data.info.name}}</div>
+            <div style="font-size: 25px;">{{ctrl.selectedRiver.name}}</div>
             <div>{{ctrl.timestamp}}</div>
           </div>
           <div class="col-xs-6 text-right">
@@ -71,7 +71,12 @@
           <div style="font-size: 22px;">{{ctrl.selectedRiver.alert.title}}</div>
           <div>{{ctrl.selectedRiver.alert.description}}</div>
         </div>
-        <ae-prediction river="ctrl.selectedRiver.data"></ae-prediction>
+        <div ng-show="ctrl.selectedRiver.data.info && ctrl.selectedRiver.data.data.length">
+          <ae-prediction river="ctrl.selectedRiver.data"></ae-prediction>
+        </div>
+        <div class="text-right">
+          <a ui-sref="history({river: ctrl.selectedRiver.slug})" class="btn btn-primary">Ver série histórica</a>
+        </div>
       </div>
 
     </div>
