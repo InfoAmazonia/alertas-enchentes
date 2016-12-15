@@ -9,26 +9,34 @@
   function MainCtrl($scope, $window, olData, Prediction) {
     var vm = this;
     vm.loading = false;
+    vm.select = false;
     vm.rivers = [
       {
         slug: 'rioacre',
         name: 'Rio Acre',
         station: 13600002,
-        history: {}
+        history: {},
+        data: {},
+        alert: {}
       },
       {
         slug: 'riomadeira',
         name: 'Rio Madeira',
         station: 15400000,
-        history: {}
+        history: {},
+        data: {},
+        alert: {}
       },
       {
         slug: 'manaus',
         name: 'Rio Amazonas',
         station: 14990000,
-        history: {}
+        history: {},
+        data: {},
+        alert: {}
       }
     ];
+    vm.timestamp = moment().format('H:mm');
     vm.selectedRiver = {};
     vm.selectRiver = selectRiver;
     vm.isSelectedRiver = isSelectedRiver;
@@ -120,9 +128,13 @@
     function selectRiver(riverSlug) {
       for (var i = 0; i < vm.rivers.length; i++) {
         if (vm.rivers[i].slug === riverSlug) {
+          vm.select = true;
           vm.loading = true;
+          vm.selectedRiver = vm.rivers[i];
           Prediction.get({'id': vm.rivers[i].station}, function(response) {
-            vm.selectedRiver = response;
+            vm.timestamp = moment().format('H:mm');
+            vm.selectedRiver.data = response;
+            vm.selectedRiver.alert = getAlertTimestamp(vm.selectedRiver.data);
             vm.loading = false;
           });
           break;
@@ -132,6 +144,55 @@
 
     function isSelectedRiver(riverSlug) {
       return (vm.selectedRiver.slug === riverSlug);
+    }
+
+    function getAlertTimestamp(river) {
+      if (!river.data.length) {
+        return {
+          title: "--",
+          description: "Não foi possível obter dados",
+          timestamp: null
+        };
+      }
+      // Checks prediction
+      var hasPrediction = 0;
+      for (var i = 0; i < river.data.length; i++) {
+        if (river.data[i].predicted) {
+          hasPrediction++;
+        };
+      }
+      if (!hasPrediction) {
+        return {
+          title: "--",
+          description: "Não foi possível obter dados de previsão",
+          timestamp: null
+        };
+      }
+      // Checks flood threshold
+      for (var i = 0; i < river.data.length; i++) {
+        if (river.data[i].predicted >= river.info.floodThreshold) {
+          return {
+            title: "Alerta de enchente",
+            description: "Ação evasiva é recomendada",
+            timestamp: data[i].id.timestamp
+          };
+        };
+      }
+      // Checks warning threshold
+      for (var i = 0; i < river.data.length; i++) {
+        if (river.data[i].predicted >= river.info.warningThreshold) {
+          return {
+            title: "Alerta de cheia",
+            description: "Esteja preparado",
+            timestamp: data[i].id.timestamp
+          };
+        };
+      }
+      return {
+        title: "Dia normal",
+        description: "Nenhuma alta prevista para as próximas horas",
+        timestamp: null
+      };
     }
 
     var windowEl = angular.element($window);

@@ -46,13 +46,37 @@
 </div>
 <div class="map-info">
   <div class="map-info-content">
-    <div class="loading" ng-show="ctrl.loading">
-      <div class="loading-speeding-wheel"></div>
-    </div>
-    <h2>{{ctrl.selectedRiver.info.name}}</h2>
-    <ae-prediction river="ctrl.selectedRiver"></ae-prediction>
 
-    <div data-alerta-enchentes-station="13600002" ng-show="ctrl.isSelectedRiver('rioacre')"></div>
+
+    <div class="map-card" ng-show="ctrl.select">
+      <div class="loading" ng-show="ctrl.loading">
+        <div class="loading-speeding-wheel"></div>
+      </div>
+      <div ng-hide="ctrl.loading">
+        <div class="row">
+          <div class="col-xs-6">
+            <div style="font-size: 25px;">{{ctrl.selectedRiver.data.info.name}}</div>
+            <div>{{ctrl.timestamp}}</div>
+          </div>
+          <div class="col-xs-6 text-right">
+            <div>
+              <span class="glyphicon glyphicon-tint"></span> <span class="alert-measure"></span>
+            </div>
+              <div>
+                <span class="glyphicon glyphicon-time"></span> <span class="alert-time"></span>
+              </div>
+          </div>
+        </div>
+        <div style="margin-top: 25px; font-size: 16px;">
+          <div style="font-size: 22px;">{{ctrl.selectedRiver.alert.title}}</div>
+          <div>{{ctrl.selectedRiver.alert.description}}</div>
+        </div>
+        <ae-prediction river="ctrl.selectedRiver.data"></ae-prediction>
+      </div>
+
+    </div>
+
+    <!-- <div data-alerta-enchentes-station="13600002" ng-show="ctrl.isSelectedRiver('rioacre')"></div>
     <div data-alerta-enchentes-station="15400000" ng-show="ctrl.isSelectedRiver('riomadeira')"></div>
     <script type="text/javascript">
     (function() {
@@ -62,7 +86,7 @@
       var entry = document.getElementsByTagName('script')[0];
       entry.parentNode.insertBefore(script, entry);
     }());
-    </script>
+    </script> -->
   </div>
 </div>
 <div class="clearfix"></div>
