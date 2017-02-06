@@ -32,10 +32,16 @@
             tooltipWidth = 50,
             tooltipHeight = 30;
 
-            var x = d3noConflict.scale.ordinal()
-                .rangeRoundBands([0, width], 0);
+            var x = d3noConflict.time.scale()
+                .rangeRound([0, width]);
             var y = d3noConflict.scale.linear()
                 .range([height, 0]);
+            var valuearea = d3noConflict.svg.area()
+                .x(function(d) { return x(d.timestamp); })
+                .y1(function(d) { return y(d.measured); });
+            var valueline = d3noConflict.svg.line()
+              .x(function(d) { return x(d.timestamp); })
+              .y(function(d) { return y(d.measured); });
             var xAxis = d3noConflict.svg.axis()
                 .scale(x)
                 .orient("bottom");
@@ -54,6 +60,7 @@
 
           // Draw lines
           var lines = svg.append("g").attr("class", "lines");
+          var area = svg.append("g").attr("class", "area");
 
           var alertLine = lines.append("line")
             .attr({
@@ -94,9 +101,6 @@
             })
             .text("Nível de enchente");
 
-          var bars = svg.append('g').attr('class', 'bars');
-          var times = svg.append('g').attr('class', 'times').attr("transform", "translate(" + margin.left + ", 15)");
-
           scope.$watch(function(scope) { return scope.river; }, function(newValue) {
             if (typeof newValue !== 'undefined' && newValue.data) {
               draw(newValue);
@@ -109,15 +113,13 @@
             var data = river.data;
             var hasPrediction = 0;
             data.forEach(function(d) {
-              d.measured = +d.measured;
-              if (d.measured) {
+              if (d.predicted) {
+                d.predicted = +d.predicted;
                 hasPrediction++;
               }
             });
 
             if (!hasPrediction) {
-              svg.select('.bars').selectAll('*').remove();
-              svg.select('.times').selectAll('*').remove();
               lines.attr('display', 'none');
               return;
             } else {
@@ -129,12 +131,16 @@
             if (domainMax < river.info.floodThreshold) {
                 var domainMax = river.info.floodThreshold;
             }
-            x.domain(data.map(function(d) { return d.timestamp; }));
+            console.log(domainMin, domainMax);
+            x.domain(d3.extent(data, function(d) { return d.timestamp; }));
             y.domain([domainMin, domainMax]);
+            valuearea.y0(y(0));
 
             alertLine.attr({
-              "y1": y(river.info.warningThreshold),
-              "y2": y(river.info.warningThreshold),
+              // "y1": y(river.info.warningThreshold),
+              // "y2": y(river.info.warningThreshold)
+              "y1": y(0),
+              "y2": y(0)
             });
             alertText.attr({
               "y": y(river.info.warningThreshold) + 12,
@@ -147,46 +153,19 @@
               "y": y(river.info.floodThreshold) - 4,
             });
 
-            svg.select('.bars').selectAll('*').remove();
-            svg.select('.times').selectAll('*').remove();
+            area.append("path")
+              .datum(data)
+              .attr("class", "area")
+              .attr("d", valuearea);
+            area.append("path")
+              .datum(data)
+              .attr("class", "line")
+              .attr("d", valueline);
 
-            bars.selectAll(".bar").data(data).enter()
-              .append("rect")
-                .attr("x", function(d) { return x(d.timestamp); })
-                .attr("width", x.rangeBand())
-                .attr("y", function(d) { return y(d.measured); })
-                .attr("height", function(d) { return height - y(d.measured) + baseValue; })
-                .attr("fill", function(d) { return color(d.measuredStatus); })
-                .style("opacity", 0.4)
-                .on("mouseover", function(d) {
-                  d3noConflict.select(this).transition().duration(200).style("opacity", 1);
-                  var m = Math.round((d.measured * 0.001) * 100) / 100;
-                  d3noConflict.select('.alert-measure').text(m+"m");
-                  d3noConflict.select('.alert-time').text(moment(d.timestamp*1000).format("H:mm"));
-                })
-                .on("mouseout", function(d) {
-                  d3noConflict.select(this).transition().duration(200).style("opacity", 0.4);
-                });
-            bars.selectAll(".bar").data(data).enter()
-              .append("rect")
-                .attr("width", x.rangeBand())
-                .attr("x", function(d) { return x(d.timestamp); })
-                .attr("y", function(d) { return y(d.measured); })
-                .attr("fill", function(d) { return color(d.measuredStatus); })
-                .attr("height", function(d) { return (d.measured) ? 2 : 0 });
-            times.selectAll(".time").data(data).enter()
-              .append("text")
-                .attr("fill", "#fff")
-                .attr("font-size", "12px")
-                .attr("text-anchor", "start")
-                .attr("x", function(d) { return x(d.timestamp)+x.rangeBand()+4; })
-                .attr("y", height + baseValue)
-                .text(function(d, i) {
-                    var minutes = moment(d.timestamp*1000).format("mm");
-                    if (minutes === "00" && i !== data.length-1) {
-                      return moment(d.timestamp*1000).format("H:mm");
-                    }
-                });
+            area.append("g")
+              .attr("transform", "translate(0," + height + ")")
+              .attr("class", "x axis")
+              .call(xAxis);
           }
 
           function color(measuredStatus) {
