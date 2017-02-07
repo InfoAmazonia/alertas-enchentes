@@ -25,7 +25,7 @@
               left: 0
             },
             width = 600 - margin.left - margin.right,
-            height = 160 - margin.top - margin.bottom,
+            height = 300 - margin.top - margin.bottom,
             viewBoxWidth = width + margin.left + margin.right,
             viewBoxHeight = height + margin.top + margin.bottom,
             baseValue = 0,
@@ -33,7 +33,7 @@
             tooltipHeight = 30;
 
             var x = d3noConflict.time.scale()
-                .rangeRound([0, width]);
+                .range([0, width]);
             var y = d3noConflict.scale.linear()
                 .range([height, 0]);
             var valuearea = d3noConflict.svg.area()
@@ -42,9 +42,14 @@
             var valueline = d3noConflict.svg.line()
               .x(function(d) { return x(d.timestamp); })
               .y(function(d) { return y(d.measured); });
+            var valueline2 = d3noConflict.svg.line()
+              .x(function(d) { return x(d.timestamp); })
+              .y(function(d) { return y(d.predicted); });
             var xAxis = d3noConflict.svg.axis()
                 .scale(x)
-                .orient("bottom");
+                .orient("bottom")
+                .ticks(12)
+                .tickFormat(d3.time.format("%H"));
             var yAxis = d3noConflict.svg.axis()
                 .scale(y)
                 .orient("left");
@@ -59,10 +64,10 @@
               .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
           // Draw lines
-          var lines = svg.append("g").attr("class", "lines");
-          var area = svg.append("g").attr("class", "area");
+          var linesG = svg.append("g").attr("class", "lines");
+          var areaG = svg.append("g").attr("class", "areaG");
 
-          var alertLine = lines.append("line")
+          var alertLine = linesG.append("line")
             .attr({
               "x1": margin.right*2,
               "x2": width-margin.left*2,
@@ -72,7 +77,7 @@
               "stroke-dasharray": "10,5",
               "stroke": color("ALERTA")
             });
-          var alertText = lines.append("text")
+          var alertText = linesG.append("text")
             .attr({
               "x": margin.right*2,
               "fill": color("ALERTA"),
@@ -81,7 +86,7 @@
               "font-family": "sans"
             })
             .text("Nível de alerta");
-          var floodLine = lines.append("line")
+          var floodLine = linesG.append("line")
             .attr({
               "fill": "none",
               "x1": margin.right*2,
@@ -91,7 +96,7 @@
               "stroke-dasharray": "10,5",
               "stroke": color("INUNDACAO")
             });
-          var floodText = lines.append("text")
+          var floodText = linesG.append("text")
             .attr({
               "x": margin.right*2,
               "fill": color("INUNDACAO"),
@@ -110,37 +115,29 @@
           function draw(river) {
             if (river.data.length < 1)  return;
 
-            var data = river.data;
-            var hasPrediction = 0;
-            data.forEach(function(d) {
-              if (d.predicted) {
-                d.predicted = +d.predicted;
-                hasPrediction++;
+            var data = [];
+            var data2 = [];
+            river.data.forEach(function(d) {
+              console.log(d);
+              if (d.measured !== null) {
+                data.push(d);
+              }
+              if (d.predicted !== null) {
+                data2.push(d);
               }
             });
 
-            if (!hasPrediction) {
-              lines.attr('display', 'none');
-              return;
-            } else {
-              lines.attr('display', 'block');
-            }
-
-            var domainMin = d3noConflict.min(data, function(d) { return d.measured; });
             var domainMax = d3noConflict.max(data, function(d) { return d.measured; });
             if (domainMax < river.info.floodThreshold) {
                 var domainMax = river.info.floodThreshold;
             }
-            console.log(domainMin, domainMax);
-            x.domain(d3.extent(data, function(d) { return d.timestamp; }));
-            y.domain([domainMin, domainMax]);
+            x.domain(d3.extent(river.data, function(d) { return d.timestamp; }));
+            y.domain([0, domainMax]);
             valuearea.y0(y(0));
 
             alertLine.attr({
-              // "y1": y(river.info.warningThreshold),
-              // "y2": y(river.info.warningThreshold)
-              "y1": y(0),
-              "y2": y(0)
+              "y1": y(river.info.warningThreshold),
+              "y2": y(river.info.warningThreshold)
             });
             alertText.attr({
               "y": y(river.info.warningThreshold) + 12,
@@ -153,16 +150,22 @@
               "y": y(river.info.floodThreshold) - 4,
             });
 
-            area.append("path")
+            svg.select('.areaG').selectAll('*').remove();
+
+            areaG.append("path")
               .datum(data)
               .attr("class", "area")
               .attr("d", valuearea);
-            area.append("path")
+            areaG.append("path")
               .datum(data)
               .attr("class", "line")
               .attr("d", valueline);
+            areaG.append("path")
+              .datum(data2)
+              .attr("class", "line2")
+              .attr("d", valueline2);
 
-            area.append("g")
+            areaG.append("g")
               .attr("transform", "translate(0," + height + ")")
               .attr("class", "x axis")
               .call(xAxis);

@@ -152,6 +152,7 @@ footer {
 
 /* Graph */
 $chart-primary-color: steelblue;
+$chart-warning-color: rgb(247, 186, 68);
 .timeline-chart {
   font: 12px sans-serif;
 }
@@ -169,7 +170,14 @@ $chart-primary-color: steelblue;
 .line {
   fill: none;
   stroke: darken($chart-primary-color, 10);
-  stroke-width: 2;
+  stroke-width: 4;
+  clip-path: url(#clip);
+}
+
+.line2 {
+  fill: none;
+  stroke: $chart-warning-color;
+  stroke-width: 4;
   clip-path: url(#clip);
 }
 
