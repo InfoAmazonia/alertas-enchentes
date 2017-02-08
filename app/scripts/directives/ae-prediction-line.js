@@ -49,7 +49,7 @@
                 .scale(x)
                 .orient("bottom")
                 .ticks(12)
-                .tickFormat(d3.time.format("%H"));
+                .tickFormat(d3.time.format("%Hh"));
             var yAxis = d3noConflict.svg.axis()
                 .scale(y)
                 .orient("left");
@@ -118,7 +118,7 @@
             var data = [];
             var data2 = [];
             river.data.forEach(function(d) {
-              console.log(d);
+              d.timestamp = new Date(d.timestamp*1000);
               if (d.measured !== null) {
                 data.push(d);
               }
