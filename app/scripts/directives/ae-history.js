@@ -160,12 +160,12 @@
                 if (d.measured) {
                   data.push({
                     date: new Date(d.timestamp),
-                    measured: Math.round((d.measured * 0.001) * 100) / 100
+                    measured: Math.round((d.measured * 0.01) * 100) / 100
                   });
                 }
               });
-              var warningThreshold = Math.round((river.info.warningThreshold * 0.001) * 100) / 100;
-              var floodThreshold = Math.round((river.info.floodThreshold * 0.001) * 100) / 100;
+              var warningThreshold = Math.round((river.info.warningThreshold * 0.01) * 100) / 100;
+              var floodThreshold = Math.round((river.info.floodThreshold * 0.01) * 100) / 100;
 
               data.sort(function(a, b) {
                 return a.date - b.date;
