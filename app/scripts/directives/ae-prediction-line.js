@@ -20,9 +20,9 @@
           var
             margin = {
               top: 50,
-              right: 0,
+              right: 10,
               bottom: 30,
-              left: 0
+              left: 30
             },
             width = 600 - margin.left - margin.right,
             height = 300 - margin.top - margin.bottom,
@@ -56,7 +56,11 @@
                 .tickFormat(d3.time.format("%Hh"));
             var yAxis = d3noConflict.svg.axis()
                 .scale(y)
-                .orient("left");
+                .orient("left")
+                .ticks(12)
+                .tickFormat(function(d) {
+                  return Math.round((d * 0.01) * 100) / 100
+                });
 
           var svg = d3noConflict.select("svg")
             .attr({
@@ -82,10 +86,13 @@
             .attr("transform", "translate(0," + height + ")")
             .attr("class", "x axis");
 
+          var axisYSVG = areaG.append("g")
+            .attr("class", "y axis");
+
           var alertLine = linesG.append("line")
             .attr({
-              "x1": margin.right*2,
-              "x2": width-margin.left*2,
+              "x1": 0,
+              "x2": width,
               "fill": "none",
               "stroke-width": "2px",
               "opacity": 0.5,
@@ -94,7 +101,7 @@
             });
           var alertText = linesG.append("text")
             .attr({
-              "x": margin.right*2,
+              "x": margin.right,
               "fill": color("ALERTA"),
               "opacity": 0.5,
               "font-size": "10",
@@ -104,8 +111,8 @@
           var floodLine = linesG.append("line")
             .attr({
               "fill": "none",
-              "x1": margin.right*2,
-              "x2": width-margin.left*2,
+              "x1": 0,
+              "x2": width,
               "stroke-width": "2px",
               "opacity": 0.5,
               "stroke-dasharray": "10,5",
@@ -113,7 +120,7 @@
             });
           var floodText = linesG.append("text")
             .attr({
-              "x": margin.right*2,
+              "x": margin.right,
               "fill": color("INUNDACAO"),
               "opacity": 0.5,
               "font-size": "10",
@@ -198,6 +205,7 @@
               .attr("d", valueline2);
 
             axisSVG.call(xAxis);
+            axisYSVG.call(yAxis);
 
             rectMouse
               .on("mouseover", mouseover)
