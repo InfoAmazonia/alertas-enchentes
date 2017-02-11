@@ -49,12 +49,7 @@
                 y = d3noConflict.scale.linear().range([height, 0]),
                 y2 = d3noConflict.scale.linear().range([height2, 0]);
 
-            var xAxis = d3noConflict.svg.axis().scale(x)
-                  .orient("bottom")
-                  .ticks(d3noConflict.time.year)
-                  .innerTickSize(-height)
-                  .outerTickSize(0)
-                  .tickPadding(10),
+            var xAxis = d3noConflict.svg.axis().scale(x),
                 xAxis2 = d3noConflict.svg.axis().scale(x2).orient("bottom").ticks(d3noConflict.time.year),
                 yAxis = d3noConflict.svg.axis().scale(y)
                   .orient("left");
@@ -62,21 +57,21 @@
             var brush = d3noConflict.svg.brush().x(x2);
 
             var areavalue = d3noConflict.svg.area()
-                .interpolate("monotone")
+                // .interpolate("monotone")
                 .x(function (d) { return x(d.date); })
                 .y0(height)
-                .y1(function (d) { return y(d.price); });
+                .y1(function (d) { return y(d.measured); });
             var linevalue = d3noConflict.svg.line()
-                .interpolate("monotone")
-                .defined(function(d) { return d.price; })
+                // .interpolate("monotone")
+                .defined(function(d) { return d.measured; })
                 .x(function(d) { return x(d.date); })
-                .y(function(d) { return y(d.price); });
+                .y(function(d) { return y(d.measured); });
 
             var area2 = d3noConflict.svg.area()
                 .interpolate("monotone")
                 .x(function (d) { return x2(d.date); })
                 .y0(height2)
-                .y1(function (d) { return y2(d.price); });
+                .y1(function (d) { return y2(d.measured); });
 
             var svg = d3noConflict.select("svg")
               .attr({
@@ -97,6 +92,8 @@
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
             var area = focus.append("path")
                 .attr("class", "area");
+            var nullArea = focus.append("path")
+                .attr("class", "area area-null");
             var line = focus.append("path")
                 .attr("class", "line");
             var dots = focus.append("g")
@@ -136,14 +133,18 @@
 
             var maxValueSvg = svg.append("text")
               .attr("class", "legend")
-              .attr("x", margin.left)
+              .attr("x", margin.left+4)
               .attr("y", 50)
+              .attr("text-anchor", "start")
+              .attr("alignment-baseline", "hanging")
               .text("");
 
             var minValueSvg = svg.append("text")
               .attr("class", "legend")
-              .attr("x", margin.left)
-              .attr("y", 70)
+              .attr("x", margin.left+4)
+              .attr("y", 50)
+              .attr("text-anchor", "start")
+              .attr("alignment-baseline", "hanging")
               .text("");
 
             scope.$watch(function(scope) { return scope.river; }, function(newValue) {
@@ -159,46 +160,91 @@
                 if (d.measured) {
                   data.push({
                     date: new Date(d.timestamp),
-                    price: d.measured
+                    measured: Math.round((d.measured * 0.01) * 100) / 100
                   });
                 }
               });
+              var warningThreshold = Math.round((river.info.warningThreshold * 0.01) * 100) / 100;
+              var floodThreshold = Math.round((river.info.floodThreshold * 0.01) * 100) / 100;
 
               data.sort(function(a, b) {
                 return a.date - b.date;
               });
 
-              var max = d3noConflict.max(data.map(function (d) { return d.price; }));
+              function diff(date1, date2) {
+                var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+                return Math.ceil(timeDiff / (1000 * 3600 * 24));
+              }
+
+              var nullData = [];
+              for (var i = 0; i < data.length-1; i++) {
+                nullData.push(data[i]);
+                if (diff(data[i+1].date, data[i].date) > 30) {
+                  var newData = {
+                    date: data[i].date,
+                    measured: null
+                  }
+                  nullData.push(newData);
+                  var newData2 = {
+                    date: data[i+1].date,
+                    measured: null
+                  }
+                  nullData.push(newData2);
+                }
+                if (data.length-2 === i) {
+                  nullData.push(data[i+1]);
+                }
+              }
+
+              var max = d3noConflict.max(data.map(function (d) { return d.measured; }));
               var extent = d3noConflict.extent(data.map(function (d) { return d.date; }));
+
+              var brushExtent = extent;
+              var endDate = data[data.length-1].date;
+              var startDate = new Date(endDate);
+              startDate = new Date(startDate.setMonth(startDate.getMonth() - 120));
+              brushExtent = [startDate, endDate];
+
               x.domain(extent);
               y.domain([0, max]);
               x2.domain(x.domain());
               y2.domain(y.domain());
 
               area.attr("d", areavalue(data));
+              nullArea.attr("d", areavalue(nullData));
               line.attr("d", linevalue(data));
-              focus.append("line")
-                .attr("class", "warning-line")
-                .attr("x1", 0)
-                .attr("y1", y(river.info.warningThreshold))
-                .attr("x2", width)
-                .attr("y2", y(river.info.warningThreshold));
-              focus.append("line")
-                .attr("class", "flood-line")
-                .attr("x1", 0)
-                .attr("y1", y(river.info.floodThreshold))
-                .attr("x2", width)
-                .attr("y2", y(river.info.floodThreshold));
+              if (warningThreshold > 0) {
+                focus.append("line")
+                  .attr("class", "warning-line")
+                  .attr("x1", 0)
+                  .attr("y1", y(warningThreshold))
+                  .attr("x2", width)
+                  .attr("y2", y(warningThreshold));
+              }
+              if (floodThreshold > 0) {
+                focus.append("line")
+                  .attr("class", "flood-line")
+                  .attr("x1", 0)
+                  .attr("y1", y(floodThreshold))
+                  .attr("x2", width)
+                  .attr("y2", y(floodThreshold));
+              }
 
-              dots.append("circle").attr("class", "dots max");
-              dots.append("circle").attr("class", "dots min");
+              dots.append("line").attr("class", "dots line-max");
+              dots.append("line").attr("class", "dots line-min");
               focus.append("g")
                   .attr("class", "x axis")
                   .attr("transform", "translate(0," + height + ")")
                   .call(xAxis);
               focus.append("g")
                   .attr("class", "y axis")
-                  .call(yAxis);
+                  .call(yAxis)
+                  .append("text")
+                    .attr("y", 6)
+                    .attr("dy", ".71em")
+                    .style("text-anchor", "end")
+                    .attr("transform", "rotate(-90)")
+                    .text("Volume (m)");
 
               context.append("path")
                   .datum(data)
@@ -221,8 +267,10 @@
                 .on("mouseout", mouseout)
                 .on("mousemove", mousemove);
 
-              brush.extent(extent);
+              brush.extent(brushExtent);
               brush.on("brush", brushed);
+              context.select('.brush').call(brush);
+              brushed();
               function brushed() {
                 if (brush.empty()) {
                   x.domain(x2.domain());
@@ -235,33 +283,28 @@
                   minValueSvg.text("");
                   dots.transition(500)
                     .attr("opacity", 0);
-                  dots.select(".dots.max")
-                    .transition(1000)
-                    .attr("r", 50);
-                  dots.select(".dots.min")
-                    .transition(1000)
-                    .attr("r", 50);
                 } else {
                   x.domain(brush.extent());
                   minMaxOfExtent = getMinMaxOfExtent(data, brush.extent());
-                  maxValueSvg.text("Maior medição: [" + minMaxOfExtent.max.value + " em "+ formatTimeLiteral(minMaxOfExtent.max.date) +"]");
-                  minValueSvg.text("Menor medição: [" + minMaxOfExtent.min.value + " em " + formatTimeLiteral(minMaxOfExtent.min.date)+"]");
+                  maxValueSvg.text("Máxima de " + minMaxOfExtent.max.value + "m");// em "+ formatTimeLiteral(minMaxOfExtent.max.date));
+                  minValueSvg.text("Mínima de " + minMaxOfExtent.min.value + "m");// em " + formatTimeLiteral(minMaxOfExtent.min.date));
+                  maxValueSvg.attr("transform", "translate("+x(minMaxOfExtent.max.date)+","+y(minMaxOfExtent.max.value)+")");
+                  minValueSvg.attr("transform", "translate("+x(minMaxOfExtent.min.date)+","+y(minMaxOfExtent.min.value)+")");
                   dots.transition(1000)
                     .attr("opacity", 1);
-                  dots.select(".dots.max")
-                    .transition(1000)
-                    .attr("r", 10);
-                  dots.select(".dots.max")
-                    .attr("cx", x(minMaxOfExtent.max.date))
-                    .attr("cy", y(minMaxOfExtent.max.value));
-                  dots.select(".dots.min")
-                    .transition(1000)
-                    .attr("r", 10);
-                  dots.select(".dots.min")
-                    .attr("cx", x(minMaxOfExtent.min.date))
-                    .attr("cy", y(minMaxOfExtent.min.value));
+                  dots.select(".dots.line-max")
+                    .attr("x1", x(minMaxOfExtent.max.date))
+                    .attr("y1", y(minMaxOfExtent.max.value)-30)
+                    .attr("x2", x(minMaxOfExtent.max.date))
+                    .attr("y2", y(minMaxOfExtent.max.value));
+                  dots.select(".dots.line-min")
+                    .attr("x1", x(minMaxOfExtent.min.date))
+                    .attr("y1", y(minMaxOfExtent.min.value)-30)
+                    .attr("x2", x(minMaxOfExtent.min.date))
+                    .attr("y2", y(minMaxOfExtent.min.value));
                 }
                 focus.select(".area").attr("d", areavalue(data));
+                focus.select(".area.area-null").attr("d", areavalue(nullData));
                 focus.select(".line").attr("d", linevalue(data));
                 focus.select(".x.axis").call(xAxis);
               }
@@ -280,10 +323,10 @@
                     d0 = data[i - 1],
                     d1 = data[i],
                     d = x0 - d0.date > d1.date - x0 ? d1 : d0;
-                selectedValueCircle.attr("transform", "translate(" + x(d.date) + "," + y(d.price) + ")");
+                selectedValueCircle.attr("transform", "translate(" + x(d.date) + "," + y(d.measured) + ")");
                 selectedValueLine.attr({"x1": x(d.date), "y1": (y(max)-tooltipPadding), "x2": x(d.date), "y2": y(0)});
                 selectedValueText.attr("transform", "translate(" + x(d.date) + "," + (y(max)-(tooltipHeight/2)-tooltipPadding) + ")");
-                selectedValueText.text(d.price+" em "+formatTimeLiteral(d.date));
+                selectedValueText.text(d.measured+"m em "+formatTimeLiteral(d.date));
                 selectedValueRect.attr({"x": (x(d.date)-(tooltipWidth/2)), "y": (y(max)-tooltipHeight-tooltipPadding)});
               }
 
@@ -320,12 +363,12 @@
                 minDate;
 
           		_.each(between, function(d) {
-                if (d.price > maxValue) {
-                  maxValue = d.price;
+                if (d.measured > maxValue) {
+                  maxValue = d.measured;
                   maxDate = d.date;
                 }
-                if (d.price < minValue) {
-                  minValue = d.price;
+                if (d.measured < minValue) {
+                  minValue = d.measured;
                   minDate = d.date;
                 }
           		});

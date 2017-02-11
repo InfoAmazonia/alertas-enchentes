@@ -1,33 +1,97 @@
-<section class="section-header">
-  <div class="container inner section-header-lg">
-    <header class="main-header text-center">
-      <h1>Alerta de enchentes</h1>
-      <p class="main-header-subheadding">Veja as previsões de volume para os rios da região amazônica</p>
-    </header>
-    <div class="row">
-      <div class="col-sm-4">
-        <a ui-sref="riobranco" class="river-cover river-cover-riobranco">
-          <span class="river-cover-inner">Rio Branco</span>
-        </a>
-      </div>
-      <div class="col-sm-4">
-        <a ui-sref="portovelho" class="river-cover river-cover-portovelho">
-          <span class="river-cover-inner">Porto Velho</span>
-        </a>
-      </div>
-      <div class="col-sm-4">
-        <a ui-sref="manaus" class="river-cover river-cover-manaus">
-          <span class="river-cover-inner">Manaus</span>
-        </a>
-      </div>
+<nav class="navbar navbar-fixed-top" ng-class="{'navbar-inverse': scroll > 150, 'navbar-default': scroll <= 150}">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" ui-sref="home">
+        <img src="images/ia-white.png" alt="Infoamazônia" width="185" height="40">
+      </a>
     </div>
-  </div>
-</section>
 
-<section class="section-primary">
-  <div class="container">
-    <h2 class="text-center">Sobre o projeto</h2>
-    <p>O Sistema de Monitoramento de Seca e Enchentes de Manaus, Rio Branco e Porto Velho é um projeto piloto do InfoAmazonia que tem o objetivo de coletar dados hidrológicos, enviar alertas, produzir e distribuir notícias sobre os impactos das mudanças climáticas nos rios da Amazônia.</p>
-    <p>O projeto responder à necessidade de informação clara, de fácil entendimento das pessoas que sofrem impacto direto das enchentes e secas da falta de políticas públicas que promovam adaptação e mitigação das mudanças do clima.</p>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Previsões <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="" ng-click="ctrl.selectRiver('rioacre')">Rio Acre</a></li>
+            <li><a href="" ng-click="ctrl.selectRiver('riomadeira')">Rio Madeira</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Séries históricas <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a ui-sref="history({river: 'rioacre'})">Rio Acre</a></li>
+            <li><a ui-sref="history({river: 'riomadeira'})">Rio Madeira</a></li>
+            <li><a ui-sref="history({river: 'rioamazonas'})">Rio Amazonas</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<openlayers class="content-fullheight" ol-defaults="ctrl.map.defaults" ol-center="ctrl.map.center">
+  <ol-marker ol-marker-properties="marker" ng-repeat="marker in ctrl.map.markers"></ol-marker>
+  <ol-layer name="{{layer.name}}" ol-layer-properties="layer" ng-repeat="layer in ctrl.map.layers"></ol-layer>
+</openlayers>
+<div class="map-headding text-center">
+  <h1>Alerta de enchentes</h1>
+  <p class="map-subheadding">Veja as previsões de volume para os rios da região amazônica</p>
+</div>
+<div class="map-info">
+  <div class="map-info-content">
+
+
+    <div class="map-card" ng-show="ctrl.select">
+      <div class="loading" ng-show="ctrl.loading">
+        <div class="loading-speeding-wheel"></div>
+      </div>
+      <div ng-hide="ctrl.loading">
+        <div class="row">
+          <div class="col-xs-6">
+            <div style="font-size: 25px; font-weight: bold;">{{ctrl.selectedRiver.name}}</div>
+            <div>{{ctrl.timestamp}}</div>
+          </div>
+          <div class="col-xs-6 text-right alert-tip" style="visible: hidden">
+            <div>
+              <span class="glyphicon glyphicon-tint"></span> <span class="alert-measure"></span>
+            </div>
+            <div>
+              <span class="glyphicon glyphicon-time"></span> <span class="alert-time"></span>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: 25px; font-size: 16px;">
+          <div style="font-size: 22px;">{{ctrl.selectedRiver.alert.title}}</div>
+          <div>{{ctrl.selectedRiver.alert.description}}</div>
+        </div>
+        <div ng-show="ctrl.selectedRiver.data.info && ctrl.selectedRiver.data.data.length">
+          <ae-prediction river="ctrl.selectedRiver.data"></ae-prediction>
+        </div>
+        <div class="text-right">
+          <a ui-sref="history({river: ctrl.selectedRiver.slug})" class="btn btn-primary">Ver série histórica</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- <div data-alerta-enchentes-station="13600002" ng-show="ctrl.isSelectedRiver('rioacre')"></div>
+    <div data-alerta-enchentes-station="15400000" ng-show="ctrl.isSelectedRiver('riomadeira')"></div>
+    <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script');
+      script.async = true;
+      script.src   = "http://localhost/alertas-enchentes-widget/alerta-enchentes.js";
+      var entry = document.getElementsByTagName('script')[0];
+      entry.parentNode.insertBefore(script, entry);
+    }());
+    </script> -->
   </div>
-</section>
+</div>
+<div class="clearfix"></div>

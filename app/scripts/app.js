@@ -13,10 +13,12 @@ angular
     'ngAnimate',
     'ngSanitize',
     'ngTouch',
-    'ui.router'
+    'ngResource',
+    'ui.router',
+    'openlayers-directive'
   ])
   .constant('RESTAPI', {
-    url: 'http://enchentes.infoamazonia.org:8080/'
+    url: 'http://enchentes.infoamazonia.org:8080'
   })
   .config(routeConfig);
 
@@ -27,24 +29,14 @@ angular
     $stateProvider
     .state('home', {
       url: "/",
-      templateUrl: "views/main.html"
-    })
-    .state('riobranco', {
-      url: "/riobranco",
-      templateUrl: "views/riobranco.html",
-      controller: "RioBrancoCtrl",
+      templateUrl: "views/main.html",
+      controller: "MainCtrl",
       controllerAs: "ctrl"
     })
-    .state('portovelho', {
-      url: "/portovelho",
-      templateUrl: "views/portovelho.html",
-      controller: "PortoVelhoCtrl",
-      controllerAs: "ctrl"
-    })
-    .state('manaus', {
-      url: "/manaus",
-      templateUrl: "views/manaus.html",
-      controller: "ManausCtrl",
+    .state('history', {
+      url: "/history/:river",
+      templateUrl: "views/history.html",
+      controller: "HistoryCtrl",
       controllerAs: "ctrl"
     });
     $urlRouterProvider.otherwise('/');

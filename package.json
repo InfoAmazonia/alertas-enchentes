@@ -40,5 +40,8 @@
   },
   "scripts": {
     "test": "karma start test/karma.conf.js"
+  },
+  "dependencies": {
+    "grunt-ssh-deploy": "^0.4.1"
   }
 }

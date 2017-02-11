@@ -4,11 +4,11 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
 
-$background-color: #0b3341;
+$background-color: #222222;
 $background-color-inverse: #fff;
 $section-padding-vertical: $padding-large-vertical*4;
-$section-primary-bg-color: #eee;
-$section-secondary-bg-color: #0b3341;
+$section-primary-bg-color: $background-color;
+$section-secondary-bg-color: #292929;
 
 body {
   padding: 0;
@@ -17,89 +17,82 @@ body {
   background-color: $background-color;
   font-family: 'Source Sans Pro', sans-serif;
   font-size: 2em;
+  color: #fff;
 }
+
 footer {
   background-color: $background-color;
   padding-top: $section-padding-vertical;
   padding-bottom: $section-padding-vertical;
   color: #fff;
 }
-.section-header {
-		background-image: url("https://upload.wikimedia.org/wikipedia/commons/4/4e/Curvas_do_Parque_Nacional_de_Anavilhanas.jpg");
-		display: -moz-flex;
-		display: -webkit-flex;
-		display: -ms-flex;
-		display: flex;
-		padding: $section-padding-vertical 0;
-		background-attachment: fixed;
-		background-position: center;
-		background-repeat: no-repeat;
-		background-size: cover;
-		border-bottom: 0 !important;
-		cursor: default;
-		position: relative;
-		top: 0;
-    padding-top: 100px;
-    color: #fff;
 
-		&:after {
-			-moz-transition: opacity 2.5s ease;
-			-webkit-transition: opacity 2.5s ease;
-			-ms-transition: opacity 2.5s ease;
-			transition: opacity 2.5s ease;
-			-moz-transition-delay: 0.75s;
-			-webkit-transition-delay: 0.75s;
-			-ms-transition-delay: 0.75s;
-			transition-delay: 0.75s;
-			-moz-pointer-events: none;
-			-webkit-pointer-events: none;
-			-ms-pointer-events: none;
-			pointer-events: none;
-			background-color: rgba(11, 51, 65, 0.8);
-			content: '';
-			display: block;
-			height: 100%;
-			left: 0;
-			opacity: 0.85;
-			position: absolute;
-			top: 0;
-			width: 100%;
-			z-index: 1;
-		}
-
-    h1 {
-			font-size: 3.25em;
-		}
-
-    header {
-      padding-top: $section-padding-vertical*2;
-      padding-bottom: $section-padding-vertical*2;
-    }
-
-    > .inner {
-			-moz-transition: opacity 1.5s ease, -moz-transform 0.5s ease-out, -moz-filter 0.5s ease, -webkit-filter 0.5s ease;
-			-webkit-transition: opacity 1.5s ease, -webkit-transform 0.5s ease-out, -webkit-filter 0.5s ease, -webkit-filter 0.5s ease;
-			-ms-transition: opacity 1.5s ease, -ms-transform 0.5s ease-out, -ms-filter 0.5s ease, -webkit-filter 0.5s ease;
-			transition: opacity 1.5s ease, transform 0.5s ease-out, filter 0.5s ease, -webkit-filter 0.5s ease;
-			position: relative;
-			z-index: 2;
-
-      image {
-				display: none;
-			}
-		}
-
+.content-fullheight {
+  float: left;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: -webkit-calc(100vh);
+  height:    -moz-calc(100vh);
+  height:         calc(100vh);
 }
 
-.section-header-lg {
-  padding-bottom: 150px;
+.content-main {
+  margin-top: $navbar-height;
 }
 
-.main-header-subheadding {
-  margin-top: $padding-large-vertical;
-  margin-bottom: $padding-large-vertical;
+.map-headding {
+  width: 100%;
   font-size: 18px;
+  position: absolute;
+  top: $navbar-height;
+  color: #fff;
+
+  h1 {
+    font-size: 1.5em;
+    @media (min-width: $screen-lg-min) {
+      font-size: 3.25em;
+    }
+	}
+
 }
+
+.map-info {
+  float: left;
+  position: absolute;
+  z-index: 10;
+  text-align: left;
+
+  @media (max-width: $screen-sm-min) {
+    bottom: 0;
+    width: 100%;
+  }
+  @media (min-width: $screen-md-min) {
+    width: 680px;
+    top: 280px;
+    margin: 20px;
+  }
+}
+
+.map-card {
+  padding: 20px;
+  background-color: rgba(11, 51, 65, 0.95);
+
+  &.map-card-inverse {
+    border: solid 1px #878787;
+    background-color: #fff;
+    color: #878787;
+  }
+}
+
+.info-visible {
+  display: block;
+}
+
+.info-invisible {
+  display: none;
+}
+
 .section-primary {
   padding-top: $section-padding-vertical;
   padding-bottom: $section-padding-vertical;
@@ -111,71 +104,15 @@ footer {
   padding-bottom: 1em;
 }
 
-.river-cover {
-  display: block;
-  height: 150px;
-  border-radius: $border-radius-base;
-  padding: $padding-large-vertical;
-  background-color: $background-color;
-  background-size: cover;
+/* MAP */
+.popup-label {
+  background: $brand-primary;
   color: #fff;
-  text-shadow: 2px 2px $text-color;
-  font-size: 28px;
-  line-height: 130px;
-  text-align: center;
-
-  &:hover {
-    text-decoration: none;
-    color: #fff;
-  }
-
-  &.river-cover-riobranco {
-    background-image: url("http://4.bp.blogspot.com/-j-MSkE8IeKo/T84Jqk7FkJI/AAAAAAAAY4k/7FgbR3JYg7o/s1600/rio-branco-AC.jpg");
-  }
-
-  &.river-cover-portovelho {
-    background-image: url("http://www.portalgentedeopiniao.net/fotos/image/vistadePortoVelhoFotoJGOMES1200.jpg");
-  }
-
-  &.river-cover-manaus {
-    background-image: url("http://sknincorporadora.com.br/files/8314/0241/3198/Fotomontagem_Noturna_Cidade.jpg");
-  }
-
-  &:after {
-    -moz-transition: opacity 2.5s ease;
-    -webkit-transition: opacity 2.5s ease;
-    -ms-transition: opacity 2.5s ease;
-    transition: opacity 2.5s ease;
-    -moz-transition-delay: 0.75s;
-    -webkit-transition-delay: 0.75s;
-    -ms-transition-delay: 0.75s;
-    transition-delay: 0.75s;
-    -moz-pointer-events: none;
-    -webkit-pointer-events: none;
-    -ms-pointer-events: none;
-    pointer-events: none;
-    background-color: rgba(0, 0, 0, 0.5);
-    content: '';
-    display: block;
-    border-radius: $border-radius-base;
-    top: -140px;
-    left: 0;
-    height: 150px;
-    opacity: 0.85;
-    position: relative;
-    margin-left: -$padding-large-vertical;
-    margin-right: -$padding-large-vertical;
-    z-index: 1;
-  }
-
-  > .river-cover-inner {
-    -moz-transition: opacity 1.5s ease, -moz-transform 0.5s ease-out, -moz-filter 0.5s ease, -webkit-filter 0.5s ease;
-    -webkit-transition: opacity 1.5s ease, -webkit-transform 0.5s ease-out, -webkit-filter 0.5s ease, -webkit-filter 0.5s ease;
-    -ms-transition: opacity 1.5s ease, -ms-transform 0.5s ease-out, -ms-filter 0.5s ease, -webkit-filter 0.5s ease;
-    transition: opacity 1.5s ease, transform 0.5s ease-out, filter 0.5s ease, -webkit-filter 0.5s ease;
-    position: relative;
-    z-index: 2;
-  }
+  padding: 2px 10px;
+  left: 3px;
+  position: relative;
+  top: 15px;
+  font-size: small;
 }
 
 .loading {
@@ -220,20 +157,32 @@ footer {
 }
 
 /* Graph */
-$chart-primary-color: #3498db;
+$chart-light-color: #7baff0;
+$chart-strong-color: #1878F0;
 .timeline-chart {
   font: 12px sans-serif;
 }
 
 .area {
-  fill: $chart-primary-color;
-  fill-opacity: 0.8;
+  fill: $chart-light-color;
+  fill-opacity: 1;
   clip-path: url(#clip);
+
+  &.area-null {
+    fill-opacity: 0.9;
+  }
 }
 
 .line {
   fill: none;
-  stroke: darken($chart-primary-color, 10);
+  stroke: $chart-strong-color;
+  stroke-width: 2;
+  clip-path: url(#clip);
+}
+
+.line2 {
+  fill: none;
+  stroke: $chart-strong-color;
   stroke-width: 2;
   clip-path: url(#clip);
 }
@@ -243,16 +192,26 @@ $chart-primary-color: #3498db;
   fill-opacity: 0.9;
 }
 
+.axis {
+  > text {
+    fill: #999;
+  }
+}
+
 .axis path,
 .axis line {
   fill: none;
-  stroke: #000;
+  stroke: #999;
   shape-rendering: crispEdges;
 }
 
 .tick line {
   opacity: 0.2;
   stroke-dasharray: 5;
+  fill: #999;
+}
+.tick {
+  fill: #999;
 }
 
 .x {
@@ -269,13 +228,21 @@ $chart-primary-color: #3498db;
   clip-path: url(#clip);
 
   &.max {
-    fill: #1abc9c;
-    stroke: #16a085;
+    fill: #fff;
+    stroke: #fff;
   }
 
   &.min {
-    fill: #1abc9c;
-    stroke: #16a085;
+    fill: #fff;
+    stroke: #fff;
+  }
+
+  &.line-max {
+    stroke: #fff;
+  }
+
+  &.line-min {
+    stroke: #fff;
   }
 
 }
@@ -304,20 +271,20 @@ $chart-primary-color: #3498db;
   }
 
   > g > circle:last-child {
-    stroke: darken($chart-primary-color, 10);
+    stroke: $chart-strong-color;
     fill: #fff;
     stroke-width: 2;
     fill-opacity: 1;
   }
 
   > line {
-    stroke: darken($chart-primary-color, 10);
+    stroke: $chart-strong-color;
     fill: none;
     stroke-width: 2;
   }
 
   > rect {
-    fill: darken($chart-primary-color, 10);
+    fill: $chart-strong-color;
     opacity: 1;
   }
 
@@ -331,7 +298,7 @@ $chart-primary-color: #3498db;
 
 .brush .extent {
   stroke: #fff;
-  fill: $chart-primary-color;
+  fill: $chart-light-color;
   fill-opacity: 0.2;
   shape-rendering: crispEdges;
 }
@@ -339,20 +306,39 @@ $chart-primary-color: #3498db;
 .legend {
   font-size: 16px;
   font-family: 'Source Sans Pro', sans-serif;
+  fill: #fff;
 }
 
 .warning-line {
   stroke: #f39c12;
   stroke-width: 2;
+  opacity: 0.6;
 }
 
 .flood-line {
   stroke: #e74c3c;
   stroke-width: 2;
+  opacity: 0.6;
+}
+
+.map {
+  float: left;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: -webkit-calc(100vh - (#{$navbar-height}));
+  height:    -moz-calc(100vh - (#{$navbar-height}));
+  height:         calc(100vh - (#{$navbar-height}));
 }
 
 /* Bootstrap overhide */
 .navbar-default {
-  background: none;
-  border: none;
+  transition: all ease 0.5s;
+}
+.navbar-inverse {
+  transition: all ease 0.5s;
+}
+
+.navbar-brand {
+  padding: 15px;
 }

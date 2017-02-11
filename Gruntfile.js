@@ -31,6 +31,37 @@ module.exports = function (grunt) {
     // Project settings
     yeoman: appConfig,
 
+    // Load credentials
+    secret: grunt.file.readJSON('secret.json'),
+
+    environments: {
+      options: {
+        local_path: 'dist',
+        current_symlink: 'site'
+      },
+      dev: {
+          options: {
+              host: '<%= secret.development.host %>',
+              username: '<%= secret.development.username %>',
+              password: '<%= secret.production.password %>',
+              port: '<%= secret.development.port %>',
+              deploy_path: '<%= secret.development.deploy_path %>',
+              debug: true,
+              releases_to_keep: '3'
+          }
+      },
+      prod: {
+          options: {
+              host: '<%= secret.production.host %>',
+              username: '<%= secret.production.username %>',
+              password: '<%= secret.production.password %>',
+              port: '<%= secret.production.port %>',
+              deploy_path: '<%= secret.production.deploy_path %>',
+              releases_to_keep: '5'
+          }
+      }
+    },
+
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       bower: {
@@ -224,7 +255,7 @@ module.exports = function (grunt) {
         src: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
         ignorePath: /(\.\.\/){1,2}bower_components\//
       }
-    }, 
+    },
 
     // Compiles Sass to CSS and generates necessary files if requested
     compass: {

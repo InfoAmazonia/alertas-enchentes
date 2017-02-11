@@ -15,32 +15,14 @@
     <!-- endbuild -->
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400" rel="stylesheet">
+    <script src="https://openlayers.org/en/v3.19.1/build/ol.js"></script>
   </head>
   <body ng-app="alertasEnchentesApp">
     <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <ae-navbar scroll-position="scroll"></ae-navbar>
-
     <div ui-view></div>
-
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-4">
-            <h3>Realização</h3>
-            <a href="http://infoamazonia.org/" target="_blank">Infoamazonia</a>
-          </div>
-          <div class="col-sm-4">
-            <h3>Apoio</h3>
-          </div>
-          <div class="col-sm-4">
-            <h3>Parceiros</h3>
-          </div>
-        </div>
-      </div>
-    </footer>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
@@ -64,17 +46,21 @@
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/d3/d3.js"></script>
     <script src="bower_components/underscore/underscore.js"></script>
+    <script src="bower_components/angular-openlayers-directive/dist/angular-openlayers-directive.min.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
-        <script src="scripts/controllers/riobranco.js"></script>
-        <script src="scripts/controllers/portovelho.js"></script>
-        <script src="scripts/controllers/manaus.js"></script>
+        <script src="scripts/controllers/history.js"></script>
         <script src="scripts/directives/ae-history.js"></script>
         <script src="scripts/directives/ae-navbar.js"></script>
+        <script src="scripts/directives/ae-prediction-line.js"></script>
+        <script src="scripts/services/history.js"></script>
+        <script src="scripts/services/prediction.js"></script>
         <!-- endbuild -->
 </body>
 </html>
