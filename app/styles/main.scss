@@ -77,6 +77,12 @@ footer {
 .map-card {
   padding: 20px;
   background-color: rgba(11, 51, 65, 0.95);
+
+  &.map-card-inverse {
+    border: solid 1px #878787;
+    background-color: #fff;
+    color: #878787;
+  }
 }
 
 .info-visible {
@@ -151,14 +157,14 @@ footer {
 }
 
 /* Graph */
-$chart-primary-color: steelblue;
-$chart-warning-color: #73A229;
+$chart-light-color: #7baff0;
+$chart-strong-color: #1878F0;
 .timeline-chart {
   font: 12px sans-serif;
 }
 
 .area {
-  fill: $chart-primary-color;
+  fill: $chart-light-color;
   fill-opacity: 1;
   clip-path: url(#clip);
 
@@ -169,14 +175,14 @@ $chart-warning-color: #73A229;
 
 .line {
   fill: none;
-  stroke: darken($chart-primary-color, 10);
+  stroke: $chart-strong-color;
   stroke-width: 2;
   clip-path: url(#clip);
 }
 
 .line2 {
   fill: none;
-  stroke: $chart-warning-color;
+  stroke: $chart-strong-color;
   stroke-width: 2;
   clip-path: url(#clip);
 }
@@ -188,24 +194,24 @@ $chart-warning-color: #73A229;
 
 .axis {
   > text {
-    fill: #fff;
+    fill: #999;
   }
 }
 
 .axis path,
 .axis line {
   fill: none;
-  stroke: #fff;
+  stroke: #999;
   shape-rendering: crispEdges;
 }
 
 .tick line {
   opacity: 0.2;
   stroke-dasharray: 5;
-  fill: #fff;
+  fill: #999;
 }
 .tick {
-  fill: #fff;
+  fill: #999;
 }
 
 .x {
@@ -265,20 +271,20 @@ $chart-warning-color: #73A229;
   }
 
   > g > circle:last-child {
-    stroke: darken($chart-primary-color, 10);
+    stroke: $chart-strong-color;
     fill: #fff;
     stroke-width: 2;
     fill-opacity: 1;
   }
 
   > line {
-    stroke: darken($chart-primary-color, 10);
+    stroke: $chart-strong-color;
     fill: none;
     stroke-width: 2;
   }
 
   > rect {
-    fill: darken($chart-primary-color, 10);
+    fill: $chart-strong-color;
     opacity: 1;
   }
 
@@ -292,7 +298,7 @@ $chart-warning-color: #73A229;
 
 .brush .extent {
   stroke: #fff;
-  fill: $chart-primary-color;
+  fill: $chart-light-color;
   fill-opacity: 0.2;
   shape-rendering: crispEdges;
 }

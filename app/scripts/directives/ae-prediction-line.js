@@ -77,8 +77,6 @@
 
           var areaSVG = areaG.append("path")
             .attr("class", "area");
-          var lineSVG = areaG.append("path")
-            .attr("class", "line");
           var line2SVG = areaG.append("path")
             .attr("class", "line2");
 
@@ -95,7 +93,7 @@
               "x2": width,
               "fill": "none",
               "stroke-width": "2px",
-              "opacity": 0.5,
+              "opacity": 1,
               "stroke-dasharray": "10,5",
               "stroke": color("ALERTA")
             });
@@ -103,7 +101,7 @@
             .attr({
               "x": margin.right,
               "fill": color("ALERTA"),
-              "opacity": 0.5,
+              "opacity": 1,
               "font-size": "10",
               "font-family": "sans"
             })
@@ -114,7 +112,7 @@
               "x1": 0,
               "x2": width,
               "stroke-width": "2px",
-              "opacity": 0.5,
+              "opacity": 1,
               "stroke-dasharray": "10,5",
               "stroke": color("INUNDACAO")
             });
@@ -122,11 +120,20 @@
             .attr({
               "x": margin.right,
               "fill": color("INUNDACAO"),
-              "opacity": 0.5,
+              "opacity": 1,
               "font-size": "10",
               "font-family": "sans"
             })
             .text("Nível de enchente");
+          var predictionText = linesG.append("text")
+            .attr({
+              "fill": color("NORMAL"),
+              "opacity": 1,
+              "font-size": "10",
+              "font-family": "sans",
+              "text-anchor": "end"
+            })
+            .text("Previsão");
 
           var dots = svg.append("g")
               .attr("class", "dots")
@@ -175,12 +182,16 @@
             });
 
             var domainMax = d3noConflict.max(data, function(d) { return d.measured; });
+            var domainMin = d3noConflict.min(data, function(d) { return d.measured; });
             if (domainMax < river.info.floodThreshold) {
-                var domainMax = river.info.floodThreshold;
+              domainMax = river.info.floodThreshold;
+            }
+            if (domainMin > river.info.floodThreshold - 1000) {
+              domainMin = river.info.floodThreshold - 1000;
             }
             x.domain(d3.extent(river.data, function(d) { return d.timestamp; }));
-            y.domain([0, domainMax]);
-            valuearea.y0(y(0));
+            y.domain([domainMin - 10, domainMax]);
+            valuearea.y0(y(domainMin));
 
             alertLine.attr({
               "y1": y(river.info.warningThreshold),
@@ -196,11 +207,13 @@
             floodText.attr({
               "y": y(river.info.floodThreshold) - 4,
             });
+            predictionText.attr({
+              "x": x(data2[data2.length-1].timestamp),
+              "y": y(data2[data2.length-1].predicted) - 4,
+            });
 
             areaSVG.datum(data)
               .attr("d", valuearea);
-            lineSVG.datum(data)
-              .attr("d", valueline);
             line2SVG.datum(data2)
               .attr("d", valueline2);
 
@@ -223,16 +236,17 @@
             function mousemove() {
               var
                 x0 = x.invert(d3noConflict.mouse(this)[0]),
-                i = bisectDate(data, x0, 1),
-                d0 = data[i - 1],
-                d1 = data[i],
+                i = bisectDate(data2, x0, 1),
+                d0 = data2[i - 1],
+                d1 = data2[i],
                 d = x0 - d0.timestamp > d1.timestamp - x0 ? d1 : d0,
-                measured = Math.round((d.measured * 0.01) * 100) / 100;
-              selectedValueCircle.attr("transform", "translate(" + x(d.timestamp) + "," + y(d.measured) + ")");
-              selectedValueLine.attr({"x1": x(d.timestamp), "y1": (y(domainMax)-tooltipPadding), "x2": x(d.timestamp), "y2": y(0)});
-              selectedValueText.attr("transform", "translate(" + x(d.timestamp) + "," + (y(domainMax)-(tooltipHeight/2)-tooltipPadding) + ")");
+                measured = Math.round((d.predicted * 0.01) * 100) / 100;
+              selectedValueCircle.attr("transform", "translate(" + x(d.timestamp) + "," + y(d.predicted) + ")");
+              selectedValueLine.attr({"x1": x(d.timestamp), "y1": (y(d.predicted)+tooltipPadding), "x2": x(d.timestamp), "y2": y(0)});
+              selectedValueText.attr("transform", "translate(" + x(d.timestamp) + "," + (y(d.predicted)-(tooltipHeight/2)+tooltipPadding) + ")");
               selectedValueText.text(measured+"m em "+formatTimeLiteral(d.timestamp));
-              selectedValueRect.attr({"x": (x(d.timestamp)-(tooltipWidth/2)), "y": (y(domainMax)-tooltipHeight-tooltipPadding)});
+              selectedValueRect.attr({"x": (x(d.timestamp)-(tooltipWidth/2)), "y": (y(d.predicted)-tooltipHeight+tooltipPadding)});
+              d3noConflict.select('.alert-tip').style("visible", "visible");
               d3noConflict.select('.alert-measure').text(measured+"m");
               d3noConflict.select('.alert-time').text(formatTimeLiteral(d.timestamp));
             }
@@ -242,16 +256,16 @@
           function color(measuredStatus) {
             switch (measuredStatus) {
               case "NORMAL":
-                return "#1878f0";
+                return "#1878F0";
                 break;
               case "ALERTA":
-                return "#faea59";
+                return "#FFE168";
                 break;
               case "INUNDACAO":
                 return "#eb533e";
                 break;
               default:
-                return "#1878f0";
+                return "#1878F0";
             }
           }
 

@@ -55,16 +55,16 @@
       <div ng-hide="ctrl.loading">
         <div class="row">
           <div class="col-xs-6">
-            <div style="font-size: 25px;">{{ctrl.selectedRiver.name}}</div>
+            <div style="font-size: 25px; font-weight: bold;">{{ctrl.selectedRiver.name}}</div>
             <div>{{ctrl.timestamp}}</div>
           </div>
-          <div class="col-xs-6 text-right">
+          <div class="col-xs-6 text-right alert-tip" style="visible: hidden">
             <div>
               <span class="glyphicon glyphicon-tint"></span> <span class="alert-measure"></span>
             </div>
-              <div>
-                <span class="glyphicon glyphicon-time"></span> <span class="alert-time"></span>
-              </div>
+            <div>
+              <span class="glyphicon glyphicon-time"></span> <span class="alert-time"></span>
+            </div>
           </div>
         </div>
         <div style="margin-top: 25px; font-size: 16px;">
