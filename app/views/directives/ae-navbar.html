@@ -1,25 +1,26 @@
-<nav class="navbar navbar-fixed-top" ng-class="{'navbar-inverse': scroll > 150, 'navbar-default': scroll <= 150}">
+<nav class="navbar navbar-default navbar-fixed-top">
   <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
+    <ul class="list-inline nav-list">
+      <li>
+        <a href="" class="inverse"><span class="glyphicon glyphicon-share-alt"></span></a>
+      </li>
+      <li>
+        <a href="" class="inverse" ng-click="toggleMenu()"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
+      </li>
+    </ul>
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
       <a class="navbar-brand" ui-sref="home">
         <img src="images/ia-white.png" alt="Infoamazônia" width="185" height="40">
       </a>
     </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav navbar-right">
-        <li><a ui-sref="riobranco">Rio Branco</a></li>
-        <li><a ui-sref="portovelho">Porto Velho</a></li>
-        <li><a ui-sref="manaus">Manaus</a></li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
+
+<div class="menu-container" ng-show="showMenu">
+  <div class="list-group">
+    <a href="#" class="list-group-item">Sobre o projeto</a>
+    <a href="#" class="list-group-item">Dados abertos</a>
+    <a href="#" class="list-group-item">Receba previsões e alertas pelo Telegram ou Facebook</a>
+  </div>
+</div>

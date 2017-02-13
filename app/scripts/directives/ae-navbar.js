@@ -2,27 +2,21 @@
   'use strict';
 
   angular.module('alertasEnchentesApp')
+    .controller('NavbarCtrl', ['$scope', function($scope) {
+      $scope.showMenu = false;
+      $scope.toggleMenu = function() {
+        $scope.showMenu = !$scope.showMenu;
+      }
+    }])
     .directive('aeNavbar', aeNavbar);
 
-    aeNavbar.$inject = ['$window'];
+    aeNavbar.$inject = [];
 
     /*jshint latedef: nofunc */
-    function aeNavbar($window) {
+    function aeNavbar() {
       return {
         templateUrl: "views/directives/ae-navbar.html",
-        restrict: 'E',
-        scope: {
-          scroll: '=scrollPosition',
-          selectRiver: '&'
-        },
-        link: function(scope, element, attrs) {
-          var windowEl = angular.element($window);
-          var handler = function() {
-            scope.scroll = windowEl.scrollTop();
-          }
-          windowEl.on('scroll', scope.$apply.bind(scope, handler));
-          handler();
-        }
+        restrict: 'E'
       }
     }
 

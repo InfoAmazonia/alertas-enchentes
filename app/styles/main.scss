@@ -4,7 +4,7 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
 
-$background-color: #222222;
+$background-color: #222;
 $background-color-inverse: #fff;
 $section-padding-vertical: $padding-large-vertical*4;
 $section-primary-bg-color: $background-color;
@@ -335,10 +335,32 @@ $chart-strong-color: #1878F0;
 .navbar-default {
   transition: all ease 0.5s;
 }
+
 .navbar-inverse {
   transition: all ease 0.5s;
 }
 
 .navbar-brand {
   padding: 15px;
+}
+
+.nav-list {
+  float: right;
+  margin: 18px 0;
+}
+
+a.inverse {
+  color: #fff;
+}
+
+.menu-container {
+  height: 100vh;
+  padding-top: $navbar-height;
+  position: absolute;
+  right: 0;
+  width: 320px;
+  z-index: 1;
+  background-color: $background-color;
+  color: #fff;
+  overflow: auto;
 }
