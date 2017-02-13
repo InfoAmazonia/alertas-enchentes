@@ -9,39 +9,29 @@
 <div class="map-info">
   <div class="map-info-content">
 
-
     <div class="map-card" ng-show="ctrl.select">
+      <button type="button" class="btn-close" ng-click="ctrl.hideCard()">&times;</button>
       <div class="loading" ng-show="ctrl.loading">
         <div class="loading-speeding-wheel"></div>
       </div>
-      <div ng-hide="ctrl.loading">
-        <div class="row">
-          <div class="col-xs-6">
-            <div style="font-size: 25px; font-weight: bold;">{{ctrl.selectedRiver.name}}</div>
-            <div>{{ctrl.timestamp}}</div>
-          </div>
-          <div class="col-xs-6 text-right alert-tip" style="visible: hidden">
-            <div>
-              <span class="glyphicon glyphicon-tint"></span> <span class="alert-measure"></span>
-            </div>
-            <div>
-              <span class="glyphicon glyphicon-time"></span> <span class="alert-time"></span>
-            </div>
-          </div>
-        </div>
-        <div style="margin-top: 25px; font-size: 16px;">
-          <div style="font-size: 22px;">{{ctrl.selectedRiver.alert.title}}</div>
+      <div class="map-card-body" ng-hide="ctrl.loading">
+        <div class="map-card-body-title"><strong>{{ctrl.selectedRiver.name}}</strong> em {{ctrl.selectedRiver.city}}</div>
+        <div>Previsões a partir de {{ctrl.timestamp}}</div>
+        <div style="margin-top: 25px;">
+          <div class="map-card-body-title">{{ctrl.selectedRiver.alert.title}}</div>
           <div>{{ctrl.selectedRiver.alert.description}}</div>
         </div>
         <div ng-show="ctrl.selectedRiver.data.info && ctrl.selectedRiver.data.data.length">
           <ae-prediction river="ctrl.selectedRiver.data"></ae-prediction>
         </div>
-        <div class="text-right">
+        <div class="text-right hidden-xs">
           <a ui-sref="history({river: ctrl.selectedRiver.slug})" class="btn btn-primary">Ver série histórica</a>
         </div>
       </div>
 
     </div>
+
+    <button type="button" name="button" class="btn btn-primary btn-block btn-lg visible-xs" data-toggle="modal" data-target="#selectModal">Selecionar rio</button>
 
     <!-- <div data-alerta-enchentes-station="13600002" ng-show="ctrl.isSelectedRiver('rioacre')"></div>
     <div data-alerta-enchentes-station="15400000" ng-show="ctrl.isSelectedRiver('riomadeira')"></div>
@@ -57,3 +47,21 @@
   </div>
 </div>
 <div class="clearfix"></div>
+<!-- Modal -->
+<div class="modal fade" id="selectModal" tabindex="-1" role="dialog" aria-labelledby="selectModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="selectModalLabel">Previsões para...</h4>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group">
+          <li class="list-group-item" ng-repeat="river in ctrl.rivers">
+            <a href="" ng-click="ctrl.selectRiver(river.slug)" data-dismiss="modal">{{river.name}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

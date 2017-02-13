@@ -2,6 +2,11 @@
   <div class="container-fluid">
     <ul class="list-inline nav-list">
       <li>
+        <a href="" class="inverse" data-toggle="modal" data-target="#botModal">
+          <span class="icon-notifications_active"></span>
+        </a>
+      </li>
+      <li>
         <a href="" class="inverse" data-toggle="modal" data-target="#shareModal">
           <span class="icon-share"></span>
         </a>
@@ -14,7 +19,7 @@
     </ul>
     <div class="navbar-header">
       <a class="navbar-brand" ui-sref="home">
-        <img src="images/ia-white.png" alt="Infoamazônia" width="185" height="40">
+        <img src="images/logo-sm.png" alt="Infoamazônia" width="150" height="33">
       </a>
     </div>
 
@@ -25,7 +30,7 @@
   <div class="list-group">
     <a href="#" class="list-group-item">Sobre o projeto</a>
     <a href="#" class="list-group-item">Dados abertos</a>
-    <a href="#" class="list-group-item">Receba previsões e alertas pelo Telegram ou Facebook</a>
+    <a href="#" class="list-group-item" data-toggle="modal" data-target="#botModal">Receba previsões e alertas pelo Telegram ou Facebook</a>
   </div>
 </div>
 
@@ -35,11 +40,55 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="shareModalLabel">Compartilhar</h4>
+        <h4 class="modal-title" id="shareModalLabel"></h4>
       </div>
       <div class="modal-body">
-        <span class="icon-facebook2"></span>
-        <span class="icon-twitter"></span>
+        <div class="text-center">
+          <p>Compartilhe nas redes sociais</p>
+          <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fenchentes.infoamazonia.org%2F%23!%2F" class="btn btn-link btn-share" target="_blank"><span class="icon-facebook2"></span></a>
+          <a href="https://twitter.com/intent/tweet?text=http%3A%2F%2Fenchentes.infoamazonia.org%2F%23%21%2F&source=webclient" class="btn btn-link btn-share" target="_blank"><span class="icon-twitter"></span></a>
+          <hr>
+          <strong>Incorpore as previsões no seu site</strong>
+          <p>Selecione um rio e utilize o código abaixo para incorporar o quadro de previsões em seu site:</p>
+        </div>
+        <br>
+        <div class="radio" ng-repeat="river in rivers">
+          <label>
+            <input type="radio" name="rivers" id="river1" ng-value="river" ng-model="$parent.selectedRiver">
+            <strong>{{river.name}}</strong> em {{river.city}} {{river.station}}
+          </label>
+        </div>
+        <textarea class="form-control" name="name" rows="2" readonly style="resize: none;"><div data-alerta-enchentes-station="{{selectedRiver.station}}"></div><script type="text/javascript">(function() {var script = document.createElement('script');script.async = true;script.src   = "http://enchentes.infoamazonia.org/alerta-enchentes.js";var entry = document.getElementsByTagName('script')[0];entry.parentNode.insertBefore(script, entry);}());</script></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal bot -->
+<div class="modal fade" id="botModal" tabindex="-1" role="dialog" aria-labelledby="botModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="botModalLabel"></h4>
+      </div>
+      <div class="modal-body">
+        <div class="text-center">
+          <p>Receba mensagens de alertas ou consulte o estados dos rios a qualquer momento usando as plataformas de mensagens</p>
+          <br>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">
+            <a href="https://telegram.me/AlertaEnchentesBot" class="btn btn-primary btn-lg btn-block" target="_blank">
+              <span class="icon-telegram"></span> &nbsp; Telegram
+            </a>
+          </div>
+          <div class="col-xs-6">
+            <a href="http://m.me/enchentes.infoamazonia" class="btn btn-primary btn-lg btn-block" target="_blank">
+              <span class="icon-facebook2"></span> &nbsp; Facebook
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>

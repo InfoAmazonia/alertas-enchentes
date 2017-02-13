@@ -14,6 +14,7 @@
       {
         slug: 'rioacre',
         name: 'Rio Acre',
+        city: 'Rio Branco',
         station: 13600002,
         history: {},
         data: {},
@@ -22,6 +23,7 @@
       {
         slug: 'riomadeira',
         name: 'Rio Madeira',
+        city: 'Porto Velho',
         station: 15400000,
         history: {},
         data: {},
@@ -29,7 +31,8 @@
       },
       {
         slug: 'manaus',
-        name: 'Rio Amazonas',
+        name: 'Rio Negro',
+        city: 'Manaus',
         station: 14990000,
         history: {},
         data: {},
@@ -39,12 +42,13 @@
     vm.timestamp = moment().format('H:mm');
     vm.selectedRiver = {};
     vm.selectRiver = selectRiver;
+    vm.hideCard = hideCard;
     vm.isSelectedRiver = isSelectedRiver;
     var smallDevice = ($(window).width() <= 998);
     vm.map = {
       center: {
-        lat: -6,
-        lon: -70,
+        lat: (smallDevice) ? -2 : -6,
+        lon: (smallDevice) ? -65 : -70,
         zoom: (smallDevice) ? 4 : 6
       },
       layers: [
@@ -94,7 +98,7 @@
           lat: -3.1383,
           lon: -60.0272,
           label: {
-              message: 'Rio Amazonas',
+              message: 'Rio Negro',
               show: true,
               showOnMouseOver: true
           }
@@ -202,6 +206,10 @@
         description: "Nenhuma alta prevista para as próximas horas",
         timestamp: null
       };
+    }
+
+    function hideCard() {
+      vm.select = false;
     }
 
     var windowEl = angular.element($window);

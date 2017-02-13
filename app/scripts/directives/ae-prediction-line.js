@@ -242,7 +242,7 @@
                 d = x0 - d0.timestamp > d1.timestamp - x0 ? d1 : d0,
                 measured = Math.round((d.predicted * 0.01) * 100) / 100;
               selectedValueCircle.attr("transform", "translate(" + x(d.timestamp) + "," + y(d.predicted) + ")");
-              selectedValueLine.attr({"x1": x(d.timestamp), "y1": (y(d.predicted)+tooltipPadding), "x2": x(d.timestamp), "y2": y(0)});
+              selectedValueLine.attr({"x1": x(d.timestamp), "y1": (y(d.predicted)+tooltipPadding), "x2": x(d.timestamp), "y2": y(domainMin)});
               selectedValueText.attr("transform", "translate(" + x(d.timestamp) + "," + (y(d.predicted)-(tooltipHeight/2)+tooltipPadding) + ")");
               selectedValueText.text(measured+"m em "+formatTimeLiteral(d.timestamp));
               selectedValueRect.attr({"x": (x(d.timestamp)-(tooltipWidth/2)), "y": (y(d.predicted)-tooltipHeight+tooltipPadding)});

@@ -16,7 +16,7 @@ body {
   margin: 0;
   font-family: sans-serif;
   background-color: $background-color;
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 2em;
 }
 
@@ -43,6 +43,7 @@ footer {
 
 .map-headding {
   width: 100%;
+  padding: 15px;
   font-size: 18px;
   position: absolute;
   top: $navbar-height;
@@ -84,6 +85,14 @@ footer {
     background-color: #fff;
     color: #878787;
   }
+}
+
+.map-card-body {
+  font-size: 0.8em;
+}
+
+.map-card-body-title {
+  font-size: 1.4em;
 }
 
 .info-visible {
@@ -290,10 +299,9 @@ $chart-strong-color: #1878F0;
   }
 
   > text {
-    font-size: 16px;
+    font-size: 14px;
     color: #fff;
     fill: #fff;
-    font-weight: bold;
   }
 }
 
@@ -350,10 +358,33 @@ $chart-strong-color: #1878F0;
   margin: 18px 0;
 }
 
+.modal-header {
+  border: none;
+}
+
+.modal-body {
+  padding: 15px;
+
+  @media (min-width: $screen-md-min) {
+    padding: 50px;
+  }
+
+  @media (min-width: $screen-lg-min) {
+    padding: 75px;
+  }
+
+}
+
+.close {
+  opacity: 1;
+}
+
 a.inverse {
   color: #fff;
 
-  &:hover {
+  &:hover,
+  &:active,
+  &:focus {
     text-decoration: none;
   }
 }
@@ -364,8 +395,30 @@ a.inverse {
   position: absolute;
   right: 0;
   width: 320px;
-  z-index: 1;
+  z-index: 999;
   background-color: $background-color;
   color: #fff;
   overflow: auto;
+}
+
+a.btn-share {
+  font-size: 40px;
+
+  &:hover,
+  &:active,
+  &:focus {
+    text-decoration: none;
+  }
+}
+
+.btn-close {
+  background-color: $brand-primary;
+  color: #000;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  top: -34px;
+  position: relative;
+  float: right;
+  text-shadow: 0 1px 0 #fff;
 }
