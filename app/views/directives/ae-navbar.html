@@ -2,10 +2,14 @@
   <div class="container-fluid">
     <ul class="list-inline nav-list">
       <li>
-        <a href="" class="inverse"><span class="glyphicon glyphicon-share-alt"></span></a>
+        <a href="" class="inverse" data-toggle="modal" data-target="#shareModal">
+          <span class="icon-share"></span>
+        </a>
       </li>
       <li>
-        <a href="" class="inverse" ng-click="toggleMenu()"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
+        <a href="" class="inverse" ng-click="toggleMenu()">
+          <span class="icon-menu"></span>
+        </a>
       </li>
     </ul>
     <div class="navbar-header">
@@ -22,5 +26,21 @@
     <a href="#" class="list-group-item">Sobre o projeto</a>
     <a href="#" class="list-group-item">Dados abertos</a>
     <a href="#" class="list-group-item">Receba previsões e alertas pelo Telegram ou Facebook</a>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="shareModalLabel">Compartilhar</h4>
+      </div>
+      <div class="modal-body">
+        <span class="icon-facebook2"></span>
+        <span class="icon-twitter"></span>
+      </div>
+    </div>
   </div>
 </div>

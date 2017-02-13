@@ -3,6 +3,7 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
+@import "icons";
 
 $background-color: #222;
 $background-color-inverse: #fff;
@@ -17,7 +18,6 @@ body {
   background-color: $background-color;
   font-family: 'Source Sans Pro', sans-serif;
   font-size: 2em;
-  color: #fff;
 }
 
 footer {
@@ -77,6 +77,7 @@ footer {
 .map-card {
   padding: 20px;
   background-color: rgba(11, 51, 65, 0.95);
+  color: #fff;
 
   &.map-card-inverse {
     border: solid 1px #878787;
@@ -351,6 +352,10 @@ $chart-strong-color: #1878F0;
 
 a.inverse {
   color: #fff;
+
+  &:hover {
+    text-decoration: none;
+  }
 }
 
 .menu-container {
