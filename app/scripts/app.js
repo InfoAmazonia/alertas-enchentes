@@ -18,7 +18,7 @@ angular
     'openlayers-directive'
   ])
   .constant('RESTAPI', {
-    url: 'https://enchentes.infoamazonia.org:8443'
+    url: 'http://enchentes.infoamazonia.org:8080'
   })
   .config(routeConfig);
 

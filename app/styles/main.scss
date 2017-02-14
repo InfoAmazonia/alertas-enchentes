@@ -76,7 +76,6 @@ footer {
 }
 
 .map-card {
-  padding: 20px;
   background-color: rgba(11, 51, 65, 0.95);
   color: #fff;
 
@@ -88,11 +87,19 @@ footer {
 }
 
 .map-card-body {
+  padding: 20px;
   font-size: 0.8em;
+  @media (max-width: $screen-sm-min) {
+    padding: 10px;
+    font-size: 0.6em;
+  }
 }
 
 .map-card-body-title {
   font-size: 1.4em;
+  @media (max-width: $screen-sm-min) {
+    font-size: 1.2em;
+  }
 }
 
 .info-visible {
@@ -417,7 +424,8 @@ a.btn-share {
   border: none;
   border-radius: 50%;
   width: 30px;
-  top: -34px;
+  top: -14px;
+  right: 6px;
   position: relative;
   float: right;
   text-shadow: 0 1px 0 #fff;

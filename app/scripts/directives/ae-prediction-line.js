@@ -87,6 +87,25 @@
           var axisYSVG = areaG.append("g")
             .attr("class", "y axis");
 
+          var attentionLine = linesG.append("line")
+          .attr({
+            "x1": 0,
+            "x2": width,
+            "fill": "none",
+            "stroke-width": "2px",
+            "opacity": 1,
+            "stroke-dasharray": "10,5",
+            "stroke": color("ATENCAO")
+          });
+          var attentionText = linesG.append("text")
+          .attr({
+            "x": margin.right,
+            "fill": color("ATENCAO"),
+            "opacity": 1,
+            "font-size": "10",
+            "font-family": "sans"
+          })
+          .text("Nível de atenção");
           var alertLine = linesG.append("line")
             .attr({
               "x1": 0,
@@ -193,12 +212,19 @@
             y.domain([domainMin - 10, domainMax]);
             valuearea.y0(y(domainMin));
 
+            attentionLine.attr({
+              "y1": y(river.info.attentionThreshold),
+              "y2": y(river.info.attentionThreshold)
+            });
+            attentionText.attr({
+              "y": y(river.info.attentionThreshold) - 4,
+            });
             alertLine.attr({
               "y1": y(river.info.warningThreshold),
               "y2": y(river.info.warningThreshold)
             });
             alertText.attr({
-              "y": y(river.info.warningThreshold) + 12,
+              "y": y(river.info.warningThreshold) - 4,
             });
             floodLine.attr({
               "y1": y(river.info.floodThreshold),
@@ -258,8 +284,11 @@
               case "NORMAL":
                 return "#1878F0";
                 break;
-              case "ALERTA":
+              case "ATENCAO":
                 return "#FFE168";
+                break;
+              case "ALERTA":
+                return "#ebb03e";
                 break;
               case "INUNDACAO":
                 return "#eb533e";
