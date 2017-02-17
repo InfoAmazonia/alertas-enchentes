@@ -183,11 +183,11 @@ $chart-strong-color: #1878F0;
 
 .area {
   fill: $chart-light-color;
-  fill-opacity: 1;
+  fill-opacity: 0.3;
   clip-path: url(#clip);
 
   &.area-null {
-    fill-opacity: 0.9;
+    fill-opacity: 1;
   }
 }
 
@@ -327,7 +327,7 @@ $chart-strong-color: #1878F0;
 }
 
 .warning-line {
-  stroke: #f39c12;
+  stroke: #ebb03e;
   stroke-width: 2;
   opacity: 0.6;
 }

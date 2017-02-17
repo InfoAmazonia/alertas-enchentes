@@ -17,12 +17,10 @@
       <div class="loading-speeding-wheel"></div>
     </div>
     <ae-history river="ctrl.selectedRiver.history" start="ctrl.datePicker.date.startDate" end="ctrl.datePicker.date.endDate"></ae-history>
-  </div>
-  <div class="container">
-    <p id="desc" style="margin:auto; margin-top: 60px; max-width: 696px; display:none;">
-      Dado o intervalo, o {{ctrl.selectedRiver.name}} aprensentou a máxima de
-      <span id="desc-max">0</span> em <span id="desc-max-date">01 de janeiro de 2000</span> e mínima de
-      <span id="desc-min">0</span> em <span id="desc-min-date">01 de janeiro de 2000</span>.
-    </p>
+    <br><br>
+    <div id="desc" class="text-right" style="display: none;">
+      <p><span class="glyphicon glyphicon-arrow-up"></span> Máxima <span id="desc-max"></span> em <span id="desc-max-date"></span></p>
+      <p><span class="glyphicon glyphicon-arrow-down"></span> Mínima <span id="desc-min"></span> em <span id="desc-min-date"></span></p>
+    </div>
   </div>
 </div>

@@ -161,7 +161,6 @@
               .text("");
 
             function selectRange(start, end) {
-              console.log("ma oeeee");
               brush.extent([new Date(start), new Date(end)]);
               brush(d3noConflict.select(".brush").transition());
               brush.event(d3noConflict.select(".brush").transition());
@@ -246,6 +245,16 @@
                   .attr("y1", y(warningThreshold))
                   .attr("x2", width)
                   .attr("y2", y(warningThreshold));
+                focus.append("text")
+                  .attr({
+                    "x": margin.right + 10,
+                    "y": y(warningThreshold) + 12,
+                    "fill": "#ebb03e",
+                    "opacity": 1,
+                    "font-size": "12",
+                    "font-family": "sans"
+                  })
+                  .text("Nível de alerta");
               }
               if (floodThreshold > 0) {
                 focus.append("line")
@@ -254,6 +263,16 @@
                   .attr("y1", y(floodThreshold))
                   .attr("x2", width)
                   .attr("y2", y(floodThreshold));
+                focus.append("text")
+                  .attr({
+                    "x": margin.right + 10,
+                    "y": y(floodThreshold) - 4,
+                    "fill": "#e74c3c",
+                    "opacity": 1,
+                    "font-size": "12",
+                    "font-family": "sans"
+                  })
+                  .text("Nível de enchente");
               }
 
               dots.append("line").attr("class", "dots line-max");
@@ -354,11 +373,21 @@
                     d0 = data[i - 1],
                     d1 = data[i],
                     d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+
                 selectedValueCircle.attr("transform", "translate(" + x(d.date) + "," + y(d.measured) + ")");
                 selectedValueLine.attr({"x1": x(d.date), "y1": (y(max)-tooltipPadding), "x2": x(d.date), "y2": y(0)});
-                selectedValueText.attr("transform", "translate(" + x(d.date) + "," + (y(max)-(tooltipHeight/2)-tooltipPadding) + ")");
                 selectedValueText.text(d.measured+"m em "+formatTimeLiteral(d.date));
-                selectedValueRect.attr({"x": (x(d.date)-(tooltipWidth/2)), "y": (y(max)-tooltipHeight-tooltipPadding)});
+
+                var xTooltip;
+                if (x(d.date) > width - tooltipWidth/2 + 10) {
+                  xTooltip = width - tooltipWidth/2 + 10;
+                } else if (x(d.date) < tooltipWidth/2) {
+                  xTooltip = tooltipWidth/2;
+                } else {
+                  xTooltip = x(d.date);
+                }
+                selectedValueText.attr("transform", "translate(" + xTooltip + "," + (y(max)-(tooltipHeight/2)-tooltipPadding) + ")");
+                selectedValueRect.attr({"x": (xTooltip-(tooltipWidth/2)), "y": (y(max)-tooltipHeight-tooltipPadding)});
               }
 
             }
