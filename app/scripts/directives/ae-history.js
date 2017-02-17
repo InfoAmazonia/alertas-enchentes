@@ -12,7 +12,9 @@
         template: '<svg></svg>',
         restrict: 'E',
         scope: {
-          river: '='
+          river: '=',
+          start: '=',
+          end: '='
         },
         link: function postLink(scope, element) {
           var d3noConflict = d3;
@@ -42,6 +44,17 @@
               "shortMonths": ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
             });
 
+            var customTimeFormat = localized.timeFormat.multi([
+            	[".%L", function(d) { return d.getMilliseconds(); }],
+            	[":%S", function(d) { return d.getSeconds(); }],
+            	["%I:%M", function(d) { return d.getMinutes(); }],
+            	["%Hh", function(d) { return d.getHours(); }],
+            	["%d %a", function(d) { return d.getDay() && d.getDate() != 1; }],
+            	["%d %b", function(d) { return d.getDate() != 1; }],
+            	["%B", function(d) { return d.getMonth(); }],
+            	["%Y", function() { return true; }]
+            ]);
+
             var formatTimeLiteral = localized.timeFormat("%d de %B  de %Y");
 
             var x = d3noConflict.time.scale().range([0, width]),
@@ -49,7 +62,7 @@
                 y = d3noConflict.scale.linear().range([height, 0]),
                 y2 = d3noConflict.scale.linear().range([height2, 0]);
 
-            var xAxis = d3noConflict.svg.axis().scale(x),
+            var xAxis = d3noConflict.svg.axis().scale(x).tickFormat(customTimeFormat),
                 xAxis2 = d3noConflict.svg.axis().scale(x2).orient("bottom").ticks(d3noConflict.time.year),
                 yAxis = d3noConflict.svg.axis().scale(y)
                   .orient("left");
@@ -147,9 +160,22 @@
               .attr("alignment-baseline", "hanging")
               .text("");
 
+            function selectRange(start, end) {
+              console.log("ma oeeee");
+              brush.extent([new Date(start), new Date(end)]);
+              brush(d3noConflict.select(".brush").transition());
+              brush.event(d3noConflict.select(".brush").transition());
+            }
+
             scope.$watch(function(scope) { return scope.river; }, function(newValue) {
               if (typeof newValue !== 'undefined' && newValue.data) {
                 draw(newValue);
+              }
+            });
+
+            scope.$watch(function(scope) { return scope.start; }, function(newValue) {
+              if (typeof newValue !== 'undefined') {
+                selectRange(scope.start, scope.end);
               }
             });
 
@@ -254,8 +280,6 @@
                   .attr("class", "x axis")
                   .attr("transform", "translate(0," + height2 + ")")
                   .call(xAxis2);
-              context.selectAll(".tick text")
-                  .on("click", selectYear);
               context.append("g")
                   .attr("class", "x brush")
                   .call(brush)
@@ -307,6 +331,13 @@
                 focus.select(".area.area-null").attr("d", areavalue(nullData));
                 focus.select(".line").attr("d", linevalue(data));
                 focus.select(".x.axis").call(xAxis);
+
+                // Set description
+                d3noConflict.select("#desc").style("display", null);
+                d3noConflict.select("#desc-max").text(minMaxOfExtent.max.value + "m");
+                d3noConflict.select("#desc-max-date").text(formatTimeLiteral(minMaxOfExtent.max.date));
+                d3noConflict.select("#desc-min").text(minMaxOfExtent.min.value + "m");
+                d3noConflict.select("#desc-min-date").text(formatTimeLiteral(minMaxOfExtent.min.date));
               }
 
               function mouseover() {
@@ -330,11 +361,6 @@
                 selectedValueRect.attr({"x": (x(d.date)-(tooltipWidth/2)), "y": (y(max)-tooltipHeight-tooltipPadding)});
               }
 
-              function selectYear() {
-                brush.extent([new Date(this.innerHTML + '-01-01'), new Date(this.innerHTML + '-12-31')]);
-                brush(d3noConflict.select(".brush").transition());
-                brush.event(d3noConflict.select(".brush").transition());
-              }
             }
 
             function getMinMaxOfExtent(data, extent) {

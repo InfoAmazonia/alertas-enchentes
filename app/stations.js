@@ -51,7 +51,7 @@
       "type":"Feature",
       "properties":{
         "station": "14990000",
-        "river": "manaus"
+        "river": "rionegro"
       },
       "geometry":{
         "type":"Polygon",

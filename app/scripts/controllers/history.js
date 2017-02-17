@@ -13,23 +13,41 @@
       {
         slug: 'rioacre',
         name: 'Rio Acre',
+        city: 'Rio Branco',
         station: 13600002,
         history: {}
       },
       {
         slug: 'riomadeira',
         name: 'Rio Madeira',
+        city: 'Porto Velho',
         station: 15400000,
         history: {}
       },
       {
-        slug: 'rioamazonas',
-        name: 'Rio Amazonas',
+        slug: 'rionegro',
+        name: 'Rio Negro',
+        city: 'Manaus',
         station: 14990000,
         history: {}
       }
     ];
     vm.selectedRiver = {};
+    vm.datePicker = {
+      date: {
+        startDate: null,
+        endDate: null
+      },
+      options: {
+        locale: {
+          applyLabel: "Selecionar",
+          fromLabel: "De",
+          format: "DD/MM/YYYY",
+          toLabel: "Até",
+          cancelLabel: 'Cancelar'
+        }
+      }
+    }
     vm.selectRiver = selectRiver;
     vm.isSelectedRiver = isSelectedRiver;
 

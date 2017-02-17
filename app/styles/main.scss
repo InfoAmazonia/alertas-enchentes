@@ -114,6 +114,7 @@ footer {
   padding-top: $section-padding-vertical;
   padding-bottom: $section-padding-vertical;
   background-color: $section-primary-bg-color;
+  color: #fff;
 }
 
 .major {
@@ -313,9 +314,9 @@ $chart-strong-color: #1878F0;
 }
 
 .brush .extent {
-  stroke: #fff;
+  stroke: $chart-light-color;
   fill: $chart-light-color;
-  fill-opacity: 0.2;
+  fill-opacity: 0.5;
   shape-rendering: crispEdges;
 }
 
@@ -429,4 +430,18 @@ a.btn-share {
   position: relative;
   float: right;
   text-shadow: 0 1px 0 #fff;
+}
+
+.form-datepicker {
+  background: none;
+  color: #fff;
+}
+
+.form-addon-datepicker {
+  background: none;
+  color: #fff;
+}
+
+.form-group-datepicker {
+  margin-left: 38px;
 }

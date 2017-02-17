@@ -30,7 +30,7 @@
         alert: {}
       },
       {
-        slug: 'manaus',
+        slug: 'rionegro',
         name: 'Rio Negro',
         city: 'Manaus',
         station: 14990000,

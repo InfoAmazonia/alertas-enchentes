@@ -1,48 +1,28 @@
-<nav class="navbar navbar-fixed-top" ng-class="{'navbar-inverse': scroll > 150, 'navbar-default': scroll <= 150}">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" ui-sref="home">
-        <img src="images/ia-white.png" alt="Infoamazônia" width="185" height="40">
-      </a>
-    </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Previsões <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="" ng-click="ctrl.selectRiver('rioacre')">Rio Acre</a></li>
-            <li><a href="" ng-click="ctrl.selectRiver('riomadeira')">Rio Madeira</a></li>
-          </ul>
-        </li>
-        <li class="dropdown">
-          <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Séries históricas <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a ui-sref="history({river: 'rioacre'})">Rio Acre</a></li>
-            <li><a ui-sref="history({river: 'riomadeira'})">Rio Madeira</a></li>
-            <li><a ui-sref="history({river: 'rioamazonas'})">Rio Amazonas</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
-
 <div class="content-main section-primary">
   <div class="container-fluid">
     <h2 class="text-center">Série histórica do {{ctrl.selectedRiver.name}}</h2>
+    <div class="row">
+      <div class="col-xs-6 col-sm-4 col-md-3">
+        <div class="input-group form-group-datepicker">
+          <span class="input-group-addon form-addon-datepicker" id="basic-addon1">
+            <span class="glyphicon glyphicon-calendar"></span>
+          </span>
+          <input id="dateRange" date-range-picker class="form-control input-lg date-picker form-datepicker" type="text" placeholder="Selecionar intervalo de data"
+          ng-model="ctrl.datePicker.date"
+          options="ctrl.datePicker.options" />
+        </div>
+      </div>
+    </div>
     <div class="loading" ng-show="ctrl.loading">
       <div class="loading-speeding-wheel"></div>
     </div>
-    <!-- {{ctrl.selectedRiver.history | json}} -->
-    <ae-history river="ctrl.selectedRiver.history"></ae-history>
+    <ae-history river="ctrl.selectedRiver.history" start="ctrl.datePicker.date.startDate" end="ctrl.datePicker.date.endDate"></ae-history>
+  </div>
+  <div class="container">
+    <p id="desc" style="margin:auto; margin-top: 60px; max-width: 696px; display:none;">
+      Dado o intervalo, o {{ctrl.selectedRiver.name}} aprensentou a máxima de
+      <span id="desc-max">0</span> em <span id="desc-max-date">01 de janeiro de 2000</span> e mínima de
+      <span id="desc-min">0</span> em <span id="desc-min-date">01 de janeiro de 2000</span>.
+    </p>
   </div>
 </div>
