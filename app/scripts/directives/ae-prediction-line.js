@@ -31,7 +31,7 @@
             baseValue = 0,
             tooltipWidth = 170,
             tooltipHeight = 30,
-            tooltipPadding = -50;
+            tooltipPadding = -20;
 
             var bisectDate = d3noConflict.bisector(function(d) { return d.timestamp; }).left;
             var formatTimeLiteral = d3.time.format("%Hh%M");
@@ -269,9 +269,19 @@
                 measured = Math.round((d.predicted * 0.01) * 100) / 100;
               selectedValueCircle.attr("transform", "translate(" + x(d.timestamp) + "," + y(d.predicted) + ")");
               selectedValueLine.attr({"x1": x(d.timestamp), "y1": (y(d.predicted)+tooltipPadding), "x2": x(d.timestamp), "y2": y(domainMin)});
-              selectedValueText.attr("transform", "translate(" + x(d.timestamp) + "," + (y(d.predicted)-(tooltipHeight/2)+tooltipPadding) + ")");
               selectedValueText.text(measured+"m em "+formatTimeLiteral(d.timestamp));
-              selectedValueRect.attr({"x": (x(d.timestamp)-(tooltipWidth/2)), "y": (y(d.predicted)-tooltipHeight+tooltipPadding)});
+
+              var xTooltip;
+              if (x(d.timestamp) > width - tooltipWidth/2 + 10) {
+                xTooltip = width - tooltipWidth/2 + 10;
+              } else if (x(d.timestamp) < tooltipWidth/2) {
+                xTooltip = tooltipWidth/2;
+              } else {
+                xTooltip = x(d.timestamp);
+              }
+
+              selectedValueText.attr("transform", "translate(" + xTooltip + "," + (y(d.predicted)-(tooltipHeight/2)+tooltipPadding) + ")");
+              selectedValueRect.attr({"x": (xTooltip-(tooltipWidth/2)), "y": (y(d.predicted)-tooltipHeight+tooltipPadding)});
               d3noConflict.select('.alert-tip').style("visible", "visible");
               d3noConflict.select('.alert-measure').text(measured+"m");
               d3noConflict.select('.alert-time').text(formatTimeLiteral(d.timestamp));
