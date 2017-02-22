@@ -204,7 +204,7 @@
               var nullData = [];
               for (var i = 0; i < data.length-1; i++) {
                 nullData.push(data[i]);
-                if (diff(data[i+1].date, data[i].date) > 30) {
+                if (diff(data[i+1].date, data[i].date) > 7) {
                   var newData = {
                     date: data[i].date,
                     measured: null
