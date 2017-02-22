@@ -326,11 +326,12 @@
                   minValueSvg.text("");
                   dots.transition(500)
                     .attr("opacity", 0);
+                  d3noConflict.select("#desc").style("display", "none");
                 } else {
                   x.domain(brush.extent());
                   minMaxOfExtent = getMinMaxOfExtent(data, brush.extent());
-                  maxValueSvg.text("Máxima de " + minMaxOfExtent.max.value + "m");// em "+ formatTimeLiteral(minMaxOfExtent.max.date));
-                  minValueSvg.text("Mínima de " + minMaxOfExtent.min.value + "m");// em " + formatTimeLiteral(minMaxOfExtent.min.date));
+                  maxValueSvg.text("Máxima de " + minMaxOfExtent.max.value.toString().replace('.', ',') + "m");// em "+ formatTimeLiteral(minMaxOfExtent.max.date));
+                  minValueSvg.text("Mínima de " + minMaxOfExtent.min.value.toString().replace('.', ',') + "m");// em " + formatTimeLiteral(minMaxOfExtent.min.date));
                   maxValueSvg.attr("transform", "translate("+x(minMaxOfExtent.max.date)+","+y(minMaxOfExtent.max.value)+")");
                   minValueSvg.attr("transform", "translate("+x(minMaxOfExtent.min.date)+","+y(minMaxOfExtent.min.value)+")");
                   dots.transition(1000)
@@ -345,18 +346,18 @@
                     .attr("y1", y(minMaxOfExtent.min.value)-30)
                     .attr("x2", x(minMaxOfExtent.min.date))
                     .attr("y2", y(minMaxOfExtent.min.value));
+
+                  // Set description
+                  d3noConflict.select("#desc").style("display", null);
+                  d3noConflict.select("#desc-max").text(minMaxOfExtent.max.value + "m");
+                  d3noConflict.select("#desc-max-date").text(formatTimeLiteral(minMaxOfExtent.max.date));
+                  d3noConflict.select("#desc-min").text(minMaxOfExtent.min.value + "m");
+                  d3noConflict.select("#desc-min-date").text(formatTimeLiteral(minMaxOfExtent.min.date));
                 }
                 focus.select(".area").attr("d", areavalue(data));
                 focus.select(".area.area-null").attr("d", areavalue(nullData));
                 focus.select(".line").attr("d", linevalue(data));
                 focus.select(".x.axis").call(xAxis);
-
-                // Set description
-                d3noConflict.select("#desc").style("display", null);
-                d3noConflict.select("#desc-max").text(minMaxOfExtent.max.value + "m");
-                d3noConflict.select("#desc-max-date").text(formatTimeLiteral(minMaxOfExtent.max.date));
-                d3noConflict.select("#desc-min").text(minMaxOfExtent.min.value + "m");
-                d3noConflict.select("#desc-min-date").text(formatTimeLiteral(minMaxOfExtent.min.date));
               }
 
               function mouseover() {
@@ -376,7 +377,7 @@
 
                 selectedValueCircle.attr("transform", "translate(" + x(d.date) + "," + y(d.measured) + ")");
                 selectedValueLine.attr({"x1": x(d.date), "y1": (y(max)-tooltipPadding), "x2": x(d.date), "y2": y(0)});
-                selectedValueText.text(d.measured+"m em "+formatTimeLiteral(d.date));
+                selectedValueText.text(d.measured.toString().replace('.', ',')+"m em "+formatTimeLiteral(d.date));
 
                 var xTooltip;
                 if (x(d.date) > width - tooltipWidth/2 + 10) {

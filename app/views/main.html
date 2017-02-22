@@ -16,7 +16,7 @@
       </div>
       <div class="map-card-body" ng-hide="ctrl.loading">
         <div class="map-card-body-title"><strong>{{ctrl.selectedRiver.name}}</strong> em {{ctrl.selectedRiver.city}}</div>
-        <div>Previsões a partir de {{ctrl.timestamp}}</div>
+        <div>Previsões a partir de <span id="alert-timestamp"></span></div>
         <div style="margin-top: 25px;">
           <div class="map-card-body-title">{{ctrl.selectedRiver.alert.title}}</div>
           <div>{{ctrl.selectedRiver.alert.description}}</div>

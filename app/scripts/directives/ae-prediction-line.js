@@ -186,6 +186,7 @@
           });
 
           function draw(river) {
+            d3noConflict.select('#alert-timestamp').text(formatTimeLiteral(new Date(river.params.timestamp*1000)));
             if (river.data.length < 1)  return;
 
             var data = [];
@@ -269,7 +270,7 @@
                 measured = Math.round((d.predicted * 0.01) * 100) / 100;
               selectedValueCircle.attr("transform", "translate(" + x(d.timestamp) + "," + y(d.predicted) + ")");
               selectedValueLine.attr({"x1": x(d.timestamp), "y1": (y(d.predicted)+tooltipPadding), "x2": x(d.timestamp), "y2": y(domainMin)});
-              selectedValueText.text(measured+"m em "+formatTimeLiteral(d.timestamp));
+              selectedValueText.text(measured.toString().replace('.', ',')+"m em "+formatTimeLiteral(d.timestamp));
 
               var xTooltip;
               if (x(d.timestamp) > width - tooltipWidth/2 + 10) {
@@ -283,7 +284,7 @@
               selectedValueText.attr("transform", "translate(" + xTooltip + "," + (y(d.predicted)-(tooltipHeight/2)+tooltipPadding) + ")");
               selectedValueRect.attr({"x": (xTooltip-(tooltipWidth/2)), "y": (y(d.predicted)-tooltipHeight+tooltipPadding)});
               d3noConflict.select('.alert-tip').style("visible", "visible");
-              d3noConflict.select('.alert-measure').text(measured+"m");
+              d3noConflict.select('.alert-measure').text(measured.toString()+"m".replace('.', ','));
               d3noConflict.select('.alert-time').text(formatTimeLiteral(d.timestamp));
             }
           }
