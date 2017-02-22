@@ -445,3 +445,25 @@ a.btn-share {
 .form-group-datepicker {
   margin-left: 38px;
 }
+
+.mapboxgl-ctrl-bottom-right {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  font-size: 0.5em;
+
+  a:link {
+    color: rgba(0, 0, 0, 0.75);
+  }
+}
+
+.mapboxgl-ctrl {
+
+  &.mapboxgl-ctrl-attrib {
+    padding: 5px;
+    background-color: rgba(255,255,255,0.5);
+    margin: 0;
+  }
+
+}

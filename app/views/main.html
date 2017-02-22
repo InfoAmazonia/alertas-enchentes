@@ -1,3 +1,9 @@
+<div class="mapboxgl-ctrl-bottom-right">
+  <div class="mapboxgl-ctrl-attrib mapboxgl-ctrl">
+    <a href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox</a>
+    <a href="http://www.openstreetmap.org/about/" target="_blank">© OpenStreetMap</a>
+  </div>
+</div>
 <openlayers class="content-fullheight" ol-defaults="ctrl.map.defaults" ol-center="ctrl.map.center">
   <ol-marker ol-marker-properties="marker" ng-repeat="marker in ctrl.map.markers"></ol-marker>
   <ol-layer name="{{layer.name}}" ol-layer-properties="layer" ng-repeat="layer in ctrl.map.layers"></ol-layer>
