@@ -326,6 +326,12 @@ $chart-strong-color: #1878F0;
   fill: #fff;
 }
 
+.attention-line {
+  stroke: #FFE168;
+  stroke-width: 2;
+  opacity: 0.6;
+}
+
 .warning-line {
   stroke: #ebb03e;
   stroke-width: 2;

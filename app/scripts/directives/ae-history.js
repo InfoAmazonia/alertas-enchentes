@@ -189,6 +189,7 @@
                   });
                 }
               });
+              var attentionThreshold = Math.round((river.info.attentionThreshold * 0.01) * 100) / 100;
               var warningThreshold = Math.round((river.info.warningThreshold * 0.01) * 100) / 100;
               var floodThreshold = Math.round((river.info.floodThreshold * 0.01) * 100) / 100;
 
@@ -238,6 +239,24 @@
               area.attr("d", areavalue(data));
               nullArea.attr("d", areavalue(nullData));
               line.attr("d", linevalue(data));
+              if (attentionThreshold > 0) {
+                focus.append("line")
+                  .attr("class", "attention-line")
+                  .attr("x1", 0)
+                  .attr("y1", y(attentionThreshold))
+                  .attr("x2", width)
+                  .attr("y2", y(attentionThreshold));
+                focus.append("text")
+                  .attr({
+                    "x": margin.right + 10,
+                    "y": y(attentionThreshold) + 12,
+                    "fill": "#FFE168",
+                    "opacity": 1,
+                    "font-size": "12",
+                    "font-family": "sans"
+                  })
+                  .text("Nível de atenção");
+              }
               if (warningThreshold > 0) {
                 focus.append("line")
                   .attr("class", "warning-line")
