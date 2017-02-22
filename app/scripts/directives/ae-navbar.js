@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('alertasEnchentesApp')
-    .controller('NavbarCtrl', ['$scope', function($scope) {
+    .controller('NavbarCtrl', ['$scope', '$location', function($scope, $location) {
       $scope.showMenu = false;
       $scope.rivers = [
         {
@@ -25,9 +25,24 @@
         }
       ];
       $scope.selectedRiver = $scope.rivers[0];
+      $scope.share = {}
+      $scope.prepareShare = function() {
+        $scope.share = {
+          title: "InfoAmazonia | Alerta de enchentes",
+          text: "Veja as previsões de volume para os rios da região amazônica",
+          url: $location.absUrl(),
+          appID: "288267271567155"
+        }
+      }
       $scope.toggleMenu = function() {
         $scope.showMenu = !$scope.showMenu;
       }
+
+      function init() {
+        $scope.toggleMenu();
+        $scope.showMenu = false;
+      }
+      init();
     }])
     .directive('aeNavbar', aeNavbar);
 

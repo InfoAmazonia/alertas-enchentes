@@ -7,7 +7,7 @@
         </a>
       </li>
       <li>
-        <a href="" class="inverse" data-toggle="modal" data-target="#shareModal">
+        <a href="" class="inverse" data-toggle="modal" data-target="#shareModal" ng-click="prepareShare()">
           <span class="icon-share"></span>
         </a>
       </li>
@@ -45,8 +45,35 @@
       <div class="modal-body">
         <div class="text-center">
           <p>Compartilhe nas redes sociais</p>
+          <a href="#"
+            socialshare
+            socialshare-provider="facebook"
+            socialshare-type="share"
+            socialshare-via="{{share.appID}}"
+            socialshare-title="{{share.title}}"
+            socialshare-description="{{share.text}}"
+            socialshare-url="{{share.url}}"
+            class="btn btn-link btn-share">
+            <span class="icon-facebook"></span>
+          </a>
           <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fenchentes.infoamazonia.org%2F%23!%2F" class="btn btn-link btn-share" target="_blank"><span class="icon-facebook2"></span></a>
-          <a href="https://twitter.com/intent/tweet?text=http%3A%2F%2Fenchentes.infoamazonia.org%2F%23%21%2F&source=webclient" class="btn btn-link btn-share" target="_blank"><span class="icon-twitter"></span></a>
+          <a href="#"
+            socialshare
+            socialshare-provider="twitter"
+            socialshare-text="{{share.text}}"
+            socialshare-hashtags="infoamazonia"
+            socialshare-url="{{share.url}}"
+            class="btn btn-link btn-share">
+            <span class="icon-twitter"></span>
+          </a>
+          <a
+            socialshare
+            socialshare-provider="whatsapp"
+            socialshare-url="{{share.url}}"
+            socialshare-text="{{share.text}}"
+            class="btn btn-link btn-share visible-xs-inline">
+            <span class="icon-whatsapp"></span>
+          </a>
           <hr>
           <strong>Incorpore as previsões no seu site</strong>
           <p>Selecione um rio e utilize o código abaixo para incorporar o quadro de previsões em seu site:</p>

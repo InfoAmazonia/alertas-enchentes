@@ -16,7 +16,8 @@ angular
     'ngResource',
     'ui.router',
     'openlayers-directive',
-    'daterangepicker'
+    'daterangepicker',
+    '720kb.socialshare'
   ])
   .constant('RESTAPI', {
     // url: 'https://enchentes.infoamazonia.org:8080'
