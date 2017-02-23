@@ -80,7 +80,7 @@
           lat: -9.972892,
           lon: -67.791799,
           label: {
-              message: 'Rio Acre',
+              message: 'Rio Branco',
               show: true,
               showOnMouseOver: true
           }
@@ -89,7 +89,7 @@
           lat: -8.748149,
           lon: -63.917471,
           label: {
-              message: 'Rio Madeira',
+              message: 'Porto Velho',
               show: true,
               showOnMouseOver: true
           }
@@ -98,7 +98,7 @@
           lat: -3.1383,
           lon: -60.0272,
           label: {
-              message: 'Rio Negro',
+              message: 'Manaus',
               show: true,
               showOnMouseOver: true
           }
