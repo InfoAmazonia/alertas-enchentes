@@ -4,9 +4,9 @@
   angular.module('alertasEnchentesApp')
     .controller('MainCtrl', MainCtrl);
 
-  MainCtrl.$inject = ['$scope', '$window', 'olData', 'Prediction'];
+  MainCtrl.$inject = ['$scope', '$window', 'olData', 'Prediction', 'Now'];
 
-  function MainCtrl($scope, $window, olData, Prediction) {
+  function MainCtrl($scope, $window, olData, Prediction, Now) {
     var vm = this;
     vm.loading = false;
     vm.select = false;
@@ -136,10 +136,13 @@
           vm.loading = true;
           vm.selectedRiver = vm.rivers[i];
           Prediction.get({'id': vm.rivers[i].station}, function(response) {
-            vm.timestamp = moment().format('H:mm');
-            vm.selectedRiver.data = response;
-            vm.selectedRiver.alert = getAlertTimestamp(vm.selectedRiver.data);
-            vm.loading = false;
+            Now.get({'id': vm.rivers[i].station}, function(now) {
+              vm.timestamp = moment().format('H:mm');
+              vm.selectedRiver.data = response;
+              vm.selectedRiver.alert = now;
+              vm.selectedRiver.past = getAlertPast(response);
+              vm.loading = false;
+            });
           }, function(error) {
             vm.timestamp = moment().format('H:mm');
             vm.selectedRiver.data = {};
@@ -157,6 +160,14 @@
 
     function isSelectedRiver(riverSlug) {
       return (vm.selectedRiver.slug === riverSlug);
+    }
+
+    function getAlertPast(river) {
+      if (river.past) {
+        var d = new Date(river.past.timestamp*1000);
+        return "A última vez que este rio atingiu este nível foi em "+moment(d).format('D[/]M[/]Y [às] H[h]mm');
+      }
+      return "";
     }
 
     function getAlertTimestamp(river) {

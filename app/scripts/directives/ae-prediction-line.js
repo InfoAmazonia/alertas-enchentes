@@ -34,7 +34,8 @@
             tooltipPadding = -20;
 
             var bisectDate = d3noConflict.bisector(function(d) { return d.timestamp; }).left;
-            var formatTimeLiteral = d3.time.format("%Hh%M");
+            var formatTimeLiteral = d3noConflict.time.format("%Hh%M");
+            var formatDateTimeLiteral = d3noConflict.time.format("%d/%m/%Y às %Hh%M");
 
             var x = d3noConflict.time.scale()
                 .range([0, width]);
@@ -186,7 +187,7 @@
           });
 
           function draw(river) {
-            d3noConflict.select('#alert-timestamp').text(formatTimeLiteral(new Date(river.params.timestamp*1000)));
+            d3noConflict.select('#alert-timestamp').text(formatDateTimeLiteral(new Date(river.params.timestamp*1000)));
             if (river.data.length < 1)  return;
 
             var data = [];

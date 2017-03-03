@@ -24,8 +24,8 @@
         <div class="map-card-body-title"><strong>{{ctrl.selectedRiver.name}}</strong> em {{ctrl.selectedRiver.city}}</div>
         <div>Previsões a partir de <span id="alert-timestamp"></span></div>
         <div style="margin-top: 25px;">
-          <div class="map-card-body-title">{{ctrl.selectedRiver.alert.title}}</div>
-          <div>{{ctrl.selectedRiver.alert.description}}</div>
+          <div>{{ctrl.selectedRiver.alert.message}}</div>
+          <div>{{ctrl.selectedRiver.past}}</div>
         </div>
         <div ng-show="ctrl.selectedRiver.data.info && ctrl.selectedRiver.data.data.length">
           <ae-prediction river="ctrl.selectedRiver.data"></ae-prediction>
@@ -37,7 +37,7 @@
 
     </div>
 
-    <button type="button" name="button" class="btn btn-primary btn-block btn-lg visible-xs" data-toggle="modal" data-target="#selectModal" ng-hide="ctrl.select">Selecionar rio</button>
+    <button type="button" name="button" class="btn btn-primary btn-block btn-lg visible-xs" data-toggle="modal" data-target="#selectModal" ng-hide="ctrl.select">Selecionar cidade</button>
 
     <!-- <div data-alerta-enchentes-station="13600002" ng-show="ctrl.isSelectedRiver('rioacre')"></div>
     <div data-alerta-enchentes-station="15400000" ng-show="ctrl.isSelectedRiver('riomadeira')"></div>
@@ -64,7 +64,7 @@
       <div class="modal-body">
         <ul class="list-group">
           <li class="list-group-item" ng-repeat="river in ctrl.rivers">
-            <a href="" ng-click="ctrl.selectRiver(river.slug)" data-dismiss="modal">{{river.name}}</a>
+            <a href="" ng-click="ctrl.selectRiver(river.slug)" data-dismiss="modal">{{river.city}}</a>
           </li>
         </ul>
       </div>
