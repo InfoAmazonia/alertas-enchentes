@@ -228,7 +228,7 @@
               var brushExtent = extent;
               var endDate = data[data.length-1].date;
               var startDate = new Date(endDate);
-              startDate = new Date(startDate.setMonth(startDate.getMonth() - 120));
+              startDate = new Date(startDate.setMonth(startDate.getMonth() - 12));
               brushExtent = [startDate, endDate];
 
               x.domain(extent);

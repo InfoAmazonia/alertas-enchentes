@@ -70,6 +70,11 @@ footer {
   }
   @media (min-width: $screen-md-min) {
     width: 680px;
+    top: 75px;
+    margin: 20px;
+  }
+  @media (min-width: $screen-lg-min) {
+    width: 680px;
     top: 280px;
     margin: 20px;
   }
