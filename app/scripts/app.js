@@ -17,7 +17,9 @@ angular
     'ui.router',
     'openlayers-directive',
     'daterangepicker',
-    '720kb.socialshare'
+    '720kb.socialshare',
+    'angulartics',
+    'angulartics.google.analytics'
   ])
   .constant('RESTAPI', {
     url: 'https://enchentes.infoamazonia.org:8080'
