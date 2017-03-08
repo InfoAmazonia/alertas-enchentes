@@ -15,7 +15,7 @@
     $http(
       {
         method: 'GET',
-        url: RESTAPI.url+'/station/13600002/history',
+        url: RESTAPI.url+'/station/13600010/history',
         cache: $templateCache
       }).then(function(response) {
         vm.loading = false;

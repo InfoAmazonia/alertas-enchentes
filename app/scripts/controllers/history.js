@@ -14,7 +14,7 @@
         slug: 'rioacre',
         name: 'Rio Acre',
         city: 'Rio Branco',
-        station: 13600002,
+        station: 13600010,
         history: {}
       },
       {
