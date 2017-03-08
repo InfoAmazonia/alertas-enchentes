@@ -12,6 +12,9 @@
           options="ctrl.datePicker.options" />
         </div>
       </div>
+      <div class="col-xs-6 col-sm-8 col-md-9 text-right">
+        <a ng-href="https://enchentes.infoamazonia.org:8080/station/{{ctrl.selectedRiver.station}}/csvhistory" class="btn btn-primary btn-lg" target="_blank" style="margin-right: 10px;"><span class="glyphicon glyphicon-download-alt"></span> Download CSV</a>
+      </div>
     </div>
     <div class="loading" ng-show="ctrl.loading">
       <div class="loading-speeding-wheel"></div>
