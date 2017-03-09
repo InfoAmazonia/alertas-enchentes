@@ -23,9 +23,17 @@
       <div class="map-card-body" ng-hide="ctrl.loading">
         <div class="map-card-body-title"><strong>{{ctrl.selectedRiver.name}}</strong> em {{ctrl.selectedRiver.city}}</div>
         <div>Previsões a partir de <span id="alert-timestamp"></span> (horário local)</div>
-        <div style="margin-top: 25px;">
-          <div>{{ctrl.selectedRiver.alert.message}}</div>
-          <div>{{ctrl.selectedRiver.past}}</div>
+        <div style="margin-top: 15px;margin-bottom: 15px;display: flex;">
+          <div style="font-size: 2em; margin-right: 15px;"><span class="icon-flood"></span></div>
+          <div>
+            <div>ATENÇÃO</div>
+            <div>Nível atual do rio em 14,90m</div>
+          </div>
+          <div style="font-size: 2em; margin-left: 60px; margin-right: 15px;"><span class="icon-flood"></span></div>
+          <div>
+            <div>ALERTA</div>
+            <div>Previsão de 14,90m em 24h</div>
+          </div>
         </div>
         <div ng-show="ctrl.selectedRiver.data.info && ctrl.selectedRiver.data.data.length">
           <ae-prediction river="ctrl.selectedRiver.data"></ae-prediction>
