@@ -136,13 +136,9 @@
           vm.loading = true;
           vm.selectedRiver = vm.rivers[i];
           Prediction.get({'id': vm.rivers[i].station}, function(response) {
-            Now.get({'id': vm.rivers[i].station}, function(now) {
-              vm.timestamp = moment().format('H:mm');
-              vm.selectedRiver.data = response;
-              vm.selectedRiver.alert = now;
-              vm.selectedRiver.past = getAlertPast(response);
-              vm.loading = false;
-            });
+            vm.selectedRiver.data = response;
+            vm.selectedRiver.past = getAlertPast(response);
+            vm.loading = false;
           }, function(error) {
             vm.timestamp = moment().format('H:mm');
             vm.selectedRiver.data = {};
@@ -168,55 +164,6 @@
         return "A última vez que este rio atingiu este nível foi em "+moment(d).format('D[/]M[/]Y [às] H[h]mm');
       }
       return "";
-    }
-
-    function getAlertTimestamp(river) {
-      if (!river.data.length) {
-        return {
-          title: "--",
-          description: "Não foi possível obter dados",
-          timestamp: null
-        };
-      }
-      // Checks prediction
-      var hasPrediction = 0;
-      for (var i = 0; i < river.data.length; i++) {
-        if (river.data[i].predicted) {
-          hasPrediction++;
-        };
-      }
-      if (!hasPrediction) {
-        return {
-          title: "--",
-          description: "Não foi possível obter dados de previsão",
-          timestamp: null
-        };
-      }
-      // Checks flood threshold
-      for (var i = 0; i < river.data.length; i++) {
-        if (river.data[i].predicted >= river.info.floodThreshold) {
-          return {
-            title: "Alerta de enchente",
-            description: "Ação evasiva é recomendada",
-            timestamp: data[i].id.timestamp
-          };
-        };
-      }
-      // Checks warning threshold
-      for (var i = 0; i < river.data.length; i++) {
-        if (river.data[i].predicted >= river.info.warningThreshold) {
-          return {
-            title: "Alerta de cheia",
-            description: "Esteja preparado",
-            timestamp: data[i].id.timestamp
-          };
-        };
-      }
-      return {
-        title: "Dia normal",
-        description: "Nenhuma alta prevista para as próximas horas",
-        timestamp: null
-      };
     }
 
     function hideCard() {

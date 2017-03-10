@@ -25,7 +25,7 @@
               left: 30
             },
             width = 600 - margin.left - margin.right,
-            height = 300 - margin.top - margin.bottom,
+            height = 200 - margin.top - margin.bottom,
             viewBoxWidth = width + margin.left + margin.right,
             viewBoxHeight = height + margin.top + margin.bottom,
             baseValue = 0,
@@ -58,7 +58,7 @@
             var yAxis = d3noConflict.svg.axis()
                 .scale(y)
                 .orient("left")
-                .ticks(12)
+                .ticks(6)
                 .tickFormat(function(d) {
                   return Math.round((d * 0.01) * 100) / 100
                 });

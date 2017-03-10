@@ -22,8 +22,8 @@ angular
     'angulartics.google.analytics'
   ])
   .constant('RESTAPI', {
-    // url: 'https://enchentes.infoamazonia.org:8080'
-    url: 'http://localhost:8080'
+    url: 'https://enchentes.infoamazonia.org:8080'
+    // url: 'http://localhost:8080'
   })
   .config(routeConfig);
 

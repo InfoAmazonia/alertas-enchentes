@@ -26,13 +26,13 @@
         <div style="margin-top: 15px;margin-bottom: 15px;display: flex;">
           <div style="font-size: 2em; margin-right: 15px;"><span class="icon-flood"></span></div>
           <div>
-            <div>ATENÇÃO</div>
-            <div>Nível atual do rio em 14,90m</div>
+            <div id="alert-measurement-status">{{ctrl.selectedRiver.data.measurement.measuredStatus}}</div>
+            <div>Nível atual do rio em <span id="alert-measurement-measured">{{ctrl.selectedRiver.data.measurement.measured | aeLevel}}</span></div>
           </div>
-          <div style="font-size: 2em; margin-left: 60px; margin-right: 15px;"><span class="icon-flood"></span></div>
-          <div>
-            <div>ALERTA</div>
-            <div>Previsão de 14,90m em 24h</div>
+          <div ng-show="ctrl.selectedRiver.data.prediction.predicted" style="font-size: 2em; margin-left: 60px; margin-right: 15px;"><span class="icon-flood"></span></div>
+          <div ng-show="ctrl.selectedRiver.data.prediction.predicted">
+            <div id="alert-prediction-status">{{ctrl.selectedRiver.data.prediction.predictedStatus}}</div>
+            <div>Previsão de <span id="alert-prediction-predicted">{{ctrl.selectedRiver.data.prediction.predicted | aeLevel}}</span> em 24h</div>
           </div>
         </div>
         <div ng-show="ctrl.selectedRiver.data.info && ctrl.selectedRiver.data.data.length">
