@@ -368,9 +368,9 @@
 
                   // Set description
                   d3noConflict.select("#desc").style("display", null);
-                  d3noConflict.select("#desc-max").text(minMaxOfExtent.max.value + "m");
+                  d3noConflict.select("#desc-max").text(minMaxOfExtent.max.value.toString().replace('.', ',') + "m");
                   d3noConflict.select("#desc-max-date").text(formatTimeLiteral(minMaxOfExtent.max.date));
-                  d3noConflict.select("#desc-min").text(minMaxOfExtent.min.value + "m");
+                  d3noConflict.select("#desc-min").text(minMaxOfExtent.min.value.toString().replace('.', ',') + "m");
                   d3noConflict.select("#desc-min-date").text(formatTimeLiteral(minMaxOfExtent.min.date));
                 }
                 focus.select(".area").attr("d", areavalue(data));
