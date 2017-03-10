@@ -351,6 +351,11 @@ $chart-strong-color: #1878F0;
   opacity: 0.6;
 }
 
+.icon-warning-normal { color: #FFF; }
+.icon-warning-attention { color: #FFE168; }
+.icon-warning-warning { color: #ebb03e; }
+.icon-warning-flood { color: #e74c3c; }
+
 .map {
   float: left;
   position: relative;

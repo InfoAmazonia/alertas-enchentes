@@ -44,6 +44,8 @@
     vm.selectRiver = selectRiver;
     vm.hideCard = hideCard;
     vm.isSelectedRiver = isSelectedRiver;
+    vm.getAlertIcon = getAlertIcon;
+    vm.getAlertIconColor = getAlertIconColor;
     var smallDevice = ($(window).width() <= 998);
     vm.map = {
       center: {
@@ -151,6 +153,30 @@
           });
           break;
         }
+      }
+    }
+
+    function getAlertIcon(status) {
+      if (status == "NORMAL") {
+        return "icon-normal";
+      } else {
+        return "icon-warning";
+      }
+    }
+
+    function getAlertIconColor(status) {
+      switch (status) {
+        case "ATENCAO":
+          return "icon-warning-attention"
+          break;
+        case "ALERTA":
+          return "icon-warning-warning"
+          break;
+        case "INUNDACAO":
+          return "icon-warning-flood"
+          break;
+        default:
+          return "icon-warning-normal"
       }
     }
 

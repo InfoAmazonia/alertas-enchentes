@@ -204,41 +204,65 @@
 
             var domainMax = d3noConflict.max(data, function(d) { return d.measured; });
             var domainMin = d3noConflict.min(data, function(d) { return d.measured; });
-            if (domainMax < river.info.floodThreshold) {
-              domainMax = river.info.floodThreshold;
+            if (!river.info.floodThreshold) {
+              var max = river.info.warningThreshold;
+            } else {
+              var max = river.info.floodThreshold;
             }
-            if (domainMin > river.info.floodThreshold - 1000) {
-              domainMin = river.info.floodThreshold - 1000;
+            if (domainMax < max) {
+              domainMax = max;
+            }
+            if (domainMin > max - 1000) {
+              domainMin = max - 1000;
             }
             x.domain(d3.extent(river.data, function(d) { return d.timestamp; }));
-            y.domain([domainMin - 10, domainMax]);
+            y.domain([domainMin - 10, domainMax + 10]);
             valuearea.y0(y(domainMin));
 
-            attentionLine.attr({
-              "y1": y(river.info.attentionThreshold),
-              "y2": y(river.info.attentionThreshold)
-            });
-            attentionText.attr({
-              "y": y(river.info.attentionThreshold) - 4,
-            });
-            alertLine.attr({
-              "y1": y(river.info.warningThreshold),
-              "y2": y(river.info.warningThreshold)
-            });
-            alertText.attr({
-              "y": y(river.info.warningThreshold) - 4,
-            });
-            floodLine.attr({
-              "y1": y(river.info.floodThreshold),
-              "y2": y(river.info.floodThreshold),
-            });
-            floodText.attr({
-              "y": y(river.info.floodThreshold) - 4,
-            });
-            predictionText.attr({
-              "x": x(data2[data2.length-1].timestamp),
-              "y": y(data2[data2.length-1].predicted) - 4,
-            });
+            if (river.info.attentionThreshold) {
+              attentionLine.attr({
+                "y1": y(river.info.attentionThreshold),
+                "y2": y(river.info.attentionThreshold)
+              }).style("visibility", "visible");
+              attentionText.attr({
+                "y": y(river.info.attentionThreshold) - 4,
+              }).style("visibility", "visible");
+            } else {
+              attentionLine.style("visibility", "hidden");
+              attentionText.style("visibility", "hidden");
+            }
+            if (river.info.warningThreshold) {
+              alertLine.attr({
+                "y1": y(river.info.warningThreshold),
+                "y2": y(river.info.warningThreshold)
+              }).style("visibility", "visible");
+              alertText.attr({
+                "y": y(river.info.warningThreshold) - 4,
+              }).style("visibility", "visible");
+            } else {
+              alertLine.style("visibility", "hidden");
+              alertText.style("visibility", "hidden");
+            }
+            if (river.info.floodThreshold) {
+              floodLine.attr({
+                "y1": y(river.info.floodThreshold),
+                "y2": y(river.info.floodThreshold),
+              }).style("visibility", "visible");
+              floodText.attr({
+                "y": y(river.info.floodThreshold) - 4,
+              }).style("visibility", "visible");
+            } else {
+              floodLine.style("visibility", "hidden");
+              floodText.style("visibility", "hidden");
+            }
+            if (data2.length) {
+              predictionText.attr({
+                "x": x(data2[data2.length-1].timestamp),
+                "y": y(data2[data2.length-1].predicted) - 4,
+              }).style("visibility", "visible");
+            } else {
+              predictionText.style("visibility", "hidden");
+            }
 
             areaSVG.datum(data)
               .attr("d", valuearea);
@@ -254,14 +278,17 @@
               .on("mousemove", mousemove);
 
             function mouseover() {
+              if (!data2.length) return;
               selectedValue.style("display", null);
             }
 
             function mouseout() {
+              if (!data2.length) return;
               selectedValue.style("display", "none");
             }
 
             function mousemove() {
+              if (!data2.length) return;
               var
                 x0 = x.invert(d3noConflict.mouse(this)[0]),
                 i = bisectDate(data2, x0, 1),
