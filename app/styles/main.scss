@@ -456,6 +456,11 @@ a.inverse {
   background-color: $background-color;
   color: #fff;
   overflow: auto;
+
+  > .menu-container-logos {
+    padding: 10px 15px;
+  }
+
 }
 
 a.btn-share {
