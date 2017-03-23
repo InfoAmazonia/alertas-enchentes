@@ -28,9 +28,9 @@
 
 <div class="menu-container" ng-show="showMenu">
   <div class="list-group">
-    <a href="#" class="list-group-item">Sobre o projeto</a>
-    <a href="#" class="list-group-item">Dados abertos</a>
-    <a href="#" class="list-group-item" data-toggle="modal" data-target="#botModal">Receba previsões e alertas pelo Telegram ou Facebook</a>
+    <a ui-sref="intro" class="list-group-item" ng-click="toggleMenu()">Apresentação</a>
+    <a ui-sref="opendata" class="list-group-item" ng-click="toggleMenu()">Dados abertos</a>
+    <a ui-sref="about" class="list-group-item" ng-click="toggleMenu()">Expediente</a>
   </div>
 </div>
 

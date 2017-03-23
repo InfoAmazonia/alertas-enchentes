@@ -43,6 +43,18 @@ angular
       templateUrl: "views/history.html",
       controller: "HistoryCtrl",
       controllerAs: "ctrl"
+    })
+    .state('intro', {
+      url: "/intro",
+      templateUrl: "views/intro.html"
+    })
+    .state('opendata', {
+      url: "/opendata",
+      templateUrl: "views/opendata.html"
+    })
+    .state('about', {
+      url: "/about",
+      templateUrl: "views/about.html"
     });
     $urlRouterProvider.otherwise('/');
   }

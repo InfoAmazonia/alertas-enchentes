@@ -124,6 +124,28 @@ footer {
   color: #fff;
 }
 
+.section-inverse {
+  padding-top: $section-padding-vertical;
+  padding-bottom: $section-padding-vertical;
+  background-color: #fff;
+}
+
+.container-text {
+  max-width: 820px;
+
+  > h1 {
+    margin-bottom: $section-padding-vertical;
+    color: #73A229;
+  }
+
+  > h2, h3 {
+    margin-top: $section-padding-vertical;
+    margin-bottom: $section-padding-vertical;
+    color: #73A229;
+  }
+
+}
+
 .major {
   border-bottom: solid 2px #fff;
   padding-bottom: 1em;
@@ -401,6 +423,14 @@ $chart-strong-color: #1878F0;
 
 }
 
+.dl-horizontal {
+  dd {
+    margin-bottom: 20px;
+  }
+
+}
+
+
 .close {
   opacity: 1;
 }
@@ -418,8 +448,9 @@ a.inverse {
 .menu-container {
   height: 100vh;
   padding-top: $navbar-height;
-  position: absolute;
+  position: fixed;
   right: 0;
+  top: 0;
   width: 320px;
   z-index: 999;
   background-color: $background-color;
