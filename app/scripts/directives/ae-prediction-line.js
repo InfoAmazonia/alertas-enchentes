@@ -19,13 +19,13 @@
 
           var
             margin = {
-              top: 15,
+              top: 35,
               right: 10,
               bottom: 30,
               left: 30
             },
             width = 600 - margin.left - margin.right,
-            height = 200 - margin.top - margin.bottom,
+            height = 220 - margin.top - margin.bottom,
             viewBoxWidth = width + margin.left + margin.right,
             viewBoxHeight = height + margin.top + margin.bottom,
             baseValue = 0,
