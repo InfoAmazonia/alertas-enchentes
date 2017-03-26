@@ -44,6 +44,53 @@
         Os dados históricos diários de cada estação foram fornecidos pela Agência Nacional de Águas (ANA) a pedido.
         A atualização diária destes dados se dá por meio da raspagem de dados da plataforma <a href="http://mapas-hidro.ana.gov.br/" target="_blank">Sistema de Monitoramento Hidrológico</a> da ANA.
       </p>
+
+      <h2>Descrição da API</h2>
+
+      <p>
+        A Interface de Programação de Aplicativos (API) do Alerta de Enchentes pode ser acessada através das seguintes rotas.
+      </p>
+
+      <table class="table">
+        <tr>
+          <td>GET</td>
+          <td>
+            <a href="https://enchentes.infoamazonia.org:8080/station/15400000/now" target="_blank">/station/{id}/now</a>
+          </td>
+          <td>
+            Retorna o texto descritivo da situação atual da estação {id}
+          </td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>
+            <a href="https://enchentes.infoamazonia.org:8080/station/15400000/prediction" target="_blank">/station/{id}/prediction</a>
+          </td>
+          <td>Retorna os níveis medidos e previstos para a estação {id}</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>
+            <a href="https://enchentes.infoamazonia.org:8080/station/15400000/alert" target="_blank">/station/{id}/alert</a>
+          </td>
+          <td>Retorna o texto descritivo da situação prevista da estação {id}</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>
+            <a href="https://enchentes.infoamazonia.org:8080/station/15400000/history" target="_blank">/station/{id}/history</a>
+          </td>
+          <td>Retorna todos os níveis históricos medidos na estação {id}</td>
+        </tr>
+        <tr>
+          <td>GET</td>
+          <td>
+            <a href="https://enchentes.infoamazonia.org:8080/station/15400000/csvhistory" target="_blank">/station/{id}/csvhistory</a>
+          </td>
+          <td>Retorna todos os níveis históricos medidos na estação {id} em formato CSV</td>
+        </tr>
+      </table>
+
   </div>
 
 </main>
