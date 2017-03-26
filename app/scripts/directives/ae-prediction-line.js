@@ -31,7 +31,7 @@
             baseValue = 0,
             tooltipWidth = 170,
             tooltipHeight = 30,
-            tooltipPadding = -20;
+            tooltipPadding = -35;
 
             var bisectDate = d3noConflict.bisector(function(d) { return d.timestamp; }).left;
             var formatTimeLiteral = d3noConflict.time.format("%Hh%M");
