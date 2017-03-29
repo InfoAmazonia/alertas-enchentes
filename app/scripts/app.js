@@ -55,6 +55,10 @@ angular
     .state('about', {
       url: "/about",
       templateUrl: "views/about.html"
+    })
+    .state('privacypolicy', {
+      url: "/privacypolicy",
+      templateUrl: "views/privacypolicy.html"
     });
     $urlRouterProvider.otherwise('/');
   }
