@@ -26,13 +26,13 @@
         <div style="margin-top: 15px;margin-bottom: 15px;display: flex;">
           <div style="font-size: 2.3em; margin-right: 15px;"><span ng-class="[ctrl.getAlertIcon(ctrl.selectedRiver.data.measurement.measuredStatus), ctrl.getAlertIconColor(ctrl.selectedRiver.data.measurement.measuredStatus)]"></span></div>
           <div>
-            <div id="alert-measurement-status">{{ctrl.selectedRiver.data.measurement.measuredStatus}}</div>
             <div>Nível atual do rio em <span id="alert-measurement-measured">{{ctrl.selectedRiver.data.measurement.measured | aeLevel}}</span></div>
+            <div id="alert-measurement-status">{{ctrl.selectedRiver.data.measurement.measuredStatus}}</div>
           </div>
           <div ng-show="ctrl.selectedRiver.data.prediction.predicted" style="font-size: 2.3em; margin-left: 60px; margin-right: 15px;"><span ng-class="[ctrl.getAlertIcon(ctrl.selectedRiver.data.prediction.predictedStatus), ctrl.getAlertIconColor(ctrl.selectedRiver.data.prediction.predictedStatus)]"></span></div>
           <div ng-show="ctrl.selectedRiver.data.prediction.predicted">
-            <div id="alert-prediction-status">{{ctrl.selectedRiver.data.prediction.predictedStatus}}</div>
             <div>Previsão de <span id="alert-prediction-predicted">{{ctrl.selectedRiver.data.prediction.predicted | aeLevel}}</span> em {{ctrl.selectedRiver.data.info.predictionWindow}}h</div>
+            <div id="alert-prediction-status">{{ctrl.selectedRiver.data.prediction.predictedStatus}}</div>
           </div>
         </div>
         <div ng-show="ctrl.selectedRiver.data.info && ctrl.selectedRiver.data.data.length">
